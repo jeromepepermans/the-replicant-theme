@@ -144,14 +144,16 @@
 - **Pourquoi** : décision de Jérôme ; les deux mécanismes sont complémentaires (bibliothèque existante côté
   serveur, chargement ciblé côté thème).
 
-### DECISION-014 — Professionnels : groupe pro, prix HT, 20 % de remise, validation manuelle
-- **Date** : 17/09/2026 · **Sujet** : parcours B2B (complète DECISION-003)
-- **Décision** : créer un **groupe client « Professionnel »** affichant les prix **HT** avec **20 % de remise** ;
-  l'accès au groupe reste soumis à **validation manuelle** par un employé en back-office.
-- **Pourquoi** : décision de Jérôme. Cohérent avec l'existant : le groupe `5 As Import` affiche déjà les prix
-  **HT** et le groupe `10 Ami(e)` applique déjà **-20 %**.
-- **Impact** : la remise doit être décidée par produit (meilleur prix) ou globale selon l'arbitrage commerce ;
-  le tunnel et les taux d'affichage doivent gérer un client connecté à prix HT (TVA affichée séparément).
+### DECISION-014 — Professionnels : le tarif est porté par le groupe client, le chantier livre le parcours
+- **Date** : 17/09/2026 (révisée) · **Sujet** : parcours B2B (complète DECISION-003)
+- **Décision** : **aucune logique de prix à développer**. Les conditions pro (prix **HT**, remise) sont
+  **portées par le groupe client**, comme le font déjà les groupes existants (`5 As Import` en HT,
+  `10 Ami(e)` à -20 %). Le chantier livre **le parcours** : un **formulaire d'inscription professionnel**,
+  la création du compte **en attente**, la **validation manuelle par un employé** en back-office, l'e-mail
+  de confirmation ou de refus, et la bascule dans le groupe.
+- **Pourquoi** : décision de Jérôme — « tout est géré par le groupe client, donc on n'y touche pas ».
+- **Impact** : le thème et le module compagnon **n'affichent** qu'un état (client pro validé ou non) et ne
+  calculent **aucun** prix pro. Le module d'inscription reste simple, testable, sans dépendance au commerce.
 
 ### DECISION-015 — L'app mobile est un canal de commande
 - **Date** : 17/09/2026 · **Sujet** : app mobile (phase 9)
@@ -170,6 +172,31 @@
   verrouillées par version) ; `1.x` (compatible 8.x) **n'est plus maintenu**, `2.x` cible 9.2.
 - **Impact** : voir `docs/dev-theme-prestashop.md` (voie A/B/C, recommandation B) et la page de bascule à
   écrire, `docs/theme-9-migration.md`.
+
+### DECISION-017 — Le plus léger possible : aucun framework CSS, architecture modulaire maison
+- **Date** : 17/09/2026 · **Sujet** : base technique du thème (précise DECISION-001)
+- **Décision** : **zéro framework CSS** (ni Bootstrap, ni équivalent). Le thème est bâti sur des **tokens**
+  (custom properties), une petite couche d'utilitaires maison écrite à la demande, et des **composants
+  modulaires** (BEM) chargés par page plutôt qu'une feuille monolithique unique.
+- **Pourquoi** : réponse de Jérôme — « le plus léger, mais évolutif et modulable ». Un framework complet
+  embarque des dizaines de Ko de règles non utilisées : première cause d'écart au budget de poids.
+- **Impact** : chaque composant utilisé doit exister dans notre code (coût d'écriture assumé) ; la
+  « modulabilité » vient de la structure des feuilles/composants et du module compagnon, pas d'un framework.
+  Les conventions Hummingbird restent respectées (BEM, `@layer`, `data-ps-*`) pour l'évolutivité.
+
+### DECISION-018 — Bascule vers PrestaShop 9 en 2027 : objectif daté
+- **Date** : 17/09/2026 · **Sujet** : trajectoire de version
+- **Décision** : Jérôme fixe la bascule vers **PrestaShop 9 l'année prochaine (2027)**. Le thème est écrit
+  dès maintenant selon les conventions de la référence Hummingbird, et un **plan de bascule** est tenu à
+  jour (`docs/theme-9-migration.md`).
+- **Conséquences à traiter dès cette année** :
+  - monter la boutique de **8.2.3 → 8.2.8** (dernier patch de la branche, publié le 18/08/2026) ;
+  - écrire le **module compagnon « compatible 9 »** (aucune dépendance retirée en 9.0, services Symfony
+    propres, ni `guzzle`, ni `SwiftMailer`) ;
+  - **ne rien ajouter** qui dépende des modules appelés à disparaître (écosystème IQIT, Revolution Slider) ;
+  - tenir à jour la doc de bascule : `override/` à traiter, matrice Hummingbird, passage à Hummingbird 2.x
+    (9.2), Admin API pour l'app mobile.
+- **Pourquoi** : une bascule se prépare un an à l'avance ; c'est ce qui évite le « on refait tout » en 2027.
 
 ### DECISION-006 — La collecte de la newsletter est partie prenante du chantier
 - **Date** : 17/09/2026 · **Sujet** : dépendance externe
@@ -233,15 +260,17 @@
 | Phase | État |
 |---|---|
 | 0 — Audit & sauvegarde | ☑ audit lecture seule **fait** (prod + préprod, 17/09/2026) · ☐ sauvegarde du thème et de la base **à faire sur accord** |
+| **0 bis — Remise à niveau de la préprod** | ☑ **runbook écrit** (`docs/runbook-remise-a-niveau-preprod.md`) · ☐ **à exécuter sur accord de Jérôme** |
 | 1 — Design (Claude Design) | ☐ prompts livrés, maquettes à produire — tokens à valider d'abord |
-| 2 — Socle du thème | ☐ bloqué par le sort des 23 modules IQIT (DECISION-009) |
+| 2 — Socle du thème | ☐ base arrêtée : thème vierge, conventions Hummingbird, **aucun framework CSS** (DECISION-017) |
 | 3 — Module BO compagnon | ☐ |
-| 4 — Tunnel de vente | ☐ **révisé** : arbitrage « habiller l'existant / remplacer » (DECISION-007) |
-| 5 — Particuliers & pro | ☐ |
+| 4 — Tunnel de vente | ☐ tunnel maison après décorticage de `ets_onepagecheckout` (DECISION-010) |
+| 5 — Particuliers & pro | ☐ parcours seulement : formulaire + validation manuelle, **aucune logique de prix** (DECISION-014) |
 | 6 — Intégrations | ☐ |
-| 7 — Recette | ☐ bloqué par la fiabilité de la préprod (DECISION-008) |
+| 7 — Recette | ☐ |
 | 8 — Production | ☐ |
-| 9 — App mobile | ☐ cadrage séparé |
+| 9 — App mobile | ☐ cadrage séparé — **canal de commande** (DECISION-015) |
+| **10 — Bascule PrestaShop 9 (2027)** | ☐ préparée dès cette année : montée **8.2.3 → 8.2.8**, sortie de l'écosystème IQIT, traitement des 63 `override/` |
 
 ---
 

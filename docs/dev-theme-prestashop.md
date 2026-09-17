@@ -81,19 +81,24 @@ Conséquence : on ne peut pas « cloner Hummingbird » et avoir un thème qui ma
 
 ---
 
-## 4. Stratégie retenue (à valider) — « conventions Hummingbird, code à nous »
+## 4. Stratégie — **arrêtée le 17/09/2026 : conventions Hummingbird, code à nous, zéro framework**
 
-Trois voies possibles, posées franchement :
+Les trois voies possibles, expliquées en clair :
 
-| Voie | Ce que c'est | Coût | Risque |
+| Voie | Ce que c'est, en clair | Coût | Risque |
 |---|---|---|---|
-| **A — Forker Hummingbird 1.x** | On part du code de la branche compatible 8.1+ | rapide au départ | branche **dormante depuis 09/2025**, Bootstrap 5.2, et la migration vers 2.x (9.2) sera une **porte réelle**, pas un simple rebase |
-| **B — Thème vierge + conventions Hummingbird** *(recommandée)* | On écrit `replicant` de zéro (Smarty, hooks 8.2) en adoptant **exactement** les conventions de la référence : BEM, SCSS modulaire avec `@layer`, `data-ps-*`, **zéro jQuery** dans le thème, accessibilité d'abord, `theme.yml` complet | on écrit tout (ce qui est déjà la demande) | faible : notre code nous appartient, et la bascule 9.x est un **port** de gabarits, pas une réécriture |
-| **C — Migrer d'abord la boutique en 9.x** | Passer la boutique en 9.2 puis partir d'Hummingbird 2.x | énorme | **très élevé** : 103 modules + 63 overrides du cœur + écosystème IQIT à porter avant même de toucher au thème |
+| **A — Forker Hummingbird `1.x`** | On part du code du thème de démarrage officiel compatible 8.x, on retire son look de démo et on construit le design dessus. | rapide au départ | branche **abandonnée depuis 09/2025**, embarque **tout Bootstrap** (contraire à la cible de poids), et la bascule 2027 vers Hummingbird 2.x (9.2) serait **un portage réel** |
+| **B — Thème vierge aux conventions Hummingbird** ✅ | On écrit notre propre thème de zéro, mais **avec les règles de construction de la référence future** : mêmes noms de classes (BEM), même façon d'accrocher le JavaScript (`data-ps-*`), pas de jQuery, héritage de gabarits, accessibilité d'abord. | on écrit tout (c'était déjà la demande) | faible : le code nous appartient, on ne charge que ce qu'on utilise, et la bascule 2027 est un **port**, pas une réécriture |
+| **C — Migrer la boutique en 9.x d'abord** | Passer la boutique en PrestaShop 9 avant de commencer le thème. | énorme | **très élevé** : 103 modules, 63 `override/` du cœur et tout l'écosystème IQIT à porter d'abord |
 
-**Recommandation : voie B.** La légèreté visée (aucun framework complet, aucun module AJIT à recharger,
-CSS à tokens) est **incompatible** avec un fork qui embarque Bootstrap 5.2/5.3 entier ; et c'est précisément
-notre code qui rendra la bascule 9.x mécanique.
+**Pourquoi B est retenue** : les réponses de Jérôme du 17/09 (« le plus léger, mais évolutif et modulable »
++ « l'objectif sera de passer sur la 9 l'année prochaine ») **éliminent A** — un fork embarque un framework
+entier et saute en 2027 — et **reportent C à 2027**, où elle devient justement la phase 10.
+B est la seule voie compatible, en même temps, avec le budget de poids et avec l'échéance 2027.
+
+**Décisions liées** : DECISION-016 (conventions Hummingbird dès maintenant), **DECISION-017 (aucun framework
+CSS : tokens + utilitaires maison + composants modulaires)**, DECISION-018 (bascule PrestaShop 9 en 2027,
+avec montée 8.2.3 → 8.2.8 dès cette année).
 
 ### Règles d'écriture qui rendent le thème « prêt pour 9.1+ »
 

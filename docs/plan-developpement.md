@@ -114,12 +114,16 @@ Décision DECISION-010 : tunnel **maison**, `ets_onepagecheckout` désactivé ap
 
 ## Phase 5 — Particuliers & professionnels
 
+**Décision DECISION-014 : le tarif pro est porté par le groupe client — aucune logique de prix n'est
+développée ici.** Le chantier livre le **parcours d'inscription et de validation**, rien d'autre.
+
 - [ ] Particulier : inscription/connexion courte, compte, commandes, suivi, adresses, retours.
 - [ ] **Pro** : formulaire de demande (société, responsable, activité, volume, Kbis), mentions RGPD.
-- [ ] Création du compte **en attente** — le groupe « Professionnel » n'est **pas** appliqué.
+- [ ] Création du compte **en attente** — le groupe professionnel n'est **pas** appliqué à la création.
 - [ ] Écran back-office « Demandes pro » : liste, filtres, fiche, **Valider / Refuser avec motif obligatoire**, journal.
 - [ ] E-mails transactionnels (confirmation client, notification équipe, décision).
-- [ ] Bascule automatique de groupe client à la validation.
+- [ ] Bascule automatique dans le groupe client à la validation (les conditions — HT, remise — sont
+      **configurées sur le groupe** par Jérôme, hors code).
 
 ---
 
@@ -167,6 +171,24 @@ Décision DECISION-015 : l'app doit permettre de **passer commande**, pas seulem
       chiffrée, en tenant compte de `ps_stock_available` (`id_shop=1` obligatoire, piège mesuré).
 - [ ] Réutilisation des **points d'entrée du tunnel** conçus en phase 4 (ne pas réinventer le panier ni le paiement).
 - [ ] Moyen de paiement de l'app à trancher (Monetico / Alma / PayPal / Stripe).
+
+---
+
+## Phase 10 — Bascule vers PrestaShop 9 (objectif 2027 — DECISION-018)
+
+**Un an à l'avance, ce qui se prépare ici ne se rattrape pas en 2027.**
+
+- [ ] **Monter la boutique en 8.2.8** (dernier patch de la branche 8.2, publié le 18/08/2026) : d'abord sur
+      la préprod, puis en production, avec sauvegarde préalable et contrôle du tunnel.
+- [ ] **`docs/theme-9-migration.md`** tenu à jour : écarts à traiter, `theme.yml` (types d'images),
+      conventions, matrice Hummingbird relue à chaque version.
+- [ ] **Traitement des 63 `override/`** du cœur (dont `Customer.php` et `WelcomeDiscountService`) : ils
+      bloquent une montée de version et doivent être soit intégrés proprement, soit retirés.
+- [ ] **Sortie de l'écosystème IQIT** terminée avant la bascule (sinon le portage devient un projet à lui seul).
+- [ ] **Module compagnon « compatible 9 »** : ni `guzzle`, ni `SwiftMailer`, services Symfony déclarés,
+      aucune dépendance retirée en 9.0.
+- [ ] **Recette comparée 8.2 ↔ 9.x** sur les 5 gabarits clés (accueil, catégorie, produit, panier, commande).
+- [ ] **App mobile** : bascule du webservice classique vers l'**Admin API** (API Platform) si elle est retenue.
 
 ---
 
