@@ -261,7 +261,7 @@
 |---|---|
 | 0 — Audit & sauvegarde | ☑ audit lecture seule **fait** (prod + préprod, 17/09/2026) · ☐ sauvegarde du thème et de la base **à faire sur accord** |
 | **0 bis — Remise à niveau de la préprod** | ☑ **runbook écrit** (`docs/runbook-remise-a-niveau-preprod.md`) · ☐ **à exécuter sur accord de Jérôme** |
-| 1 — Design (Claude Design) | ☐ prompts livrés, maquettes à produire — tokens à valider d'abord |
+| 1 — Design (Claude Design) | ☑ **tokens livrés** (`tokens.json`, `DESIGN.md`, `apercu-tokens.html` vérifié en navigateur) · ☐ validation par Jérôme puis maquettes (prompts P0→P10 prêts) |
 | 2 — Socle du thème | ☐ base arrêtée : thème vierge, conventions Hummingbird, **aucun framework CSS** (DECISION-017) |
 | 3 — Module BO compagnon | ☐ |
 | 4 — Tunnel de vente | ☐ tunnel maison après décorticage de `ets_onepagecheckout` (DECISION-010) |

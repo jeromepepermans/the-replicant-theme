@@ -49,8 +49,11 @@ et le développement du thème peut commencer dessus.
 
 ## Phase 1 — Design (Claude Design)
 
-- [ ] Design tokens (`docs/design/tokens.json` + `DESIGN.md`) : couleurs, typo, espacements, rayons, durée/courbes d'animation, breakpoints, états.
-- [ ] Validation des tokens avant tout écran.
+- [x] Design tokens livrés : `docs/design/tokens.json` (source unique, thème + module + app) + `docs/design/DESIGN.md`
+      (justification, contrastes calculés, interdits) + `docs/design/apercu-tokens.html` (planche d'aperçu vérifiée
+      dans un navigateur : 19 pastilles, bandeau or/encre 7,30:1, CTA 44 px, aucun débordement à 390 px, réglages interactifs).
+- [ ] **Validation des tokens par Jérôme** avant tout écran : palette dérivée de l'audit, et **choix du binôme typographique**
+      (option A Montserrat + Source Sans 3, ou option B Fraunces + Montserrat) — licences des polices à confirmer à la source.
 - [ ] Accueil : 3 directions (prudente / fidèle / divergente) → choix de la direction.
 - [ ] Maquettes hi-fi **mobile d'abord** puis desktop : accueil, navigation, catégorie, fiche produit,
       tunnel (4 étapes + confirmation), compte particulier, espace pro (présentation, formulaire, écran

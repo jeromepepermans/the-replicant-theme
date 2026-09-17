@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>replicant — jetons de design v0.1</title>
+<style>
+  /* ============================================================================
+     Jetons de design du thème « replicant » (the-replicant.com) — 17/09/2026
+     Source : docs/design/tokens.json — dérivés de la charte mesurée sur le site.
+     AUCUN framework CSS : uniquement des variables et des composants maison.
+     ============================================================================ */
+  :root{
+    --brand-700:#934a47; --brand-600:#ab5a57; --brand-500:#d06e6a; --brand-200:#e8b7b5; --brand-100:#f7eceb;
+    --gold-600:#9a8b55; --gold-500:#c6b26d; --gold-100:#f6f1e2;
+    --ink-900:#2b2419; --ink-700:#4a4133; --ink-600:#6b6152;
+    --surface-0:#ffffff; --surface-50:#faf8f5; --surface-100:#f4f1ea; --border:#e6e0d6;
+    --success:#2f6b46; --warning:#8a5a12; --danger:#a5342f; --info:#2f5d75;
+    --r-sm:6px; --r-md:10px; --r-lg:16px; --r-pill:999px;
+    --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-6:24px; --s-8:32px; --s-12:48px;
+    --e-1:0 1px 2px rgba(43,36,25,.06); --e-2:0 4px 12px rgba(43,36,25,.08); --e-3:0 12px 28px rgba(43,36,25,.12);
+    --dur-micro:160ms; --dur-std:240ms; --dur-in:320ms;
+    --ease-out:cubic-bezier(.22,.61,.36,1); --ease-in:cubic-bezier(.4,0,1,1);
+    --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --font-serif:Georgia,"Times New Roman",serif;
+    --font-head:var(--font-sans);
+    --density:1;
+    /* Jetons de la page de démonstration (l'app les fournit normalement) */
+    --page-bg:#f4f1ea; --page-ink:#2b2419;
+  }
+  [data-radius="net"]{ --r-sm:2px; --r-md:3px; --r-lg:4px; }
+  [data-density="compact"]{ --density:.75; }
+  [data-titres="serif"]{ --font-head:var(--font-serif); }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--page-bg); color:var(--page-ink); font-family:var(--font-sans);
+    font-size:16px; line-height:1.6; padding:var(--s-4); max-width:1100px;
+  }
+  h1,h2,h3{font-family:var(--font-head); line-height:1.15; margin:0; text-wrap:balance}
+  h1{font-size:clamp(1.5rem,1.2rem + 1.6vw,2.25rem); font-weight:700}
+  h2{font-size:clamp(1.125rem,1rem + .7vw,1.5rem); font-weight:600; margin-top:var(--s-8)}
+  h3{font-size:clamp(1rem,.95rem + .3vw,1.1875rem); font-weight:600}
+  p{margin:var(--s-2) 0}
+  .lede{color:var(--ink-600); max-width:70ch}
+  .meta{font-size:.8125rem; color:var(--ink-600)}
+  .board{display:flex; flex-direction:column; gap:var(--s-6); align-items:flex-start}
+  .panel{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--r-lg);
+         padding:calc(var(--s-4) * var(--density)); width:100%; box-shadow:var(--e-1)}
+  .grid{display:grid; gap:var(--s-2); grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); margin-top:var(--s-3)}
+  .sw{border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; background:var(--surface-0)}
+  .sw__chip{height:56px}
+  .sw__txt{padding:var(--s-2); font-size:.75rem; line-height:1.35}
+  .sw__txt b{display:block; font-weight:600}
+  .sw__txt code{font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--ink-600)}
+  table{border-collapse:collapse; width:100%; font-size:.8125rem; margin-top:var(--s-3)}
+  th,td{text-align:left; padding:var(--s-2); border-bottom:1px solid var(--border)}
+  th{font-weight:600; color:var(--ink-700)}
+  .ok{color:var(--success); font-weight:600}
+  .no{color:var(--danger); font-weight:600}
+  .scale>*{margin:var(--s-3) 0; padding-bottom:var(--s-2); border-bottom:1px dashed var(--border)}
+  .t-display{font-size:clamp(2rem,1.4rem + 2.6vw,3.25rem); font-weight:700; font-family:var(--font-head); line-height:1.05}
+  .t-h1{font-size:clamp(1.75rem,1.3rem + 1.8vw,2.5rem); font-weight:600; font-family:var(--font-head)}
+  .t-h2{font-size:clamp(1.375rem,1.15rem + .9vw,1.75rem); font-weight:600; font-family:var(--font-head)}
+  .t-h3{font-size:clamp(1.125rem,1.05rem + .4vw,1.3125rem); font-weight:600; font-family:var(--font-head)}
+  .t-body{font-size:1rem}
+  .t-small{font-size:.875rem; color:var(--ink-600)}
+  .t-micro{font-size:.75rem; color:var(--ink-600)}
+  .row{display:flex; flex-wrap:wrap; gap:var(--s-3); align-items:center; margin-top:var(--s-3)}
+  /* --- Boutons --- */
+  .btn{font:inherit; font-weight:600; border:1px solid transparent; border-radius:var(--r-md); cursor:pointer;
+       min-height:44px; padding:0 var(--s-4); display:inline-flex; align-items:center; gap:var(--s-2);
+       transition:background var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out)}
+  .btn--primary{background:var(--brand-600); color:#fff}
+  .btn--primary:hover{background:var(--brand-700)}
+  .btn--primary:active{transform:translateY(1px)}
+  .btn--ghost{background:transparent; color:var(--brand-700); border-color:var(--brand-500)}
+  .btn--ghost:hover{background:var(--brand-100)}
+  .btn[disabled]{background:var(--surface-100); color:var(--ink-600); cursor:not-allowed}
+  :focus-visible{outline:2px solid var(--brand-600); outline-offset:2px}
+  /* --- Badges --- */
+  .badge{display:inline-flex; align-items:center; gap:var(--s-1); font-size:.75rem; font-weight:600;
+         padding:2px var(--s-2); border-radius:var(--r-pill); border:1px solid transparent; line-height:1.5}
+  .badge--ia{background:var(--brand-100); color:var(--brand-700); border-color:var(--brand-200)}
+  .badge--promo{background:var(--brand-600); color:#fff}
+  .badge--stock{background:var(--surface-100); color:var(--ink-900); border-color:var(--border)}
+  .badge--oos{background:#fdeceb; color:var(--danger); border-color:#f2c9c6}
+  /* --- Bandeau promo (or + encre : jamais du blanc) --- */
+  .promo{background:var(--gold-500); color:var(--ink-900); border-radius:var(--r-md);
+         padding:var(--s-2) var(--s-3); display:flex; gap:var(--s-3); align-items:center; justify-content:space-between;
+         font-size:.875rem; font-weight:600}
+  .promo a{color:var(--ink-900); text-decoration:underline}
+  /* --- Carte produit --- */
+  .cards{display:grid; gap:var(--s-3); grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); margin-top:var(--s-3)}
+  .card{border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; background:var(--surface-0);
+        display:flex; flex-direction:column}
+  .card:hover{box-shadow:var(--e-2)}
+  .card__media{position:relative; aspect-ratio:1/1; background:linear-gradient(135deg,var(--surface-100),#e9e3d8);
+        display:grid; place-items:center; color:var(--ink-600); font-size:.75rem}
+  .card__ia{position:absolute; top:var(--s-2); left:var(--s-2)}
+  .card__body{padding:var(--s-3); display:flex; flex-direction:column; gap:var(--s-1); flex:1}
+  .card__title{font-size:.9375rem; font-weight:600; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2;
+        -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em}
+  .card__price{font-size:1.125rem; font-weight:700; margin-top:auto}
+  .card__price small{font-weight:400; color:var(--ink-600); font-size:.75rem}
+  /* --- Champ de formulaire --- */
+  .field{display:flex; flex-direction:column; gap:var(--s-1); max-width:340px}
+  label{font-size:.875rem; font-weight:600; color:var(--ink-700)}
+  input[type=text]{font:inherit; min-height:44px; padding:0 var(--s-3); border:1px solid var(--border);
+        border-radius:var(--r-md); background:var(--surface-0); color:var(--ink-900)}
+  input[aria-invalid=true]{border-color:var(--danger); background:#fdeceb}
+  .hint{font-size:.8125rem; color:var(--ink-600)}
+  .err{font-size:.8125rem; color:var(--danger); font-weight:600}
+  /* --- Messages --- */
+  .msg{border-left:4px solid var(--border); padding:var(--s-2) var(--s-3); border-radius:var(--r-sm);
+       font-size:.875rem; background:var(--surface-50)}
+  .msg--ok{border-color:var(--success)} .msg--err{border-color:var(--danger)} .msg--info{border-color:var(--info)}
+  /* --- Barre mobile --- */
+  .nav{display:flex; gap:var(--s-1); background:var(--surface-0); border:1px solid var(--border);
+       border-radius:var(--r-lg); padding:var(--s-1); max-width:420px}
+  .nav a{flex:1; text-align:center; font-size:.75rem; text-decoration:none; color:var(--ink-600);
+       padding:var(--s-2) 0; min-height:44px; display:flex; flex-direction:column; justify-content:center; border-radius:var(--r-md)}
+  .nav a[aria-current=page]{color:var(--brand-700); background:var(--brand-100); font-weight:600}
+  /* --- Espacement / rayons --- */
+  .spacebar{height:14px; background:var(--brand-200); border-radius:2px}
+  .radii{display:flex; gap:var(--s-3); margin-top:var(--s-3); flex-wrap:wrap}
+  .radii div{width:64px; height:64px; background:var(--brand-100); border:1px solid var(--brand-200);
+       display:grid; place-items:center; font-size:.75rem; color:var(--brand-700)}
+  /* --- Réglages --- */
+  .tweaks{position:sticky; top:var(--s-2); z-index:5; background:var(--ink-900); color:#fff; border-radius:var(--r-pill);
+       padding:var(--s-2) var(--s-3); display:flex; gap:var(--s-2); align-items:center; flex-wrap:wrap; font-size:.75rem;
+       box-shadow:var(--e-3); width:100%}
+  .tweaks button{font:inherit; font-size:.75rem; background:transparent; color:#fff; border:1px solid rgba(255,255,255,.4);
+       border-radius:var(--r-pill); padding:4px 10px; min-height:28px; cursor:pointer}
+  .tweaks button[aria-pressed=true]{background:#fff; color:var(--ink-900); border-color:#fff}
+  @media (prefers-reduced-motion: reduce){
+    *{transition-duration:1ms !important; animation-duration:1ms !important}
+  }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="tweaks" role="group" aria-label="Réglages d'aperçu">
+    <strong>Réglages</strong>
+    <button id="t-density" aria-pressed="false">densité compacte</button>
+    <button id="t-radius" aria-pressed="false">rayons nets</button>
+    <button id="t-serif" aria-pressed="false">titres serif (option B)</button>
+    <span class="meta" style="color:#e6e0d6">— l'aperçu doit rester juste quand ils sont éteints</span>
+  </div>
+
+  <header>
+    <h1>replicant — jetons de design <span style="font-weight:400;color:var(--ink-600)">v0.1</span></h1>
+    <p class="lede">Charte <b>dérivée de la mesure</b> du site en production (audit du 17/09/2026) : la marque
+    terracotta + or est conservée, les contrastes sont corrigés. Source unique : <code>docs/design/tokens.json</code>.</p>
+    <p class="meta">Polices : l'aperçu utilise une pile système. <b>Montserrat</b> (option A et B) et <b>Source Sans 3</b> /
+    <b>Fraunces</b> seront auto-hébergées en woff2 — licences à confirmer à la source avant téléchargement.</p>
+  </header>
+
+  <section class="panel">
+    <h2 style="margin-top:0">1 · Couleurs</h2>
+    <p class="meta">Un rôle, une valeur. Aucun composant n'écrit un hex en dur.</p>
+    <div class="grid" id="swatches"></div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">2 · Contrastes (calculés, pas estimés)</h2>
+    <p class="meta">Seuils : 4,5:1 pour le texte, 3:1 pour les éléments d'interface. Les paires non conformes
+    sont documentées comme <b>interdits</b> avec leur alternative.</p>
+    <table>
+      <thead><tr><th>Combinaison</th><th>Usage</th><th>Ratio</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>encre #2b2419 sur blanc</td><td>texte, prix, titres</td><td>15,34:1</td><td class="ok">conforme</td></tr>
+        <tr><td>encre #2b2419 sur or #c6b26d</td><td>bandeau promo</td><td>7,30:1</td><td class="ok">conforme</td></tr>
+        <tr><td>blanc sur CTA #ab5a57</td><td>bouton principal</td><td>4,85:1</td><td class="ok">conforme</td></tr>
+        <tr><td>#6b6152 sur blanc</td><td>mentions, TVA</td><td>6,07:1</td><td class="ok">conforme</td></tr>
+        <tr><td>blanc sur #d06e6a <span class="meta">(site actuel)</span></td><td>bouton</td><td>3,43:1</td><td class="no">interdit</td></tr>
+        <tr><td>blanc sur or #c6b26d <span class="meta">(site actuel)</span></td><td>bandeau</td><td>2,10:1</td><td class="no">interdit</td></tr>
+        <tr><td>encre #2b2419 sur #d06e6a</td><td>grands textes seulement</td><td>4,47:1</td><td class="no">interdit en corps</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">3 · Typographie</h2>
+    <div class="scale">
+      <div class="t-display">Cadeaux originaux et insolites</div>
+      <div class="t-h1">Titre de section</div>
+      <div class="t-h2">Sous-section</div>
+      <div class="t-h3">Lot de 6 étiquettes pour bouteilles Halloween</div>
+      <div class="t-body">Corps de texte : description produit, conditions, aide. Base 16 px, interligne 1,6 —
+      lisible sur mobile sans zoom.</div>
+      <div class="t-small">Petit : « Derniers articles en stock », TVA affichée, délai de livraison.</div>
+      <div class="t-micro">Micro : badges et étiquettes — jamais en dessous de 12 px.</div>
+    </div>
+    <p class="meta"><b>Option A</b> — Montserrat (titres) + Source Sans 3 (corps) : continuité de marque.
+    <b>Option B</b> — Fraunces (titres, serif chaleureuse) + Montserrat (corps) : plus de caractère.
+    Basculez avec le réglage « titres serif » ci-dessus (ici : Georgia en substitution).</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">4 · Espacement et rayons</h2>
+    <div id="spaces"></div>
+    <div class="radii">
+      <div style="border-radius:var(--r-sm)">6 px</div>
+      <div style="border-radius:var(--r-md)">10 px</div>
+      <div style="border-radius:var(--r-lg)">16 px</div>
+      <div style="border-radius:var(--r-pill)">pill</div>
+    </div>
+    <p class="meta">Tout espacement est un multiple de 4. Un seul rayon par famille de composant.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">5 · Composants</h2>
+
+    <h3>Bandeau promo</h3>
+    <div class="promo">
+      <span>Livraison offerte dès 49 € — <span style="font-weight:400">jusqu'au 30 septembre</span></span>
+      <a href="#" data-hermes-send="Bandeau promo : quelle formulation et quel lien par défaut ?">Voir la sélection →</a>
+    </div>
+    <p class="meta">Fond or, <b>texte encre obligatoire</b> (7,30:1) : le blanc sur or est interdit. Fermable, avec dates paramétrables.</p>
+
+    <h3 style="margin-top:var(--s-6)">Boutons</h3>
+    <div class="row">
+      <button class="btn btn--primary" data-hermes-send="Composant bouton principal : quel libellé par défaut (« Ajouter au panier ») ?">Ajouter au panier</button>
+      <button class="btn btn--ghost">Voir la fiche</button>
+      <button class="btn btn--primary" disabled>Rupture de stock</button>
+    </div>
+    <p class="meta">Cible tactile 44 px minimum, anneau de focus visible au clavier (Tab), jamais d'état porté par la couleur seule.</p>
+
+    <h3 style="margin-top:var(--s-6)">Badges</h3>
+    <div class="row">
+      <span class="badge badge--ia">Généré par l'IA</span>
+      <span class="badge badge--promo">-20 %</span>
+      <span class="badge badge--stock">Derniers articles en stock</span>
+      <span class="badge badge--oos">Rupture de stock</span>
+    </div>
+    <p class="meta">Le badge « Généré par l'IA » vient du module <code>aimetadata</code> (activez-le sur la préprod) :
+    le thème lui <b>réserve l'emplacement</b> dans la galerie et sur les vignettes, il ne lit jamais la base.</p>
+
+    <h3 style="margin-top:var(--s-6)">Carte produit</h3>
+    <div class="cards">
+      <article class="card">
+        <div class="card__media"><span class="badge badge--ia card__ia">Généré par l'IA</span>photo produit</div>
+        <div class="card__body">
+          <p class="card__title">Lot de 6 étiquettes pour bouteilles Halloween / Dimensions : 13 x 9 cm</p>
+          <span class="badge badge--stock">Derniers articles en stock</span>
+          <p class="card__price">9,99 € <small>TTC</small></p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card__media">photo produit</div>
+        <div class="card__body">
+          <p class="card__title">Masque zombie avec élastique de maintien</p>
+          <span class="badge badge--oos">Rupture de stock</span>
+          <p class="card__price">6,50 € <small>TTC</small></p>
+        </div>
+      </article>
+    </div>
+    <p class="meta">Titre sur 2 lignes maximum, hauteur réservée (aucun décalage au chargement), prix TTC en gras,
+    disponibilité en toutes lettres.</p>
+
+    <h3 style="margin-top:var(--s-6)">Formulaire</h3>
+    <div class="row" style="align-items:flex-start">
+      <div class="field">
+        <label for="siret">Numéro SIRET <span class="meta">(professionnels)</span></label>
+        <input type="text" id="siret" value="1234" aria-invalid="true" aria-describedby="siret-err">
+        <span class="err" id="siret-err">Le SIRET doit comporter 14 chiffres.</span>
+        <span class="hint">Erreur sous le champ, jamais seulement en haut de page.</span>
+      </div>
+    </div>
+
+    <h3 style="margin-top:var(--s-6)">Messages</h3>
+    <div class="row" style="flex-direction:column; align-items:stretch; max-width:520px">
+      <div class="msg msg--ok"><b>Demande envoyée.</b> Elle sera examinée par notre équipe sous 48 h ouvrées.</div>
+      <div class="msg msg--err"><b>Paiement refusé.</b> Aucun montant n'a été prélevé — vous pouvez réessayer.</div>
+      <div class="msg msg--info"><b>Commande enregistrée</b> n° 123456 · suivi disponible dans votre compte.</div>
+    </div>
+
+    <h3 style="margin-top:var(--s-6)">Navigation mobile</h3>
+    <nav class="nav" aria-label="Navigation principale (aperçu)">
+      <a href="#" aria-current="page">Accueil</a><a href="#">Catégories</a><a href="#">Recherche</a>
+      <a href="#">Panier</a><a href="#">Compte</a>
+    </nav>
+    <p class="meta">5 entrées au maximum, 44 px de haut, libellées — jamais d'icône seule.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">6 · Mouvement</h2>
+    <div class="row">
+      <button class="btn btn--ghost" id="m1">Apparition (240 ms)</button>
+      <button class="btn btn--ghost" id="m2">Micro-interaction (160 ms)</button>
+      <button class="btn btn--ghost" id="m3">Cascade (3 éléments)</button>
+    </div>
+    <div class="row" id="mzone" style="min-height:56px; align-items:center">
+      <span class="badge badge--stock" data-demo>1</span>
+      <span class="badge badge--stock" data-demo>2</span>
+      <span class="badge badge--stock" data-demo>3</span>
+    </div>
+    <p class="meta">Réglages retenus : <b>Subtle</b> et <b>Standard</b> uniquement (l'outillage UI en propose 17, dont
+    un niveau « Complex » élastique — écarté : pas de rebond dans un tunnel d'achat). GSAP arrive
+    <b>après le premier rendu</b>, jamais sur le chemin critique, et tout est désactivé si
+    <code>prefers-reduced-motion</code> (essayez : le réglage système suffit).</p>
+  </section>
+
+  <p class="meta">Sources : <code>docs/design/tokens.json</code> · <code>docs/design/DESIGN.md</code> ·
+  audit du 17/09/2026 · budget : CSS ≤ 45 Ko gzip, JS ≤ 110 Ko, accueil ≤ 90 Ko, ≤ 60 requêtes.</p>
+</div>
+
+<script>
+/* Aperçu sans dépendance : c'est aussi une démonstration du « zéro framework CSS ». */
+(function(){
+  var C = {
+    'brand-700':'#934a47','brand-600':'#ab5a57','brand-500':'#d06e6a','brand-200':'#e8b7b5','brand-100':'#f7eceb',
+    'gold-600':'#9a8b55','gold-500':'#c6b26d','gold-100':'#f6f1e2',
+    'ink-900':'#2b2419','ink-700':'#4a4133','ink-600':'#6b6152',
+    'surface-0':'#ffffff','surface-50':'#faf8f5','surface-100':'#f4f1ea','border':'#e6e0d6',
+    'success':'#2f6b46','warning':'#8a5a12','danger':'#a5342f','info':'#2f5d75'
+  };
+  var USAGE = {
+    'brand-600':'CTA plein (blanc dessus 4,85:1)','brand-700':'survol du CTA','brand-500':'accents et bordures non textuels',
+    'brand-200':'bordures douces','brand-100':'fonds doux','gold-500':'bandeau promo (texte encre)','gold-600':'or appuyé',
+    'gold-100':'fond doré doux','ink-900':'texte, titres, prix','ink-700':'texte secondaire','ink-600':'mentions, TVA',
+    'surface-0':'fond de carte','surface-50':'fond de page','surface-100':'zones neutres','border':'séparateurs',
+    'success':'succès','warning':'avertissement','danger':'erreur','info':'information'
+  };
+  var host = document.getElementById('swatches');
+  Object.keys(C).forEach(function(k){
+    var d = document.createElement('div'); d.className='sw';
+    d.innerHTML = '<div class="sw__chip" style="background:'+C[k]+'"></div>'+
+      '<div class="sw__txt"><b>'+k+'</b><code>'+C[k]+'</code><span>'+USAGE[k]+'</span></div>';
+    host.appendChild(d);
+  });
+
+  var sp = document.getElementById('spaces');
+  [4,8,12,16,24,32,48,64,96].forEach(function(v){
+    var r = document.createElement('div');
+    r.style.cssText='display:flex;gap:12px;align-items:center;font-size:.75rem;color:var(--ink-600)';
+    r.innerHTML='<span style="width:52px;display:inline-block">'+v+' px</span><span class="spacebar" style="width:'+v+'px"></span>';
+    sp.appendChild(r);
+  });
+
+  function toggle(id, attr, value, onLabel, offLabel){
+    var b = document.getElementById(id);
+    b.addEventListener('click', function(){
+      var on = b.getAttribute('aria-pressed') === 'true';
+      b.setAttribute('aria-pressed', String(!on));
+      if(attr === 'serif'){ document.documentElement.dataset.titres = !on ? 'serif' : 'sans'; }
+      else { document.documentElement.dataset[attr] = !on ? value : ''; }
+      b.textContent = !on ? onLabel : offLabel;
+    });
+  }
+  toggle('t-density','density','compact','densité confort','densité compacte');
+  toggle('t-radius','radius','net','rayons doux','rayons nets');
+  toggle('t-serif','serif',null,'titres sans-serif','titres serif (option B)');
+
+  function reduced(){ return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  document.getElementById('m1').addEventListener('click', function(){
+    var p = document.querySelector('.panel');
+    p.style.transition = reduced() ? 'none' : 'opacity var(--dur-std) var(--ease-out), transform var(--dur-std) var(--ease-out)';
+    p.style.opacity = 0; p.style.transform = 'translateY(12px)';
+    requestAnimationFrame(function(){ p.style.opacity = 1; p.style.transform = 'none'; });
+  });
+  document.getElementById('m2').addEventListener('click', function(){
+    var b = this;
+    b.style.transition = reduced() ? 'none' : 'transform var(--dur-micro) var(--ease-out)';
+    b.style.transform = 'scale(.97)';
+    setTimeout(function(){ b.style.transform = 'none'; }, 90);
+  });
+  document.getElementById('m3').addEventListener('click', function(){
+    var els = document.querySelectorAll('[data-demo]');
+    els.forEach(function(el,i){
+      el.style.transition = reduced() ? 'none' : 'opacity var(--dur-std) var(--ease-out)';
+      el.style.opacity = 0;
+      setTimeout(function(){ el.style.opacity = 1; }, reduced() ? 0 : 50*(i+1));
+    });
+  });
+})();
+</script>
+</body>
+</html>
