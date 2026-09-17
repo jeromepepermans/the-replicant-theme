@@ -198,6 +198,41 @@
     (9.2), Admin API pour l'app mobile.
 - **Pourquoi** : une bascule se prépare un an à l'avance ; c'est ce qui évite le « on refait tout » en 2027.
 
+### DECISION-019 — La charte du site passe sur le nouveau logo (terracotta abandonné)
+- **Date** : 17/09/2026 · **Sujet** : identité visuelle du thème
+- **Décision** : le logo étant refait, la palette du thème est **dérivée du nouveau logo**, mesurée au pixel :
+  jaune `#fdd800` (13,3 % des pixels vifs) = **action** (fond du CTA, texte encre 10,96:1) ; orange
+  `#fda503` (11,3 %) = **promo** (texte encre 7,71:1) ; cyan `#00f1fc` (4,7 %) = **décor uniquement**
+  (1,40:1 sur blanc, jamais en texte) ; bleu `#007ef6` = **information** ; rouge `#ff0000` (8,6 %) =
+  **contour du logo seulement** (4,0:1 → les erreurs utilisent `#c1121f`, 6,22:1). L'encre `#2b2419` ne
+  change pas (même famille que les contours sombres du logo). **Le terracotta `#d06e6a` et l'or `#c6b26d`
+  sont retirés du système.**
+- **Pourquoi** : demande de Jérôme (« refaire le modèle design pour qu'il soit en harmonie avec le logo »).
+- **Règle d'harmonie** : l'énergie du logo (rayons, biseau, contours épais) reste **dans le logo et le
+  bandeau promo** ; l'interface reste plate, calme et rapide — condition de « moderne simple, facile et
+  rapide d'acheter ».
+- **Conséquence typographique** : l'option serif (Fraunces) de la v0.1 est **écartée** (rupture avec un
+  lettrage sans-serif gras italique) ; on retient **Montserrat 700/600 + Source Sans 3 400/600**, avec
+  l'italique en écho au logo, réservé aux titres promotionnels.
+- **Précision mesurée** : le fichier reçu contient **4 variantes réellement différentes** (empreintes
+  distinctes — une lecture visuelle rapide les avait crues identiques) ; elles diffèrent par la **densité
+  de rayons** (couleurs vives : 29,2 / 30,5 / 37,6 / 43,8 %) ; fond **transparent** (32-36 %), aucun badge
+  fermé. **Le logo ne partira jamais tel quel sur le site** : il faut une version **plate sans rayons**
+  pour l'en-tête, en SVG, plus une déclinaison icône (favicon, app mobile).
+
+### DECISION-020 — Navigation et achat rapide deviennent des exigences de design explicites
+- **Date** : 17/09/2026 · **Sujet** : navigation et parcours d'achat
+- **Décision** : la navigation est un livrable de design à part entière : **3 chemins maximum** jusqu'à un
+  produit (univers → sous-catégorie → produit), recherche toujours à un geste ; **barre basse mobile à
+  5 entrées de 48 px** (libellées ET iconographiées) ; **méga-menu desktop à 2 niveaux visibles sans clic**,
+  ouvrable au survol et au clavier ; fil d'Ariane systématique. L'achat rapide vise **moins de 60 secondes** :
+  ajout au panier depuis la carte produit, panier latéral, **commande invité par défaut**, **4 écrans
+  maximum**, frais de port affichés dès le panier, aucun popup, aucune inscription forcée.
+- **Pourquoi** : demande explicite de Jérôme (« moderne simple pour le client, facile et très rapide
+  d'acheter »).
+- **Impact** : les univers du menu et les catégories mises en avant de l'accueil sont **les mêmes données**
+  paramétrables en back-office ; les prompts Claude Design P3 et P6 ont été réécrits en conséquence.
+
 ### DECISION-006 — La collecte de la newsletter est partie prenante du chantier
 - **Date** : 17/09/2026 · **Sujet** : dépendance externe
 - **Décision** : la mise à jour des sélecteurs de la collecte (`newsletter-replicant`,
@@ -297,15 +332,16 @@ conventions Hummingbird pour l'évolutivité.
 
 **Restent ouverts :**
 
-1. **Base du thème** : fork de Hummingbird `1.x` (compatible 8.x mais **plus maintenu**),
-   thème vierge aux conventions Hummingbird (**recommandé**), ou migration de la boutique en 9.x d'abord ?
-   → `docs/dev-theme-prestashop.md` §4.
-2. **Framework CSS** : zéro framework (recommandé, cohérent avec la cible de poids) ou sous-ensemble
-   Bootstrap 5.3 aligné sur la référence ?
-3. **Trajectoire 9.x** : objectif daté par Jérôme, ou simple souhaite d'évolutivité ? (conditionne le budget
-   de portage et la priorité du module compagnon). Rappel : la boutique est en **8.2.3** alors que **8.2.8**
-   est publié — une montée de patch 8.2.x est à prévoir.
-4. **Remise pro** : -20 % global ou par produit (meilleur prix) ? Multipliable avec les remises existantes ?
-5. **App mobile** : quel moyen de paiement dans l'app (Monetico / Alma / PayPal, ou Stripe) ?
-6. **Newsletter** : qui met à jour les sélecteurs de collecte (périmètre `newsletter-replicant`) ?
-7. **Sauvegarde de production** : où sera la sauvegarde du thème et de la base avant la bascule finale ?
+1. **Quelle variante du logo est retenue** (1, 2, 3 ou 4 de la planche) — la densité de rayons varie
+   (29,2 / 30,5 / 37,6 / 43,8 % de la surface), donc le rendu dans un en-tête n'est pas le même.
+2. **Déclinaisons du logo à fournir** : version **plate sans rayons** pour l'en-tête, **SVG**, **icône
+   seule** (favicon, app mobile), et une version **monochrome** — le fichier actuel (2,6 Mo, JPEG-like,
+   4 variantes 3D sur fond transparent) ne peut pas partir tel quel sur le site.
+3. **Bascule de la charte sur le logo** : le CTA passe-t-il au **jaune `#fdd800`** (10,96:1 avec l'encre)
+   ou reste-t-il au terracotta actuel `#d06e6a` (3,43:1 avec du blanc, sous le seuil) ?
+4. **Base du thème** : thème vierge aux conventions Hummingbird (**recommandé**) — voir
+   `docs/dev-theme-prestashop.md` §4.
+5. **Trajectoire 9.x** : objectif 2027 (DECISION-018) → prévoir la montée **8.2.3 → 8.2.8** cette année.
+6. **App mobile** : quel moyen de paiement (Monetico / Alma / PayPal, ou Stripe) ?
+7. **Newsletter** : qui met à jour les sélecteurs de collecte (périmètre `newsletter-replicant`) ?
+8. **Sauvegarde de production** : où sera la sauvegarde du thème et de la base avant la bascule finale ?

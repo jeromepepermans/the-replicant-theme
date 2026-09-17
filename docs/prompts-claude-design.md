@@ -21,12 +21,18 @@ CONTRAINTES NON NÉGOCIABLES
   pas d'illustration décorative gratuite, pas d'ombre portée superflue, pas de blur/glassmorphism,
   pas de dégradés « SaaS ». Les visuels produits sont des photos sur fond clair.
 - Accessibilité WCAG 2.2 AA : contraste, focus visibles, cibles tactiles ≥ 44 px, pas d'info par la couleur seule.
-- Palette imposée (issue de l'audit du site actuel — ne pas inventer d'autres couleurs) :
-  brand-600 #ab5a57 (CTA, texte blanc dessus), brand-500 #d06e6a (accents, bordures),
-  brand-100 #f7eceb (fonds doux), or #c6b26d (bandeau promo, texte encre #2b2419 dessus),
-  ink-900 #2b2419, ink-600 #6b6152, surface #ffffff / #faf8f5, border #e6e0d6.
-- Typographie : Montserrat (déjà la police de la marque) pour les titres ; propose-moi 2 binômes
-  corps de texte pertinents, auto-hébergeables, maximum 2 graisses au total.
+- **Palette issue du NOUVEAU LOGO** (analyse pixel, ne pas inventer d'autres couleurs) :
+  jaune #fdd800 = fond du CTA et des éléments actifs — TOUJOURS avec du texte encre #2b2419 (10,96:1) ;
+  orange #fda503 = bandeau promo et badges, texte encre (7,71:1) ; cyan #00f1fc = DÉCOR uniquement
+  (1,40:1 sur blanc : jamais du texte) ; bleu #007ef6 = information (texte #0071dd) ; rouge #ff0000 =
+  contour du logo seulement (4,0:1) — les erreurs utilisent #c1121f ; encre #2b2419 / #4a4133 / #6b6152,
+  surfaces #ffffff / #faf8f5 / #f4f1ea, bordure #e6e0d6. Le terracotta #d06e6a et l'or #c6b26d de
+  l'ancienne charte sont abandonnés.
+- **Harmonie avec le logo** : l'énergie du logo (rayons, biseau, contours épais) reste dans le logo et le
+  bandeau promo. L'interface reste PLATE, calme, rapide : aucun biseau, aucun dégradé métallique, aucune
+  ombre décorative, pas de starburst en fond de section.
+- Typographie : Montserrat 700/600 pour les titres (police déjà installée, en écho au lettrage sans-serif
+  gras italique du logo) et Source Sans 3 400/600 pour le corps ; deux graisses maximum ; auto-hébergées.
 - Style : chaleureux, artisanal, lisible. Interdits explicites (AI-slop) : dégradé bleu/violet,
   grille de 3 cartes icône+titre+phrase, icône dans un carré arrondi au-dessus de chaque titre,
   tout centré, chiffres géants décoratifs, emoji, Inter par défaut, « Insights/Growth/Scale ».
@@ -83,13 +89,33 @@ Livrables : 3 variantes de composition + la version retenue en 390 / 768 / 1440,
 ## P3 — Header, navigation, recherche, panier
 
 ```
-Conçois la navigation : header desktop (logo, recherche, compte, panier avec compteur, mega-menu par
-univers de cadeaux), header mobile compact + menu plein écran + recherche plein écran + mini-panier
-(panier latéral avec 2 produits). Le header doit rester ultra-léger : distingue ce qui est chargé au
-premier rendu de ce qui ne l'est qu'à l'ouverture du menu.
-États à livrer : vide, focus clavier, mobile avec clavier ouvert, scrollé (version compacte),
+Conçois la navigation — c'est une exigence forte du client : elle doit être facile sur mobile COMME sur
+desktop, et permettre d'atteindre n'importe quel produit en 3 chemins maximum, avec la recherche toujours
+à un geste.
+
+DESKTOP
+- en-tête 72 px : logo à gauche, univers au centre, recherche + compte + panier à droite ; version compacte
+  au défilement.
+- méga-menu : une colonne par univers, 2 niveaux visibles SANS clic, image de mise en avant optionnelle,
+  ouvrable au survol ET au clavier.
+- recherche permanente avec suggestions (catégories + produits), raccourci clavier « / ».
+- fil d'Ariane sur toutes les pages catalogue et produit.
+
+MOBILE
+- en-tête 56 px collant : logo (version plate, sans rayons), recherche en icône ouvrant un champ plein
+  écran, panier avec compteur.
+- barre de navigation basse à 5 entrées (Accueil · Catégories · Recherche · Panier · Compte), 48 px de
+  haut, entrées LIBELLÉES et iconographiées (jamais d'icône seule), onglet actif marqué.
+- menu plein écran : univers dépliés au premier niveau, aucun sous-menu caché, fermeture au balayage,
+  retour système respecté.
+- filtres de catégorie : panneau dédié avec compteur de résultats et bouton « Voir les N produits »
+  toujours visible.
+
+Le header doit rester ultra-léger : distingue ce qui est chargé au premier rendu de ce qui ne l'est qu'à
+l'ouverture du menu. États à livrer : vide, focus clavier, mobile avec clavier ouvert, scrollé,
 0 produit / 1 produit / rupture de stock.
-Zones paramétrables : logo, bandeau annonce, ordre des entrées de menu, univers mis en avant.
+Zones paramétrables (back-office) : logo, bandeau annonce, univers et ordre des entrées, entrées de la
+barre mobile, univers mis en avant — les mêmes données que les catégories mises en avant de l'accueil.
 ```
 
 ---
@@ -131,6 +157,15 @@ Conçois le tunnel de commande en 4 étapes visibles, faisables sans créer de c
 puis Confirmation claire (numéro, suivi, e-mails annoncés).
 Contraintes : aucune étape ne dépasse un écran mobile ; chaque étape est atteignable en 1 clic depuis la
 précédente ; erreurs de champ au bon endroit ; jamais de perte de panier au retour arrière.
+
+OBJECTIF MESURABLE : un client qui sait ce qu'il veut achète en MOINS DE 60 SECONDES, sans créer de compte.
+- ajout au panier possible depuis la carte produit, sans ouvrir la fiche produit ;
+- panier latéral : modification de quantité et lancement de la commande sans changer de page ;
+- commande invité par défaut, création de compte proposée APRÈS la commande ;
+- frais de port affichés dès le panier (jamais de surprise au dernier écran) ;
+- transporteurs et moyens de paiement au même niveau, adresse en autocomplétion ;
+- aucun compte à rebours, aucun popup, aucune inscription forcée à la newsletter ;
+- progression visible en permanence (étape 2/4), retour arrière toujours possible.
 Livrable : maquettes des 4 étapes + confirmation + états d'erreur, mobile d'abord, plus un prototype
 cliquable du parcours complet.
 ```

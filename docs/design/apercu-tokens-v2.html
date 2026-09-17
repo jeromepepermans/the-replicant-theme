@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>replicant — jetons de design v0.2 (harmonisés avec le nouveau logo)</title>
+<style>
+  /* ============================================================================
+     Jetons v0.2 — palette dérivée du NOUVEAU LOGO (analyse pixel du 17/09/2026)
+     Zéro framework CSS : variables + composants maison.
+     ============================================================================ */
+  :root{
+    --action-500:#fdd800; --action-600:#dfbe00; --action-100:#fef9d6;
+    --chaud-500:#fda503;  --chaud-600:#ca8402;  --chaud-700:#986302;
+    --froid-500:#00f1fc;  --froid-600:#00858b;  --froid-700:#00787e; --froid-100:#e6fbfd;
+    --info-500:#007ef6;   --info-600:#0071dd;
+    --danger-600:#c1121f; --danger-100:#fdeaec;
+    --ink-900:#2b2419; --ink-700:#4a4133; --ink-600:#6b6152;
+    --surface-0:#ffffff; --surface-50:#faf8f5; --surface-100:#f4f1ea; --border:#e6e0d6;
+    /* héritage : conservé uniquement pour comparaison via le réglage « ancienne charte » */
+    --legacy-500:#d06e6a; --legacy-700:#934a47; --legacy-100:#f7eceb;
+    --r-sm:6px; --r-md:10px; --r-lg:16px; --r-pill:999px;
+    --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-6:24px; --s-8:32px; --s-12:48px;
+    --e-1:0 1px 2px rgba(43,36,25,.06); --e-2:0 4px 12px rgba(43,36,25,.08); --e-3:0 12px 28px rgba(43,36,25,.12);
+    --dur-micro:160ms; --dur-std:240ms;
+    --ease-out:cubic-bezier(.22,.61,.36,1);
+    --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --density:1;
+    --page-bg:#f4f1ea; --page-ink:#2b2419;
+    /* jetons « charte actuelle » remappés sur l'action */
+    --cta-bg:var(--action-500); --cta-bg-hover:var(--action-600); --cta-ink:var(--ink-900);
+  }
+  [data-charte="actuelle"]{
+    --cta-bg:var(--legacy-500); --cta-bg-hover:var(--legacy-700); --cta-ink:#ffffff;
+    --action-500:var(--legacy-500); --action-100:var(--legacy-100); --action-600:var(--legacy-700);
+  }
+  [data-radius="net"]{ --r-sm:2px; --r-md:3px; --r-lg:4px; }
+  [data-density="compact"]{ --density:.75; }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--page-bg); color:var(--page-ink); font-family:var(--font-sans); font-size:16px;
+       line-height:1.6; padding:var(--s-4); max-width:1100px}
+  h1,h2,h3{line-height:1.15; margin:0}
+  h1{font-size:clamp(1.5rem,1.2rem + 1.4vw,2.125rem); font-weight:700}
+  h2{font-size:clamp(1.125rem,1rem + .6vw,1.4rem); font-weight:700; margin-top:var(--s-8)}
+  h3{font-size:1rem; font-weight:600}
+  p{margin:var(--s-2) 0}
+  .lede{color:var(--ink-600); max-width:72ch}
+  .meta{font-size:.8125rem; color:var(--ink-600)}
+  .board{display:flex; flex-direction:column; gap:var(--s-6); align-items:flex-start}
+  .panel{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--r-lg);
+         padding:calc(var(--s-4) * var(--density)); width:100%; box-shadow:var(--e-1)}
+  .grid{display:grid; gap:var(--s-2); grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); margin-top:var(--s-3)}
+  .sw{border:1px solid var(--border); border-radius:var(--r-md); overflow:hidden; background:var(--surface-0)}
+  .sw__chip{height:54px; display:grid; place-items:center; font-size:.6875rem; font-weight:700}
+  .sw__txt{padding:var(--s-2); font-size:.75rem; line-height:1.35}
+  .sw__txt b{display:block}
+  .sw__txt code{font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--ink-600)}
+  table{border-collapse:collapse; width:100%; font-size:.8125rem; margin-top:var(--s-3)}
+  th,td{text-align:left; padding:var(--s-2); border-bottom:1px solid var(--border)}
+  .ok{color:#2f6b46; font-weight:600} .no{color:var(--danger-600); font-weight:600}
+  .row{display:flex; flex-wrap:wrap; gap:var(--s-3); align-items:center; margin-top:var(--s-3)}
+  .col{display:flex; flex-direction:column; gap:var(--s-2)}
+  /* --- Boutons --- */
+  .btn{font:inherit; font-weight:700; border:1px solid transparent; border-radius:var(--r-md); cursor:pointer;
+       min-height:44px; padding:0 var(--s-4); display:inline-flex; align-items:center; gap:var(--s-2);
+       transition:background var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out)}
+  .btn--primary{background:var(--cta-bg); color:var(--cta-ink)}
+  .btn--primary:hover{background:var(--cta-bg-hover)}
+  .btn--primary:active{transform:translateY(1px)}
+  .btn--ghost{background:transparent; color:var(--froid-700); border-color:var(--froid-600)}
+  .btn--ghost:hover{background:var(--froid-100)}
+  .btn[disabled]{background:var(--surface-100); color:var(--ink-600); cursor:not-allowed}
+  :focus-visible{outline:2px solid var(--ink-900); outline-offset:2px}
+  /* --- Badges --- */
+  .badge{display:inline-flex; align-items:center; gap:var(--s-1); font-size:.75rem; font-weight:700;
+         padding:2px var(--s-2); border-radius:var(--r-pill); border:1px solid transparent}
+  .badge--ia{background:var(--froid-100); color:var(--froid-700); border-color:var(--froid-600)}
+  .badge--promo{background:var(--chaud-500); color:var(--ink-900)}
+  .badge--stock{background:var(--surface-100); color:var(--ink-900); border-color:var(--border)}
+  .badge--oos{background:var(--danger-100); color:var(--danger-600); border-color:#f2c9c6}
+  /* --- Bandeau promo (énergie du logo : orange + éclat ponctuel) --- */
+  .promo{background:var(--chaud-500); color:var(--ink-900); border-radius:var(--r-md); padding:var(--s-2) var(--s-3);
+         display:flex; gap:var(--s-3); align-items:center; justify-content:space-between; font-size:.875rem; font-weight:700}
+  .promo a{color:var(--ink-900)}
+  .spark{display:inline-block; width:10px; height:10px; margin-right:6px;
+         background:conic-gradient(from 0deg, var(--ink-900) 0 8%, transparent 8% 17%, var(--ink-900) 17% 25%, transparent 25% 33%, var(--ink-900) 33% 42%, transparent 42% 50%, var(--ink-900) 50% 58%, transparent 58% 67%, var(--ink-900) 67% 75%, transparent 75% 83%, var(--ink-900) 83% 92%, transparent 92%);
+         clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)}
+  /* --- Carte produit --- */
+  .cards{display:grid; gap:var(--s-3); grid-template-columns:repeat(auto-fill,minmax(176px,1fr)); margin-top:var(--s-3)}
+  .card{border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; background:var(--surface-0); display:flex; flex-direction:column}
+  .card:hover{box-shadow:var(--e-2)}
+  .card__media{position:relative; aspect-ratio:1/1; background:linear-gradient(135deg,var(--surface-100),#e9e3d8);
+        display:grid; place-items:center; color:var(--ink-600); font-size:.75rem}
+  .card__ia{position:absolute; top:var(--s-2); left:var(--s-2)}
+  .card__add{position:absolute; right:var(--s-2); bottom:var(--s-2); width:44px; height:44px; border-radius:var(--r-pill);
+        border:none; background:var(--cta-bg); color:var(--cta-ink); font-size:1.25rem; font-weight:700; cursor:pointer; line-height:1}
+  .card__body{padding:var(--s-3); display:flex; flex-direction:column; gap:var(--s-1); flex:1}
+  .card__title{font-size:.9375rem; font-weight:600; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2;
+        -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em; margin:0}
+  .card__price{font-size:1.125rem; font-weight:700; margin-top:auto}
+  .card__price small{font-weight:400; color:var(--ink-600); font-size:.75rem}
+  /* --- Navigation : en-tête desktop + barre mobile --- */
+  .header{border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface-0); padding:var(--s-2) var(--s-3);
+          display:flex; align-items:center; gap:var(--s-4); flex-wrap:wrap}
+  .logo-slot{font-weight:700; font-style:italic; font-size:1.0625rem; letter-spacing:.02em;
+          display:flex; align-items:center; gap:6px; padding:var(--s-1) var(--s-2); border:1px dashed var(--border); border-radius:var(--r-sm)}
+  .logo-slot i{width:16px; height:16px; border-radius:50%; display:inline-block;
+          background:conic-gradient(var(--action-500) 0 25%, var(--chaud-500) 25% 50%, var(--froid-500) 50% 75%, var(--info-500) 75% 100%)}
+  .menu{display:flex; gap:var(--s-3); flex-wrap:wrap; margin-left:auto; align-items:center; font-size:.9375rem}
+  .menu a{color:var(--ink-900); text-decoration:none; padding:var(--s-2); border-radius:var(--r-sm)}
+  .menu a[aria-current=page]{background:var(--action-100); font-weight:700}
+  .menu a:hover{background:var(--surface-100)}
+  .search{display:flex; align-items:center; gap:var(--s-2); border:1px solid var(--border); border-radius:var(--r-pill);
+          padding:0 var(--s-3); min-height:44px; min-width:210px; color:var(--ink-600); font-size:.875rem; background:var(--surface-50)}
+  .nb{background:var(--froid-500); color:var(--ink-900); border-radius:var(--r-pill); font-size:.6875rem; font-weight:700; padding:0 6px; margin-left:4px}
+  .megamenu{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:var(--s-3); margin-top:var(--s-2);
+          border:1px solid var(--border); border-radius:var(--r-lg); padding:var(--s-3); background:var(--surface-50)}
+  .megamenu div span{font-weight:700; font-size:.875rem; display:block; margin-bottom:var(--s-1)}
+  .megamenu a{display:block; font-size:.8125rem; color:var(--ink-700); text-decoration:none; padding:2px 0}
+  .megamenu a:hover{color:var(--froid-700); text-decoration:underline}
+  .mobile-head{border:1px solid var(--border); border-radius:var(--r-lg); background:var(--surface-0); padding:var(--s-2);
+          display:flex; align-items:center; gap:var(--s-2); max-width:390px; min-height:56px}
+  .mobile-head .sp{flex:1}
+  .nav{display:flex; gap:2px; background:var(--surface-0); border:1px solid var(--border); border-radius:var(--r-lg);
+       padding:var(--s-1); max-width:390px}
+  .nav a{flex:1; text-align:center; font-size:.6875rem; text-decoration:none; color:var(--ink-600); padding:var(--s-1) 0;
+       min-height:48px; display:flex; flex-direction:column; justify-content:center; gap:2px; border-radius:var(--r-md); font-weight:600}
+  .nav a b{font-size:1.0625rem; font-weight:400; line-height:1}
+  .nav a[aria-current=page]{color:var(--ink-900); background:var(--action-100)}
+  .crumbs{font-size:.8125rem; color:var(--ink-600); margin-top:var(--s-2)}
+  .crumbs a{color:var(--froid-700)}
+  /* --- Divers --- */
+  .field{display:flex; flex-direction:column; gap:var(--s-1); max-width:340px}
+  label{font-size:.875rem; font-weight:600; color:var(--ink-700)}
+  input[type=text]{font:inherit; min-height:44px; padding:0 var(--s-3); border:1px solid var(--border);
+        border-radius:var(--r-md); background:var(--surface-0)}
+  input[aria-invalid=true]{border-color:var(--danger-600); background:var(--danger-100)}
+  .hint{font-size:.8125rem; color:var(--ink-600)} .err{font-size:.8125rem; color:var(--danger-600); font-weight:600}
+  .msg{border-left:4px solid var(--border); padding:var(--s-2) var(--s-3); border-radius:var(--r-sm); font-size:.875rem; background:var(--surface-50)}
+  .msg--ok{border-color:#2f6b46} .msg--err{border-color:var(--danger-600)} .msg--info{border-color:var(--info-500)}
+  .radii{display:flex; gap:var(--s-3); margin-top:var(--s-3); flex-wrap:wrap}
+  .radii div{width:60px; height:60px; background:var(--action-100); border:1px solid var(--border); display:grid; place-items:center; font-size:.75rem}
+  .tweaks{position:sticky; top:var(--s-2); z-index:5; background:var(--ink-900); color:#fff; border-radius:var(--r-pill);
+       padding:var(--s-2) var(--s-3); display:flex; gap:var(--s-2); align-items:center; flex-wrap:wrap; font-size:.75rem;
+       box-shadow:var(--e-3); width:100%}
+  .tweaks button{font:inherit; font-size:.75rem; background:transparent; color:#fff; border:1px solid rgba(255,255,255,.4);
+       border-radius:var(--r-pill); padding:4px 10px; min-height:28px; cursor:pointer}
+  .tweaks button[aria-pressed=true]{background:#fff; color:var(--ink-900); border-color:#fff}
+  @media (prefers-reduced-motion: reduce){ *{transition-duration:1ms !important; animation-duration:1ms !important} }
+</style>
+</head>
+<body>
+<div class="board">
+
+  <div class="tweaks" role="group" aria-label="Réglages d'aperçu">
+    <strong>Réglages</strong>
+    <button id="t-charte" aria-pressed="false">comparer : charte actuelle (terracotta)</button>
+    <button id="t-density" aria-pressed="false">densité compacte</button>
+    <button id="t-radius" aria-pressed="false">rayons nets</button>
+  </div>
+
+  <header>
+    <h1>replicant — jetons de design <span style="font-weight:400;color:var(--ink-600)">v0.2</span></h1>
+    <p class="lede"><b>Palette dérivée du nouveau logo</b> (analyse pixel : jaune <code>#fdd800</code> 13,3 %,
+    orange <code>#fda503</code> 11,3 %, rouge <code>#ff0000</code> 8,6 % — contour —, cyan <code>#00f1fc</code> 4,7 %,
+    bleu <code>#007ef6</code>). L'énergie du logo reste dans le logo et le bandeau ; l'interface reste plate,
+    calme et rapide. Source unique : <code>docs/design/tokens.json</code> v0.2.0.</p>
+    <p class="meta">Polices : aperçu en pile système. Montserrat (titres, en écho au lettrage sans-serif gras
+    italique du logo) + Source Sans 3 (corps) — <b>licences à confirmer à la source</b> avant auto-hébergement.</p>
+  </header>
+
+  <section class="panel">
+    <h2 style="margin-top:0">1 · Du logo à l'interface</h2>
+    <p class="meta">Chaque couleur du logo reçoit un rôle d'interface, avec son contraste mesuré. Aucune n'est
+    transposée telle quelle sans vérification.</p>
+    <table>
+      <thead><tr><th>Couleur du logo</th><th>Rôle dans l'interface</th><th>Contraste</th></tr></thead>
+      <tbody>
+        <tr><td>Jaune <code>#fdd800</code></td><td>fond du CTA, éléments actifs (texte encre)</td><td class="ok">10,96:1</td></tr>
+        <tr><td>Orange <code>#fda503</code></td><td>bandeau promo, badges (texte encre)</td><td class="ok">7,71:1</td></tr>
+        <tr><td>Cyan <code>#00f1fc</code></td><td><b>décor uniquement</b> (soulignements, aplats) → interface <code>#00858b</code>, texte <code>#00787e</code></td><td class="no">1,40:1 en texte</td></tr>
+        <tr><td>Bleu <code>#007ef6</code></td><td>information (texte <code>#0071dd</code>)</td><td class="ok">4,77:1</td></tr>
+        <tr><td>Rouge <code>#ff0000</code></td><td>contour du logo seulement → erreurs en <code>#c1121f</code></td><td class="no">4,0:1 → <span class="ok">6,22:1</span></td></tr>
+        <tr><td>Ombres quasi-noires</td><td>encre <code>#2b2419</code> (déjà la même famille)</td><td class="ok">15,34:1</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">2 · Palette (14 paires texte/fond contrôlées, 14 conformes)</h2>
+    <div class="grid" id="swatches"></div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">3 · Navigation — mobile et desktop</h2>
+
+    <h3>Desktop · en-tête, recherche permanente, méga-menu</h3>
+    <div class="header">
+      <span class="logo-slot"><i></i> The Replicant</span>
+      <span class="search">🔍 Rechercher un cadeau… <span style="margin-left:auto;font-size:.75rem">/</span></span>
+      <nav class="menu" aria-label="Navigation desktop (aperçu)">
+        <a href="#" aria-current="page">Univers</a><a href="#">Nouveautés</a><a href="#">Promos</a>
+        <a href="#">Idées cadeaux</a><a href="#">Compte</a><a href="#">Panier<span class="nb">2</span></a>
+      </nav>
+    </div>
+    <div class="megamenu">
+      <div><span>Fêtes &amp; saisons</span><a href="#">Halloween</a><a href="#">Noël</a><a href="#">14 juillet</a><a href="#">Pâques</a></div>
+      <div><span>Anniversaires</span><a href="#">Adultes</a><a href="#">Enfants</a><a href="#">18 ans</a><a href="#">Grands-parents</a></div>
+      <div><span>Jeux &amp; extérieur</span><a href="#">Pistolet à billes</a><a href="#">Pétanque</a><a href="#">Ballons</a></div>
+      <div><span>Maison &amp; déco</span><a href="#">Décorations</a><a href="#">Cuisine</a><a href="#">Mugs</a></div>
+    </div>
+    <p class="crumbs">Accueil › <a href="#">Fêtes &amp; saisons</a> › Halloween</p>
+    <p class="meta">72 px, devient compact au défilement. Méga-menu : une colonne par univers, 2 niveaux visibles
+    <b>sans clic</b>, ouvrable au survol <b>et au clavier</b>. Fil d'Ariane partout.</p>
+
+    <h3 style="margin-top:var(--s-6)">Mobile · en-tête compact + barre basse 5 entrées</h3>
+    <div class="mobile-head">
+      <span class="logo-slot"><i></i> R</span>
+      <span class="sp"></span>
+      <span class="search" style="min-width:auto">🔍</span>
+      <span class="search" style="min-width:auto">🛒<span class="nb">2</span></span>
+    </div>
+    <nav class="nav" aria-label="Navigation mobile (aperçu)" style="margin-top:var(--s-3)">
+      <a href="#" aria-current="page"><b>⌂</b>Accueil</a>
+      <a href="#"><b>▤</b>Catégories</a>
+      <a href="#"><b>⌕</b>Recherche</a>
+      <a href="#"><b>▢</b>Panier</a>
+      <a href="#"><b>☺</b>Compte</a>
+    </nav>
+    <p class="meta">56 px d'en-tête, barre basse <b>48 px</b>, entrées <b>libellées et iconographiées</b>
+    (jamais d'icône seule), onglet actif marqué. Le menu plein écran déplie les univers au premier niveau —
+    aucun sous-menu caché. Filtres de catégorie : panneau dédié avec compteur de résultats.</p>
+    <p class="meta"><b>Paramétrable en back-office</b> : univers et ordre, entrées de la barre mobile, univers mis
+    en avant, image par univers — <b>les mêmes données</b> que les catégories mises en avant de l'accueil.</p>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">4 · Composants</h2>
+
+    <h3>Bandeau promo <span class="meta">(le seul endroit où l'énergie du logo s'exprime)</span></h3>
+    <div class="promo">
+      <span><span class="spark"></span>Livraison offerte dès 49 € — jusqu'au 30 septembre</span>
+      <a href="#" data-hermes-send="Bandeau promo : quelle formulation par défaut et quel lien ?">Voir la sélection →</a>
+    </div>
+
+    <h3 style="margin-top:var(--s-6)">Boutons</h3>
+    <div class="row">
+      <button class="btn btn--primary" data-hermes-send="CTA principal : libellé par défaut « Ajouter au panier » ?">Ajouter au panier</button>
+      <button class="btn btn--ghost">Voir la fiche</button>
+      <button class="btn btn--primary" disabled>Rupture de stock</button>
+    </div>
+    <p class="meta">Jaune du logo + texte encre (10,96:1), 44 px minimum, focus clavier visible.
+    Bascule « comparer : charte actuelle » pour voir le même bouton en terracotta (blanc dessus : 3,43:1 — sous le seuil).</p>
+
+    <h3 style="margin-top:var(--s-6)">Badges</h3>
+    <div class="row">
+      <span class="badge badge--ia">Généré par l'IA</span>
+      <span class="badge badge--promo">-20 %</span>
+      <span class="badge badge--stock">Derniers articles en stock</span>
+      <span class="badge badge--oos">Rupture de stock</span>
+    </div>
+
+    <h3 style="margin-top:var(--s-6)">Carte produit — achat sans ouvrir la fiche</h3>
+    <div class="cards">
+      <article class="card">
+        <div class="card__media"><span class="badge badge--ia card__ia">Généré par l'IA</span>photo produit
+          <button class="card__add" aria-label="Ajouter au panier" data-hermes-send="Ajout direct depuis la carte produit : on garde ?">+</button>
+        </div>
+        <div class="card__body">
+          <p class="card__title">Lot de 6 étiquettes pour bouteilles Halloween / Dimensions : 13 x 9 cm</p>
+          <span class="badge badge--stock">Derniers articles en stock</span>
+          <p class="card__price">9,99 € <small>TTC</small></p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card__media">photo produit
+          <button class="card__add" aria-label="Ajouter au panier">+</button>
+        </div>
+        <div class="card__body">
+          <p class="card__title">Masque zombie avec élastique de maintien</p>
+          <span class="badge badge--oos">Rupture de stock</span>
+          <p class="card__price">6,50 € <small>TTC</small></p>
+        </div>
+      </article>
+    </div>
+
+    <h3 style="margin-top:var(--s-6)">Formulaire et messages</h3>
+    <div class="row" style="align-items:flex-start">
+      <div class="field">
+        <label for="siret">Numéro SIRET <span class="meta">(professionnels)</span></label>
+        <input type="text" id="siret" value="1234" aria-invalid="true" aria-describedby="siret-err">
+        <span class="err" id="siret-err">Le SIRET doit comporter 14 chiffres.</span>
+        <span class="hint">Erreur sous le champ. Aucune information portée par la seule couleur.</span>
+      </div>
+    </div>
+    <div class="row col" style="max-width:520px; margin-top:var(--s-3)">
+      <div class="msg msg--ok"><b>Demande envoyée.</b> Elle sera examinée par notre équipe sous 48 h ouvrées.</div>
+      <div class="msg msg--err"><b>Paiement refusé.</b> Aucun montant n'a été prélevé — vous pouvez réessayer.</div>
+      <div class="msg msg--info"><b>Commande enregistrée</b> n° 123456 · suivi dans votre compte.</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2 style="margin-top:0">5 · Achat rapide (objectif : moins de 60 secondes)</h2>
+    <div class="row col" style="max-width:640px">
+      <div class="msg msg--ok">1 · ajout au panier <b>depuis la carte produit</b> — pas besoin d'ouvrir la fiche</div>
+      <div class="msg msg--ok">2 · panier latéral : quantité et <b>commande lancée sans changer de page</b></div>
+      <div class="msg msg--ok">3 · <b>commande invité</b> par défaut, création de compte proposée après</div>
+      <div class="msg msg--ok">4 · <b>4 écrans maximum</b>, frais de port affichés dès le panier</div>
+    </div>
+    <p class="meta">Refusés : inscription obligatoire, étape artificielle, fenêtre modale qui interrompt le tunnel,
+    frais découverts au dernier écran, compte à rebours, inscription forcée à la newsletter.</p>
+  </section>
+
+  <p class="meta">Sources : <code>docs/design/tokens.json</code> v0.2.0 · <code>docs/design/DESIGN.md</code> v0.2 ·
+  logo analysé au pixel le 17/09/2026 · audit du site le 17/09/2026 · budget : CSS ≤ 45 Ko, JS ≤ 110 Ko, accueil ≤ 90 Ko gzip.</p>
+</div>
+
+<script>
+/* Aperçu sans dépendance — démonstration du « zéro framework CSS ». */
+(function(){
+  var C = {'action-500':'#fdd800 · CTA','action-600':'#dfbe00 · survol','action-100':'#fef9d6 · fond doux',
+    'chaud-500':'#fda503 · promo','chaud-600':'#ca8402 · UI','chaud-700':'#986302 · texte',
+    'froid-500':'#00f1fc · décor','froid-600':'#00858b · UI','froid-700':'#00787e · lien','froid-100':'#e6fbfd · fond',
+    'info-500':'#007ef6 · UI','info-600':'#0071dd · texte','danger-600':'#c1121f · erreur',
+    'ink-900':'#2b2419 · texte','ink-700':'#4a4133 · secondaire','ink-600':'#6b6152 · mentions',
+    'surface-0':'#ffffff · carte','surface-50':'#faf8f5 · page','surface-100':'#f4f1ea · zone','border':'#e6e0d6 · bordure'};
+  var host=document.getElementById('swatches');
+  Object.keys(C).forEach(function(k){
+    var hex=C[k].split(' ')[0], lbl=C[k].substring(C[k].indexOf('·')+2);
+    var dark=['ink-900','ink-700','ink-600','froid-700','chaud-700','info-600','danger-600'];
+    var fg=dark.indexOf(k)>=0?'#fff':'#2b2419';
+    var d=document.createElement('div'); d.className='sw';
+    d.innerHTML='<div class="sw__chip" style="background:'+hex+';color:'+fg+'">'+lbl+'</div>'+
+      '<div class="sw__txt"><b>'+k+'</b><code>'+hex+'</code><span>'+lbl+'</span></div>';
+    host.appendChild(d);
+  });
+  function toggle(id, cb, labels){
+    var b=document.getElementById(id);
+    b.addEventListener('click', function(){
+      var on=b.getAttribute('aria-pressed')==='true';
+      b.setAttribute('aria-pressed', String(!on));
+      cb(!on);
+      if(labels) b.textContent = !on ? labels[0] : labels[1];
+    });
+  }
+  toggle('t-charte', function(on){ document.documentElement.dataset.charte = on?'actuelle':'logo'; },
+        ['comparer : charte actuelle (terracotta)','comparer : nouveau logo (jaune)']);
+  toggle('t-density', function(on){ document.documentElement.dataset.density = on?'compact':''; },
+        ['densité confort','densité compacte']);
+  toggle('t-radius', function(on){ document.documentElement.dataset.radius = on?'net':''; },
+        ['rayons doux','rayons nets']);
+})();
+</script>
+</body>
+</html>
