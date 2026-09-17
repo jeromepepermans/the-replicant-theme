@@ -1,0 +1,32 @@
+# .gitignore — the-replicant-theme
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Dépendances & build
+/node_modules/
+/vendor/
+/dist/
+/cache/
+/logs/
+*.log
+
+# Livrables et archives
+*.zip
+*.tar.gz
+*.bak
+*.bak-*
+
+# Sauvegardes & rendus de contrôle
+/sauvegardes/
+/rendu-local/
+/rendu-serveur/
+/rendu-local-*/
+/rendu-serveur-*/
+
+# Divers
+.DS_Store
+*.swp
+Thumbs.db
