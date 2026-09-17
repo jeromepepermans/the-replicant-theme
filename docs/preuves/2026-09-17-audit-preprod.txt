@@ -1,0 +1,232 @@
+### SOCLE
+  chemin=/home/djdj2187/preprod.the-replicant.com base=djdj2187_preprod_thereplicant prefixe=ps_ hote=localhost
+  MariaDB/MySQL = 11.4.13-MariaDB
+  PrestaShop (version en base) = 8.2.3
+== clés de configuration du socle
+  PS_COOKIE_SAMESITE | Lax
+  PS_CSS_THEME_CACHE | NULL
+  PS_JS_THEME_CACHE | NULL
+  PS_MAINTENANCE_IP | 85.69.220.144, 109.234.164.179, 109.234.164.179,212.195.87.9
+  PS_REWRITING_SETTINGS | 0
+  PS_SHOP_ENABLE | NULL
+  PS_SSL_ENABLED | 1
+
+### THEMES (en base et sur disque)
+== ps_shop.theme_name (le thème réellement actif)
+  1 | The Replicant | 1 | 0 | warehousechild
+
+### MULTISTORE (mesure)
+== ps_shop
+  1 | 1 | The Replicant | 1 | 0
+== ps_shop_url
+  1 | preprod.the-replicant.com | / |  | 1 | 1
+== ps_shop_group
+  1 | Default | 0 | 0 | 0
+== PS_MULTISHOP_FEATURE_ACTIVE (absence = jamais activé)
+  (0 ligne)
+
+### MODULES
+  modules enregistrés = 129
+  modules actifs = 89
+== modules actifs (nom | version), ordre alphabétique
+  aimetadata(1.2.2)  amazon(5.4.12)  autoupgrade(7.4.4)
+  blockoss(2.0.0)  cdiscount(4.5.36)  colissimo_essentiel(1.0.0)
+  customtextpro(1.0.0)  dashactivity(2.1.1)  dashgoals(2.0.4)
+  dashproducts(2.2.0)  dashtrends(2.1.3)  freelivery(2.1.6)
+  graphnvd3(2.0.3)  gridhtml(2.0.3)  gsitemap(5.0.0)
+  hc_fedex(1.0.0)  iqitadditionaltabs(1.1.1)  iqitcompare(1.1.3)
+  iqitcontactpage(1.0.0)  iqitcookielaw(1.0.2)  iqitcountdown(1.0.0)
+  iqitcrossselling(1.1.0)  iqitdashboardnews(1.0)  iqitelementor(1.2.4)
+  iqitemailsubscriptionconf(1.0.0)  iqitextendedproduct(1.1.2)  iqitfreedeliverycount(1.4.1)
+  iqithtmlandbanners(1.1.0)  iqitlinksmanager(1.4.0)  iqitmegamenu(4.0.0)
+  iqitpopup(1.1.1)  iqitproductflags(1.0.0)  iqitproductsnav(1.0.0)
+  iqitproducttags(1.0.0)  iqitproductvariants(1.0.0)  iqitreviews(1.0.5)
+  iqitsearch(1.1.3)  iqitsizecharts(1.2.2)  iqitsociallogin(1.0.1)
+  iqitthemeeditor(4.7.2)  iqitwishlist(1.1.3)  m2emultichannelconnect(1.2.9)
+  pagesnotfound(3.0.0)  ph_blog_column_custom(1.1.0)  ph_relatedposts(1.2)
+  ph_simpleblog(1.8.0)  pixel_cloudflare_turnstile(1.1.4)  productcomments(7.0.0)
+  psgdpr(1.4.3)  ps_accounts(8.0.8)  ps_brandlist(1.0.3)
+  ps_categorytree(3.0.2)  ps_currencyselector(2.1.1)  ps_customeraccountlinks(3.2.0)
+  ps_customersignin(2.0.5)  ps_distributionapiclient(1.2.0)  ps_emailalerts(3.0.1)
+  ps_emailsubscription(2.8.3)  ps_facebook(1.38.16)  ps_facetedsearch(4.0.1)
+  ps_faviconnotificationbo(2.1.3)  ps_feeder(1.0.1)  ps_languageselector(2.1.3)
+  ps_mbo(4.14.1)  ps_mcp_server(0.1.1)  ps_mcp_tools(0.1.1)
+  ps_sharebuttons(2.1.3)  ps_shoppingcart(3.0.0)  ps_wirepayment(2.2.1)
+  revsliderprestashop(6.2.22.5)  statsbestcategories(2.1.0)  statsbestcustomers(2.1.0)
+  statsbestproducts(2.0.1)  statsbestsuppliers(2.0.2)  statsbestvouchers(2.0.1)
+  statscarrier(2.0.1)  statscatalog(2.0.4)  statscheckup(2.0.3)
+  statsdata(2.1.2)  statsforecast(2.1.0)  statsnewsletter(2.0.3)
+  statspersonalinfos(2.1.0)  statsproduct(2.1.3)  statsregistrations(2.0.1)
+  statssales(2.1.1)  statssearch(2.0.2)  statsstock(2.0.1)
+  storecommander(2.2.0)  temuconnector(1.0.0)
+
+== modules clés du chantier
+== présents ? version ? actifs ?
+  aimetadata | 1.2.2 | 1
+  amazon | 5.4.12 | 1
+  cdiscount | 4.5.36 | 1
+  iqitelementor | 1.2.4 | 1
+  ph_simpleblog | 1.8.0 | 1
+  ps_currencyselector | 2.1.1 | 1
+  ps_customeraccountlinks | 3.2.0 | 1
+  ps_customersignin | 2.0.5 | 1
+  ps_emailsubscription | 2.8.3 | 1
+  ps_facetedsearch | 4.0.1 | 1
+  ps_languageselector | 2.1.3 | 1
+  ps_shoppingcart | 3.0.0 | 1
+  ps_wirepayment | 2.2.1 | 1
+  temuconnector | 1.0.0 | 1
+  blockreassurance | 5.1.4 | 0
+  colissimo | 2.2.2 | 0
+  ps_banner | 2.1.2 | 0
+  ps_bestsellers | 1.0.7 | 0
+  ps_featuredproducts | 2.1.6 | 0
+  ps_imageslider | 3.1.3 | 0
+  ps_linklist | 6.0.7 | 0
+  ps_mainmenu | 2.3.6 | 0
+  ps_newproducts | 1.0.5 | 0
+  ps_searchbar | 2.1.4 | 0
+  ps_socialfollow | 2.3.2 | 0
+  ps_specials | 1.0.3 | 0
+  sendinblue | 5.0.34 | 0
+
+== hooks réellement posés par les modules clés du chantier
+== contour fonctionnel réel
+  aimetadata | actionFrontControllerSetMedia | 11
+  aimetadata | actionObjectImageDeleteAfter | 2
+  aimetadata | actionObjectProductDeleteAfter | 12
+  aimetadata | actionOnImageResizeAfter | 1
+  aimetadata | displayAdminProductsExtra | 10
+  aimetadata | displayAsFirstProductImage | 2
+  aimetadata | displayAsLastProductImage | 2
+  aimetadata | displayProductAdditionalInfo | 4
+  iqitelementor | actionObjectCategoryAddAfter | 3
+  iqitelementor | actionObjectCategoryDeleteAfter | 3
+  iqitelementor | actionObjectCategoryUpdateAfter | 3
+  iqitelementor | actionObjectCmsDeleteAfter | 2
+  iqitelementor | actionObjectCmsUpdateAfter | 2
+  iqitelementor | actionObjectCmsUpdateBefore | 1
+  iqitelementor | actionObjectManufacturerAddAfter | 3
+  iqitelementor | actionObjectManufacturerDeleteAfter | 3
+  iqitelementor | actionObjectManufacturerUpdateAfter | 3
+  iqitelementor | actionObjectProductAddAfter | 4
+  iqitelementor | actionObjectProductDeleteAfter | 6
+  iqitelementor | actionObjectProductUpdateAfter | 5
+  iqitelementor | actionObjectSimpleBlogPostAddAfter | 1
+  iqitelementor | actionObjectSimpleBlogPostUpdateAfter | 1
+  iqitelementor | actionProductAdd | 4
+  iqitelementor | displayBackOfficeHeader | 21
+  iqitelementor | displayBlogElementor | 1
+  iqitelementor | displayCategoryElementor | 1
+  iqitelementor | displayCMSDisputeInformation | 1
+  iqitelementor | displayHeader | 23
+  iqitelementor | displayHome | 2
+  iqitelementor | displayManufacturerElementor | 1
+  iqitelementor | displayProductElementor | 1
+  iqitelementor | isJustElementor | 1
+  iqitelementor | registerGDPRConsent | 5
+  ph_simpleblog | actionDeleteGDPRCustomer | 2
+  ph_simpleblog | actionExportGDPRData | 2
+  ph_simpleblog | displayBackOfficeHeader | 4
+  ph_simpleblog | displayHeader | 4
+  ph_simpleblog | displayPrestaHomeBlogAfterPostContent | 1
+  ph_simpleblog | displaySimpleBlogCategories | 1
+  ph_simpleblog | displaySimpleBlogPosts | 1
+  ph_simpleblog | gSitemapAppendUrls | 1
+  ph_simpleblog | moduleRoutes | 2
+  ph_simpleblog | registerGDPRConsent | 3
+  ps_banner | actionObjectLanguageAddAfter | 2
+  ps_banner | displayHome | 5
+  ps_featuredproducts | actionAdminGroupsControllerSaveAfter | 1
+  ps_featuredproducts | actionCategoryUpdate | 4
+  ps_featuredproducts | actionProductAdd | 8
+  ps_featuredproducts | actionProductDelete | 8
+  ps_featuredproducts | actionProductUpdate | 6
+  ps_featuredproducts | displayHome | 4
+  ps_featuredproducts | displayOrderConfirmation2 | 1
+  ps_imageslider | actionShopDataDuplication | 5
+  ps_imageslider | displayHeader | 18
+  ps_imageslider | displayHome | 3
+
+== module aimetadata : antériorité (badge IA / AI Act)
+== enregistré ? actif ?
+  323 | aimetadata | 1 | 1.2.2
+== clés de configuration (noms seulement)
+  AIMETADATA_BADGE_ON_THUMBNAILS
+  AIMETADATA_LOG_ENABLED
+  AIMETADATA_LOG_LAST_PURGE
+  AIMETADATA_LOG_LEVEL
+  AIMETADATA_LOG_RETENTION_DAYS
+== tables propres au module
+  ps_ai_image_metadata
+  ps_ai_image_metadata_log
+
+### CATALOGUE
+  produits (toutes lignes) = 4523
+  produits actifs = 2157
+  product_shop actifs = 2191
+  catégories actives = 284
+  lignes ps_image = 26106
+  produits avec au moins une image = 4228
+
+### CLIENTS, GROUPES, EMPLOYÉS
+== groupes clients
+  1 | Visiteur | 0.00 | 1 | 0
+  2 | Invit� | 0.00 | 1 | 0
+  3 | Client | 0.00 | 1 | 0
+  4 | Amazon | 0.00 | 1 | 0
+  5 | As Import | 0.00 | 1 | 1
+  6 | No-Reply | 0.00 | 1 | 0
+  7 | Rakuten | 0.00 | 1 | 0
+  8 | Cdiscount | 0.00 | 1 | 0
+  9 | Hecate | 0.00 | 1 | 0
+  10 | Ami(e) | 20.00 | 1 | 0
+== clients par groupe
+  4 | 131166
+  3 | 40646
+  8 | 1289
+  2 | 276
+  1 | 35
+  9 | 16
+  10 | 5
+  6 | 4
+  7 | 4
+  0 | 3
+  5 | 1
+  clients = 173351
+  employés actifs (validation des comptes pro) = 7
+== langues
+  1 | fr | 1
+  2 | be | 0
+  3 | de | 0
+  4 | es | 0
+  5 | it | 0
+  6 | sv | 0
+  7 | pl | 0
+  8 | nl | 0
+  9 | gb | 0
+== devises
+  1 | EUR | 1 | 1.000000
+  2 | SEK | 0 | 11.245768
+  3 | PLN | 0 | 4.698679
+  4 | GBP | 0 | 0.878904
+
+### LIVRAISON & PAIEMENT (matière du tunnel)
+== transporteurs
+  SQLERR: Unknown column 'cl.delivery' in 'SELECT'
+== hooks de paiement réellement occupés (qui prend le paiement aujourd'hui)
+== qui prend le paiement aujourd'hui
+  ps_checkout | displayPaymentReturn
+  ps_wirepayment | displayPaymentReturn
+  alma | paymentOptions
+  MoneticoPaiement | paymentOptions
+  ps_checkout | paymentOptions
+  ps_wirepayment | paymentOptions
+  alma | paymentReturn
+
+### COMMANDES (volumétrie récente)
+  commandes (total) = 172278
+  commandes 30 jours = 0
+  clients inscrits newsletter (colonne newsletter) = 15142
+
+== FIN SONDE ==

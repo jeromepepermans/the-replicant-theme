@@ -1,0 +1,280 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+### OVERRIDE Customer*.php (contenu intégral — petits fichiers)
+===== override/classes/Customer.php =====
+<?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+require_once(_PS_CLASS_DIR_.'Customer.php');
+require_once(_PS_ROOT_DIR_.'/override/classes/service/WelcomeDiscountService.php');
+class Customer extends CustomerCore
+{
+    public function add($autoDate = true, $nullValues = true)
+    {
+        $result = parent::add($autoDate, $nullValues);
+        if ($result) {
+            try {
+                $welcomeService = new WelcomeDiscountService();
+                $welcomeService->generateWelcomeDiscount($this);
+            } catch (Exception $e) {
+                PrestaShopLogger::addLog(
+                    'Error generating welcome discount: ' . $e->getMessage(),
+                    3,
+                    null,
+                    'Customer',
+                    (int)$this->id,
+                    true
+                );
+            }
+        }
+        return $result;
+    }
+} 
+===== override/classes/Customer1.php =====
+<?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+class Customer extends CustomerCore
+{
+    public function add($autoDate = true, $nullValues = true)
+    {
+        PrestaShopLogger::addLog(
+            'Début de la méthode add() dans Customer override',
+            1,
+            null,
+            'Customer',
+            0,
+            true
+        );
+        $result = parent::add($autoDate, $nullValues);
+        if ($result) {
+            PrestaShopLogger::addLog(
+                'Customer créé avec succès, ID: ' . (int)$this->id,
+                1,
+                null,
+                'Customer',
+                (int)$this->id,
+                true
+            );
+            try {
+                if (!class_exists('WelcomeDiscountService')) {
+                    PrestaShopLogger::addLog(
+                        'Classe WelcomeDiscountService non trouvée',
+                        3,
+                        null,
+                        'Customer',
+                        (int)$this->id,
+                        true
+                    );
+                    return $result;
+                }
+                $welcomeService = new WelcomeDiscountService();
+                $welcomeService->generateWelcomeDiscount($this);
+            } catch (Exception $e) {
+                PrestaShopLogger::addLog(
+                    'Error generating welcome discount: ' . $e->getMessage() . ' - Trace: ' . $e->getTraceAsString(),
+                    3,
+                    null,
+                    'Customer',
+                    (int)$this->id,
+                    true
+                );
+            }
+        } else {
+            PrestaShopLogger::addLog(
+                'Échec de la création du customer',
+                3,
+===== override/classes/CustomerV1.php =====
+<?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+require_once(_PS_CLASS_DIR_.'Customer.php');
+require_once(_PS_ROOT_DIR_.'/override/classes/service/WelcomeDiscountService.php');
+class Customer extends CustomerCore
+{
+    public function add($autoDate = true, $nullValues = true)
+    {
+        $result = parent::add($autoDate, $nullValues);
+        if ($result) {
+            try {
+                $welcomeService = new WelcomeDiscountService();
+                $welcomeService->generateWelcomeDiscount($this);
+            } catch (Exception $e) {
+                PrestaShopLogger::addLog(
+                    'Error generating welcome discount: ' . $e->getMessage(),
+                    3,
+                    null,
+                    'Customer',
+                    (int)$this->id,
+                    true
+                );
+            }
+        }
+        return $result;
+    }
+} 
+===== override/classes/CustomerOK.php =====
+<?php
+class Customer extends CustomerCore
+{
+    public function __construct($id = null)
+    {
+        parent::__construct($id);
+    }
+    public function add($autoDate = true, $nullValues = true)
+{
+    $result = parent::add($autoDate, $nullValues);
+    if ($result) {
+        $this->generateDiscountOnRegistration();
+    }
+    return $result;
+}
+    private function generateDiscountOnRegistration()
+    {
+        if (!$this->id) {
+            return;
+        }
+        // Vérifier si le client a déjà passé une commande
+    $orderCount = Db::getInstance()->getValue('
+    SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'orders 
+    WHERE id_customer = ' . (int) $this->id
+);
+if ($orderCount > 0) {
+    return; // Ne pas générer de code si le client a déjà une commande
+}
+        $expirationDate = date('Y-m-d H:i:s', strtotime('+30 days'));
+          // ID des groupes autorisés à recevoir l'email
+    $allowedGroups = [3]; // Remplace par les ID des groupes souhaités
+    // Récupérer les groupes du client
+    $customerGroups = Customer::getGroupsStatic($this->id);
+    // Vérifier si le client appartient à au moins un des groupes autorisés
+    if (!array_intersect($customerGroups, $allowedGroups)) {
+        return; // Arrêter ici si le client n'est pas dans un groupe autorisé
+    }
+            // Exclure les adresses email contenant certains mots
+            $excludedKeywords = ['test', 'spam', 'demo', '@cdiscount', '@marketplace', 'amazon']; // Ajoute les mots à exclure
+            foreach ($excludedKeywords as $keyword) {
+                if (stripos($this->email, $keyword) !== false) {
+                    return; // Arrêter l'exécution si un mot interdit est trouvé
+                }
+            }
+        $cartRule = new CartRule();
+        $cartRule->code = 'WELCOME' . strtoupper(Tools::passwdGen(6));
+        $cartRule->id_customer = (int) $this->id;
+        $cartRule->date_from = date('Y-m-d H:i:s');
+        $cartRule->date_to = $expirationDate;
+
+### override/classes/service/WelcomeDiscountService.php (60 premières lignes)
+<?php
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+class WelcomeDiscountService
+{
+    private $context;
+    private $excludedTerms = [
+        'test',
+        'spam',
+        'demo',
+        '@cdiscount',
+        '@marketplace',
+        'amazon',
+        'temu',
+        'clemarche'
+    ];
+    public function __construct()
+    {
+        $this->context = Context::getContext();
+    }
+    public function generateWelcomeDiscount($customer)
+    {
+        try {
+            if (!Validate::isLoadedObject($customer)) {
+                PrestaShopLogger::addLog(
+                    "Customer object invalid",
+                    3,
+                    null,
+                    'WelcomeDiscountService',
+                    null,
+                    true
+                );
+                return false;
+            }
+            // Vérifier si l'email est autorisé
+            if (!$this->isEmailAllowed($customer->email)) {
+                PrestaShopLogger::addLog(
+                    "Email {$customer->email} not allowed for welcome discount",
+                    1,
+                    null,
+                    'WelcomeDiscountService',
+                    (int)$customer->id,
+                    true
+                );
+                return false;
+            }
+            // Vérifier si le client a déjà un code de bienvenue
+            if ($this->hasExistingWelcomeDiscount($customer->id)) {
+                PrestaShopLogger::addLog(
+                    "Customer {$customer->id} already has a welcome discount",
+                    1,
+                    null,
+                    'WelcomeDiscountService',
+
+### IMAGES WEBP : le backfill a-t-il produit des fichiers ?
+0
+0
+216997
+BackfillState.php
+DEPLOY.md
+EmailPayloadBuilder.php
+Lock.php
+cron_webp_backfill.php
+logs
+state
+Content-type: text/html; charset=UTF-8
+
+Ce script doit être exécuté en ligne de commande uniquement.
+
+### UN FORMULAIRE PRO EXISTE-T-IL DÉJÀ QUELQUE PART ?
+/home/djdj2187/the-replicant.com/modules/amazon/amazon.php
+/home/djdj2187/the-replicant.com/modules/psgdpr/psgdpr.php
+/home/djdj2187/the-replicant.com/modules/cdiscount/cdiscount.php
+--- pages CMS (contenu) contenant 'professionnel' ---
+Unsuccessful stat on filename containing newline at /var/cpanel/ea4/ea_php_cli.pm line 87.
+  cms 1 : Livraisons et retours
+  cms 2 : Mentions l�gales
+  cms 3 : Conditions g�n�rales de vente
+  cms 4 : Qui sommes-nous ?
+  cms 5 : Paiement s�curis�
+  cms 7 : FAQ - Pistolet � billes
+  cms 10 : Politique de confidentialit�
+  cms 12 : Bon plan du moment
+  cms 13 : R�glement programme de fid�lit�
+  cms 14 : Id�es Cadeaux Anniversaire Originaux � The Replicant
+  cms 15 : Id�es Cadeaux EVJF Originaux et Pas Chers � The Replicant
+  cms 16 : Id�es Cadeaux Bapt�me et Baby Shower Originaux � The Replicant
+  cms 17 : Id�es Cadeaux No�l Originaux Pas Chers � The Replicant
+  pages CMS mentionnant "professionnel" : 0
+
+### GROUPES : méthode d'affichage des prix (HT/TTC) et catégories concernées
+Unsuccessful stat on filename containing newline at /var/cpanel/ea4/ea_php_cli.pm line 87.
+  id | nom | public_name | price_display_method (0=TTC,1=HT)
+
+### HOOKS DU THÈME : quels modules écrivent sur la fiche produit / la galerie
+Unsuccessful stat on filename containing newline at /var/cpanel/ea4/ea_php_cli.pm line 87.
+  displayAfterProductThumbs (1) : iqitextendedproduct
+  displayFooterProduct (2) : certishoppingsocialreviews,productcomments
+  displayProductActions (1) : blockwishlist
+  displayProductAdditionalInfo (5) : aimetadata,colissimo,iqitproducttags,productcomments,ps_sharebuttons
+  displayProductExtraContent (4) : certishoppingsocialreviews,iqitadditionaltabs,iqitreviews,ph_relatedposts
+  displayProductListFunctionalButtons (2) : iqitcompare,iqitwishlist
+  displayProductListReviews (2) : certishoppingsocialreviews,productcomments
+  displayProductPriceBlock (2) : alma,certishoppingsocialreviews
+  displayRightColumnProduct (2) : certishoppingsocialreviews,iqithtmlandbanners
+
+== FIN AUDIT 3 ==
+

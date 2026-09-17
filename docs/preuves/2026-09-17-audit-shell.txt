@@ -1,0 +1,254 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+### SYSTÈME
+2026-09-17T14:22:38+02:00
+nilgaut.o2switch.net
+PHP 8.1.34 (cli) (built: Aug 23 2026 14:48:18) (NTS)
+disque : /dev/md90       3.6T  1.9T  1.6T  56% /home/djdj2187
+inodes : /dev/md90      244187136 22503550 221683586   10% /home/djdj2187
+HOME=/home/djdj2187
+
+### ARBORESCENCES
+drwxr-x--- 36 djdj2187 nobody 4096 Sep 17 10:17 /home/djdj2187/preprod.the-replicant.com
+drwxr-x--- 37 djdj2187 nobody 4096 Sep 17 12:12 /home/djdj2187/the-replicant.com
+--- paramètres (nom de base seulement, pas de credentials) ---
+/home/djdj2187/the-replicant.com -> base=djdj2187_pab host=localhost user_len=17 pwd_len=8
+/home/djdj2187/preprod.the-replicant.com -> base=djdj2187_preprod_thereplicant host=localhost user_len=16 pwd_len=18
+
+### THEMES SUR DISQUE (taille = poids réellement servi)
+--- /home/djdj2187/the-replicant.com/themes ---
+  4096 o  Sep 22 2022  /home/djdj2187/the-replicant.com/themes/_libraries/
+  4096 o  Jun 25 09:45  /home/djdj2187/the-replicant.com/themes/child_classic/
+  4096 o  Jan 13 2026  /home/djdj2187/the-replicant.com/themes/classic/
+  4096 o  Jun 25 09:09  /home/djdj2187/the-replicant.com/themes/warehouse/
+  4096 o  Jan 13 2026  /home/djdj2187/the-replicant.com/themes/warehousechild/
+  child_classic -> theme.yml : name: child_classic
+  classic -> theme.yml : name: classic
+  warehouse -> theme.yml : name: warehouse
+  warehousechild -> theme.yml : name: warehousechild
+--- /home/djdj2187/preprod.the-replicant.com/themes ---
+  4096 o  Sep 22 2022  /home/djdj2187/preprod.the-replicant.com/themes/_libraries/
+  4096 o  Mar 11 2025  /home/djdj2187/preprod.the-replicant.com/themes/child_classic/
+  4096 o  Jan 2 2026  /home/djdj2187/preprod.the-replicant.com/themes/classic/
+  4096 o  May 18 11:33  /home/djdj2187/preprod.the-replicant.com/themes/warehouse/
+  4096 o  Jan 2 2026  /home/djdj2187/preprod.the-replicant.com/themes/warehousechild/
+  child_classic -> theme.yml : name: child_classic
+  classic -> theme.yml : name: classic
+  warehouse -> theme.yml : name: warehouse
+  warehousechild -> theme.yml : name: warehousechild
+
+### TAILLE DU THEME EN PRODUCTION ET DE SES CACHES
+1.2M	/home/djdj2187/the-replicant.com/themes/_libraries/
+1.8M	/home/djdj2187/the-replicant.com/themes/child_classic/
+6.2M	/home/djdj2187/the-replicant.com/themes/classic/
+95M	/home/djdj2187/the-replicant.com/themes/warehouse/
+1.4M	/home/djdj2187/the-replicant.com/themes/warehousechild/
+/home/djdj2187/the-replicant.com/themes/child_classic/assets/cache/:
+total 8
+drwxr-xr-x 2 djdj2187 djdj2187 4096 Sep 14  2023 .
+drwxr-xr-x 4 djdj2187 djdj2187 4096 Sep 14  2023 ..
+
+/home/djdj2187/the-replicant.com/themes/classic/assets/cache/:
+total 8
+drwxr-xr-x 2 djdj2187 djdj2187 4096 Sep 22  2022 .
+drwxr-xr-x 5 djdj2187 djdj2187 4096 Sep 22  2022 ..
+
+/home/djdj2187/the-replicant.com/themes/warehouse/assets/cache/:
+total 27788
+drwxr-xr-x 2 djdj2187 djdj2187    4096 Sep 16 13:27 .
+drwxr-xr-x 6 djdj2187 djdj2187    4096 Jan 13  2026 ..
+-rw-r--r-- 1 djdj2187 djdj2187 1387256 Sep 15 15:59 bottom-6ae2611793.js
+-rw-r--r-- 1 djdj2187 djdj2187 1107925 Sep 15 10:51 bottom-6b5ec91793.js
+-rw-r--r-- 1 djdj2187 djdj2187 1117548 Sep 15 10:50 bottom-850ba41793.js
+-rw-r--r-- 1 djdj2187 djdj2187 1109120 Sep 15 11:28 bottom-94e6a61793.js
+-rw-r--r-- 1 djdj2187 djdj2187 1119986 Sep 15 10:51 bottom-9b34dd1793.js
+-rw-r--r-- 1 djdj2187 djdj2187 1109769 Sep 15 23:28 bottom-b11af91793.js
+nb de fichiers du thème prod : 4409
+
+### OVERRIDES (ne jamais modifier le core ; mesurer ce qui est déjà surchargé)
+total 28
+drwxr-xr-x  5 djdj2187 djdj2187 4096 Sep 22  2022 .
+drwxr-x--- 37 djdj2187 nobody   4096 Sep 17 12:12 ..
+-rw-r--r--  1 djdj2187 djdj2187  170 Sep 22  2022 .htaccess
+drwxr-xr-x 24 djdj2187 djdj2187 4096 Jun 18  2025 classes
+drwxr-xr-x  4 djdj2187 djdj2187 4096 Sep 22  2022 controllers
+-rw-r--r--  1 djdj2187 djdj2187 1369 Sep 22  2022 index.php
+drwxr-xr-x  4 djdj2187 djdj2187 4096 Apr 28  2025 modules
+/home/djdj2187/the-replicant.com/override/index.php
+/home/djdj2187/the-replicant.com/override/classes/shop/index.php
+/home/djdj2187/the-replicant.com/override/classes/container/index.php
+/home/djdj2187/the-replicant.com/override/classes/webservice/index.php
+/home/djdj2187/the-replicant.com/override/classes/cache/index.php
+/home/djdj2187/the-replicant.com/override/classes/controller/FrontController.php
+/home/djdj2187/the-replicant.com/override/classes/controller/index.php
+/home/djdj2187/the-replicant.com/override/classes/index.php
+/home/djdj2187/the-replicant.com/override/classes/checkout/index.php
+/home/djdj2187/the-replicant.com/override/classes/assets/index.php
+/home/djdj2187/the-replicant.com/override/classes/log/index.php
+/home/djdj2187/the-replicant.com/override/classes/CustomerOK.php
+/home/djdj2187/the-replicant.com/override/classes/db/index.php
+/home/djdj2187/the-replicant.com/override/classes/tax/index.php
+/home/djdj2187/the-replicant.com/override/classes/pdf/index.php
+/home/djdj2187/the-replicant.com/override/classes/Cart.php
+/home/djdj2187/the-replicant.com/override/classes/Dispatcher.php
+/home/djdj2187/the-replicant.com/override/classes/Carrier.php
+/home/djdj2187/the-replicant.com/override/classes/Link.php
+/home/djdj2187/the-replicant.com/override/classes/order/index.php
+/home/djdj2187/the-replicant.com/override/classes/order/Order.php
+/home/djdj2187/the-replicant.com/override/classes/service/WelcomeDiscountService.php
+/home/djdj2187/the-replicant.com/override/classes/CustomerV1.php
+/home/djdj2187/the-replicant.com/override/classes/Customer.php
+/home/djdj2187/the-replicant.com/override/classes/module/index.php
+/home/djdj2187/the-replicant.com/override/classes/Smarty/index.php
+/home/djdj2187/the-replicant.com/override/classes/stock/index.php
+/home/djdj2187/the-replicant.com/override/classes/exception/index.php
+/home/djdj2187/the-replicant.com/override/classes/Customer1.php
+/home/djdj2187/the-replicant.com/override/classes/tree/index.php
+nb de fichiers override : 63
+--- modules livrés avec le thème (themes/<theme>/modules) ---
+/home/djdj2187/the-replicant.com/themes/child_classic/modules/:
+amazon
+colissimo
+ets_onepagecheckout
+ets_onepagecheckout2
+followup
+hc_retractation
+ph_simpleblog
+ps_emailalerts
+ps_emailsubscription
+ps_reminder
+referralprogram
+sendinblue
+wkrewardsystem
+
+/home/djdj2187/the-replicant.com/themes/classic/modules/:
+amazon
+blockreassurance
+chronopost
+colissimo
+contactform
+ets_onepagecheckout
+ets_onepagecheckout2
+followup
+ph_simpleblog
+ps_advertising
+ps_banner
+ps_bestsellers
+ps_brandlist
+ps_categoryproducts
+
+### MODULES SUR DISQUE (dossiers) vs EN BASE
+dossiers modules prod : 148
+dossiers modules préprod : 151
+
+### CRONTAB (secrets masqués)
+*/15 * * * * curl -s "https://www.the-replicant.com/module/temuconnector/cron?token=***MASKED***&action=all" >/dev/null 2>&1
+0 3 * * * curl -s "https://www.the-replicant.com/module/temuconnector/cron?token=***MASKED***&action=catalog" >/dev/null 2>&1
+0 9 * * * curl -s "https://www.the-replicant.com/index.php?fc=module&module=hc_retractation&controller=cron&token=***MASKED***" > /dev/null
+
+# --- Amazon (Feed.biz) : synchronisation des offres, toutes les heures ---
+1 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=fr&sp_mkp=A13V1IB3VIYZZH" > /dev/null 2>&1
+3 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=be&sp_mkp=AMEN7PMS3EDWL" > /dev/null 2>&1
+5 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=de&sp_mkp=A1PA6795UKMFR9" > /dev/null 2>&1
+7 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=es&sp_mkp=A1RKKUPIHCS9HS" > /dev/null 2>&1
+9 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=it&sp_mkp=APJ6JRA9NG5V4" > /dev/null 2>&1
+11 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=nl&sp_mkp=A1805IZSGTT6HS" > /dev/null 2>&1
+13 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=pl&sp_mkp=A1C3SOZRARQ6R3" > /dev/null 2>&1
+17 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/products_json.php?cron_token=***MASKED***&cron=1&action=update&lang=se&sp_mkp=A2NODRKZP88ZB9" > /dev/null 2>&1
+# --- Amazon (Feed.biz) : import des commandes, toutes les heures ---
+19 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/orders/import.php?cron_token=***MASKED***&sp_region=eu-west-1&channel=MFN,AFN&status=Pending,Unshipped,PartiallyShipped,Shipped" > /dev/null 2>&1
+# --- Amazon (Feed.biz) : annulation auto des commandes annulees sur Amazon, toutes les heures ---
+21 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/canceled.php?cron_token=***MASKED***&sp_region=eu-west-1" > /dev/null 2>&1
+
+# --- Cdiscount : integration des offres, toutes les heures ---
+39 * * * * curl -s "https://www.the-replicant.com/modules/cdiscount/functions/products_update.php?action=cron&context_key=***MASKED***&cdtoken=***MASKED***&option-package=cdiscount&channel-select=&all-offers=1&active-offers=1&available-offers=1&exclude-hidden-offers=1" > /dev/null 2>&1
+# --- Cdiscount : acceptation des commandes, toutes les heures ---
+26 * * * * curl -s "https://www.the-replicant.com/modules/cdiscount/functions/orders/order_acceptance.php?context_key=***MASKED***&cdtoken=***MASKED***" > /dev/null 2>&1
+# --- Cdiscount : import des commandes, toutes les heures, 20min apres l'acceptation (contrainte doc officielle) ---
+46 * * * * curl -s "https://www.the-replicant.com/modules/cdiscount/functions/orders/order_import.php?context_key=***MASKED***&cdtoken=***MASKED***&created-at-min=-7days&created-at-max=today&channel-select=&order_states=Accepted,InPreparation,Shipped,Delivered&page-size=100&hide_imported=1&page-index=1" > /dev/null 2>&1
+
+# --- Colissimo : suivi des colis (tracking), toutes les heures ---
+43 * * * * curl -s "https://www.the-replicant.com/index.php?fc=module&module=colissimo&controller=crontracking&secure_key=***MASKED***" > /dev/null 2>&1
+
+# --- Amazon (Feed.biz) : automatisation inventaire FBA, toutes les heures, espacement elargi (~5-6min) ---
+18 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=A13V1IB3VIYZZH" > /dev/null 2>&1
+23 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=AMEN7PMS3EDWL" > /dev/null 2>&1
+28 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=A1PA6795UKMFR9" > /dev/null 2>&1
+33 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=A1RKKUPIHCS9HS" > /dev/null 2>&1
+38 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=APJ6JRA9NG5V4" > /dev/null 2>&1
+44 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=A1805IZSGTT6HS" > /dev/null 2>&1
+50 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=A1C3SOZRARQ6R3" > /dev/null 2>&1
+56 * * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/fbamanager.php?cron_token=***MASKED***&cron=1&action=stocks&sp_mkp=A2NODRKZP88ZB9" > /dev/null 2>&1
+# --- Amazon (Feed.biz) : correction des ecarts de stock - CONFIRME LENT (9-10min/appel reel constate le 2026-08-13) ---
+# -> reparti sur 2 groupes de 4 marketplaces en alternance (1 groupe toutes les heures paires, l'autre toutes les heures impaires), espacement ~10-13min au lieu de 2min, pour eviter l'accumulation de processus concurrents constatee
+20 */2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=A13V1IB3VIYZZH&fix=1" > /dev/null 2>&1
+32 */2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=AMEN7PMS3EDWL&fix=1" > /dev/null 2>&1
+42 */2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=A1PA6795UKMFR9&fix=1" > /dev/null 2>&1
+52 */2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=A1RKKUPIHCS9HS&fix=1" > /dev/null 2>&1
+22 1-23/2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=APJ6JRA9NG5V4&fix=1" > /dev/null 2>&1
+34 1-23/2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=A1805IZSGTT6HS&fix=1" > /dev/null 2>&1
+47 1-23/2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=A1C3SOZRARQ6R3&fix=1" > /dev/null 2>&1
+59 1-23/2 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/check_stock.php?cron_token=***MASKED***&mkp=A2NODRKZP88ZB9&fix=1" > /dev/null 2>&1
+
+# --- Amazon (Feed.biz) : rapport inventaire des inscriptions - CONFIRME LENT (5-10min/appel reel constate le 2026-08-14) ---
+# -> cadence par marketplace INCHANGEE (toujours toutes les 4h chacune), mais reparti sur 4 groupes de 2 (un par heure du cycle) au lieu d'etre tous groupes sur la meme heure avec 2min d'ecart - fini l'accumulation constatee (jusqu'a 3 processus simultanes vus)
+2 0-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=fr&sp_mkp=A13V1IB3VIYZZH" > /dev/null 2>&1
+36 0-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=be&sp_mkp=AMEN7PMS3EDWL" > /dev/null 2>&1
+2 1-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=de&sp_mkp=A1PA6795UKMFR9" > /dev/null 2>&1
+36 1-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=es&sp_mkp=A1RKKUPIHCS9HS" > /dev/null 2>&1
+2 2-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=it&sp_mkp=APJ6JRA9NG5V4" > /dev/null 2>&1
+36 2-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=nl&sp_mkp=A1805IZSGTT6HS" > /dev/null 2>&1
+2 3-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=pl&sp_mkp=A1C3SOZRARQ6R3" > /dev/null 2>&1
+36 3-23/4 * * * curl -s "https://www.the-replicant.com/modules/amazon/functions/report_listing_inventory.php?cron_token=***MASKED***&cron=1&lang=se&sp_mkp=A2NODRKZP88ZB9" > /dev/null 2>&1
+
+# --- Vidage quotidien du cache Symfony/Smarty prod (var/cache/prod), 00h04 pour ne pas tomber sur le cron temuconnector "all" (*/15, tape sur :00) ni sur les crons horaires Amazon/Cdiscount concentres entre :00 et :03 ---
+4 0 * * * cd /home/djdj2187/the-replicant.com && (date '+\%Y-\%m-\%d \%H:\%M:\%S'; ./vidagecache.sh) >> /home/djdj2187/the-replicant.com/vidagecache.log 2>&1
+
+# --- Purge nocturne ps_connections/ps_connections_source/ps_guest (tracking visiteur desactive depuis le 13/01/2026, ~14M/18M lignes historiques mortes), 01h10 : apres le vidage cache (00h04) et avant le cron catalogue temuconnector (03h00), creneau libre de tout autre cron ---
+10 1 * * * cd /home/djdj2187/the-replicant.com && ./purge_stats.sh --retention-months=3 >/dev/null 2>&1
+
+# --- Colissimo Essentiel (preprod) : suivi automatique des colis (tracking), toutes les heures, minute 48 (creneau libre, evite 0-47/50/52/56/59 deja occupes par les autres crons) ---
+48 * * * * curl -s "https://preprod.the-replicant.com/index.php?fc=module&module=colissimo_essentiel&controller=crontracking&secure_key=***MASKED***" > /dev/null 2>&1
+
+# --- Backfill WebP images produit (rattrapage ponctuel, ~950/nuit) : 01h35,
+#     apres la purge stats (01h10) et avant temuconnector catalog (03h00) ---
+35 1 * * * cd /home/djdj2187/the-replicant.com/cron/webpcron && /usr/local/bin/php cron_webp_backfill.php >> logs/cron_stdout.log 2>&1
+0 9 * * 3 cd $HOME/newsletter-replicant && $HOME/virtualenv/newsletter.the-replicant.com/3.11/bin/python scripts/cycle_hebdo.py >> $HOME/logs/newsletter-replicant/cron.log 2>&1
+30 9 * * 3 cd $HOME && $HOME/virtualenv/newsletter.the-replicant.com/3.11/bin/python $HOME/check_visuels.py --http >> $HOME/logs/newsletter-replicant/check-visuels.log 2>&1
+0 11 * * 4 cd ~/newsletter-replicant && ~/virtualenv/newsletter.the-replicant.com/3.11/bin/python scripts/verifier_envoi.py >> ~/logs/newsletter-replicant/cron.log 2>&1
+0 11 * * 5 cd ~/newsletter-replicant && ~/virtualenv/newsletter.the-replicant.com/3.11/bin/python scripts/verifier_envoi.py >> ~/logs/newsletter-replicant/cron.log 2>&1
+nb de tâches cron : 58
+
+### SAUVEGARDES ET LOGS
+/home/djdj2187/backups
+/home/djdj2187/backups-tva-20260905
+/home/djdj2187/.claude/backups
+--- taille des logs du compte (top 10) ---
+434M	/home/djdj2187/the-replicant.com/var/logs
+16M	/home/djdj2187/preprod.the-replicant.com/php_errors.log
+123M	/home/djdj2187/logs/roundcube/errors.log
+1.9M	/home/djdj2187/.cagefs/tmp/full_day_window.log
+
+### CACHE SERVEUR
+total 16
+drwxr-xr-x  4 djdj2187 djdj2187 4096 Sep 15 10:01 .
+drwxr-xr-x  6 djdj2187 djdj2187 4096 Jan 13  2026 ..
+drwxr-xr-x  2 djdj2187 djdj2187 4096 Sep  4 11:46 dev
+drwxr-xr-x 20 djdj2187 djdj2187 4096 Sep 17 12:10 prod
+total 92
+drwxr-xr-x 4 djdj2187 djdj2187 4096 Jul 31 14:53 .
+drwxr-xr-x 5 djdj2187 djdj2187 4096 Mar 26  2025 ..
+drwxr-xr-x 2 djdj2187 djdj2187 4096 Jul 31 14:53 addons
+drwxr-xr-x 2 djdj2187 djdj2187 4096 Jul 31 14:53 api_platform
+-rw-r--r-- 1 djdj2187 djdj2187 3421 Jan 13  2026 config.yml
+-rw-r--r-- 1 djdj2187 djdj2187 1445 Jan 13  2026 config_dev.yml
+-rw-r--r-- 1 djdj2187 djdj2187  538 Jan 13  2026 config_legacy.yml
+
+### PHP ET OUTILS UTILES
+/usr/local/bin/composer
+/usr/local/bin/wp
+/usr/local/bin/php
+[PHP Modules] bcmath bz2 calendar Core ctype curl date dom exif fileinfo filter ftp gd gettext hash iconv igbinary imagick imap intl json ldap libxml mbstring memcached msgpack mysqli mysqlnd openssl pcntl pcre PDO pdo_mysql pdo_pgsql pdo_sqlite pgsql Phar posix readline redis Reflection session shmop SimpleXML soap sockets SPL sqlite3 standard tidy tokenizer xml xmlreader xmlwriter xsl Zend OPcache zip zlib  [Zend Modules] Zend OPcache  
+
+== FIN AUDIT SHELL ==

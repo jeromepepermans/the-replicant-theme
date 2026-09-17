@@ -51,14 +51,17 @@ the-replicant-theme/
 
 | | |
 |---|---|
-| PrestaShop | 8.2.x, PHP 8.1.34 (CLI), thème `warehouse`, constructeur IQIT Elementor |
-| Hébergement | o2switch, compte `djdj2187`, `~/the-replicant.com` + `~/preprod.the-replicant.com` |
+| PrestaShop | **8.2.3**, PHP 8.1.34 (CLI), MariaDB 11.4.13, thème actif `warehouse`, 103 modules actifs |
+| Hébergement | o2switch, compte `djdj2187`, `~/the-replicant.com` (prod, base `djdj2187_pab`) + `~/preprod.the-replicant.com` (base dédiée, **mais thème et modules non alignés**) |
 | Home | 1 408 463 o brut / 332 076 o gzip, 317 requêtes, CSS 142 Ko gzip, JS 398 Ko gzip |
-| Images | 313 images uniques, 0 WebP / 0 AVIF / 0 `srcset` |
-| Blog | module `ph_simpleblog` (`/blog`) |
-| Espace pro | inexistant (404 sur `/professionnels`) |
+| Images | 313 images uniques, 0 WebP / 0 AVIF / 0 `srcset` (0 fichier WebP pour 216 997 JPEG en boutique) |
+| Blog | module `ph_simpleblog` 1.8.0 (`/blog`) |
+| Espace pro | inexistant (404 sur `/professionnels`, aucun groupe « Professionnel ») |
+| Tunnel | **`ets_onepagecheckout` 2.8.6 déjà actif** (Monetico, Alma, PayPal, virement) |
+| Badge IA | **`aimetadata` 1.2.2 installé et actif** (`displayAsFirstProductImage` / `displayAsLastProductImage`) |
 
-Détail et méthode : `docs/audit-2026-09-17-site-public.md`.
+Détail et méthode : `docs/audit-2026-09-17-site-public.md` (mesures publiques) et
+`docs/audit-phase0-2026-09-17.md` (audit SSH lecture seule), preuves brutes dans `docs/preuves/`.
 
 ## Commandes
 

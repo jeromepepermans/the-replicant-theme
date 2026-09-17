@@ -1,0 +1,382 @@
+** WARNING: connection is not using a post-quantum key exchange algorithm.
+** This session may be vulnerable to "store now, decrypt later" attacks.
+** The server may need to be upgraded. See https://openssh.com/pq.html
+### THEME ENFANT warehousechild (prod) — contenu
+2026-01-13      302 /home/djdj2187/the-replicant.com/themes/warehousechild/config/theme.yml
+2026-01-13      928 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/img/blank.png
+2026-01-13    31000 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/css/font-awesome.min.css
+2026-01-13    37414 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/css/font-awesome.css
+2026-01-13    38016 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/css/font-awesome-preload.css
+2026-01-13    77160 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.woff2
+2026-01-13    98024 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.woff
+2026-01-13   134808 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/FontAwesome.otf
+2026-01-13   149420 /home/djdj2187/the-replicant.com/themes/warehousechild/preview.png
+2026-01-13   165548 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.ttf
+2026-01-13   165742 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.eot
+2026-01-13   443670 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.svg
+--- theme.yml du thème enfant ---
+parent: warehouse
+name: warehousechild
+display_name: Warehouse child theme
+version: 1.0
+author:
+  name: "IQIT"
+assets:
+  use_parent_assets: true
+  css:
+    all:
+      - id: font-awesome
+        path: assets/css/font-awesome/css/font-awesome.css
+        media: all
+        priority: 200
+
+
+### THEME ENFANT child_classic (prod) — juste la liste
+2023-09-14      130 /home/djdj2187/the-replicant.com/themes/child_classic/config/theme.yml
+2023-09-14     1369 /home/djdj2187/the-replicant.com/themes/child_classic/assets/css/index.php
+2023-09-14     1369 /home/djdj2187/the-replicant.com/themes/child_classic/assets/index.php
+2023-09-14     1369 /home/djdj2187/the-replicant.com/themes/child_classic/config/index.php
+2023-09-14     1369 /home/djdj2187/the-replicant.com/themes/child_classic/index.php
+2023-09-14   141698 /home/djdj2187/the-replicant.com/themes/child_classic/preview.png
+2025-03-11      222 /home/djdj2187/the-replicant.com/themes/child_classic/assets/css/custom.css
+2025-03-11     3498 /home/djdj2187/the-replicant.com/themes/child_classic/templates/_partials/head.tpl
+2026-06-25        0 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/email_sponsership.txt
+2026-06-25        0 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/reward_advertisement_campaign.txt
+2026-06-25       10 /home/djdj2187/the-replicant.com/themes/child_classic/modules/amazon/mails/fr/empty.txt
+2026-06-25       22 /home/djdj2187/the-replicant.com/themes/child_classic/modules/amazon/mails/fr/reply_msg.txt
+2026-06-25      107 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/reward_assign_membership_admin.txt
+2026-06-25      114 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/reward_update_membership_admin.txt
+2026-06-25      126 /home/djdj2187/the-replicant.com/themes/child_classic/modules/amazon/mails/fr/fba_stocks.txt
+2026-06-25      132 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/reward_active_membership_customer.txt
+2026-06-25      136 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/reward_assign_membership_customer.txt
+2026-06-25      141 /home/djdj2187/the-replicant.com/themes/child_classic/modules/sendinblue/mails/fr/smtpTestMail.txt
+2026-06-25      152 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/reward_update_membership_customer.txt
+2026-06-25      192 /home/djdj2187/the-replicant.com/themes/child_classic/modules/wkrewardsystem/mails/fr/reward_membership_approval_admin.txt
+
+### OVERRIDES liés au client / compte / validation (noms + dates + taille)
+2025-06-11 09:56 | 905 o | /home/djdj2187/the-replicant.com/override/classes/Customer.php
+2025-05-05 11:06 | 905 o | /home/djdj2187/the-replicant.com/override/classes/CustomerV1.php
+2025-05-05 11:13 | 1915 o | /home/djdj2187/the-replicant.com/override/classes/Customer1.php
+2025-03-25 08:49 | 4093 o | /home/djdj2187/the-replicant.com/override/classes/CustomerOK.php
+2025-12-30 11:27 | 5892 o | /home/djdj2187/the-replicant.com/override/classes/service/WelcomeDiscountService.php
+2024-02-07 10:29 | 1080 o | /home/djdj2187/the-replicant.com/override/classes/controller/FrontController.php
+2024-02-07 10:29 | 4236 o | /home/djdj2187/the-replicant.com/override/classes/Link.php
+2024-01-31 11:18 | 6157 o | /home/djdj2187/the-replicant.com/override/classes/Carrier.php
+--- mots-clés pro/validation dans les overrides (noms de fichiers + lignes) ---
+/home/djdj2187/the-replicant.com/override/classes/Dispatcher.php:195:    public function validateRoute($route_id, $rule, &$errors = [])
+/home/djdj2187/the-replicant.com/override/classes/Dispatcher.php:211:        return parent::validateRoute($route_id, $rule, $errors);
+/home/djdj2187/the-replicant.com/override/classes/Link.php:61:        if (Validate::isLoadedObject($category)) {
+/home/djdj2187/the-replicant.com/override/classes/order/Order.php:41:            'validate' => 'isUrl',
+/home/djdj2187/the-replicant.com/override/classes/service/WelcomeDiscountService.php:29:            if (!Validate::isLoadedObject($customer)) {
+
+### ETS ONEPAGECHECKOUT — hooks posés et configuration (prod)
+Unsuccessful stat on filename containing newline at /var/cpanel/ea4/ea_php_cli.pm line 87.
+  alma(2.7.2) active=1 -> actionAdminControllerInitBefore
+  alma(2.7.2) active=1 -> actionObjectUpdateAfter
+  alma(2.7.2) active=1 -> actionOrderStatusPostUpdate
+  alma(2.7.2) active=1 -> displayAdminAfterHeader
+  alma(2.7.2) active=1 -> displayAdminOrderMain
+  alma(2.7.2) active=1 -> displayBackOfficeHeader
+  alma(2.7.2) active=1 -> displayProductPriceBlock
+  alma(2.7.2) active=1 -> header
+  alma(2.7.2) active=1 -> moduleRoutes
+  alma(2.7.2) active=1 -> paymentOptions
+  alma(2.7.2) active=1 -> paymentReturn
+  ets_awesomeurl(1.2.4) active=1 -> actionAdminEtsAwuUrlRedirectsFormModifier
+  ets_awesomeurl(1.2.4) active=1 -> actionAdminMetaControllerUpdate_optionsAfter
+  ets_awesomeurl(1.2.4) active=1 -> actionAdminMetaControllerUpdate_optionsBefore
+  ets_awesomeurl(1.2.4) active=1 -> actionAdminShopParametersMetaControllerPostProcessUrlSchemaBefore
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeCreateCategoryFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeCreateCmsPageCategoryFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeCreateCmsPageFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeCreateMetaFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeCreateRootCategoryFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeUpdateCategoryFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeUpdateCmsPageCategoryFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeUpdateCmsPageFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeUpdateMetaFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionBeforeUpdateRootCategoryFormHandler
+  ets_awesomeurl(1.2.4) active=1 -> actionCategoryFormBuilderModifier
+  ets_awesomeurl(1.2.4) active=1 -> actionCmsPageCategoryFormBuilderModifier
+  ets_awesomeurl(1.2.4) active=1 -> actionCmsPageFormBuilderModifier
+  ets_awesomeurl(1.2.4) active=1 -> actionDispatcherBefore
+  ets_awesomeurl(1.2.4) active=1 -> actionMetaFormBuilderModifier
+  ets_awesomeurl(1.2.4) active=1 -> actionObjectAddAfter
+  ets_awesomeurl(1.2.4) active=1 -> actionObjectAddBefore
+  ets_awesomeurl(1.2.4) active=1 -> actionObjectUpdateAfter
+  ets_awesomeurl(1.2.4) active=1 -> actionObjectUpdateBefore
+  ets_awesomeurl(1.2.4) active=1 -> actionProductFormBuilderModifier
+  ets_awesomeurl(1.2.4) active=1 -> actionProductSave
+  ets_awesomeurl(1.2.4) active=1 -> actionRootCategoryFormBuilderModifier
+  ets_awesomeurl(1.2.4) active=1 -> displayAdminProductsSeoStepBottom
+  ets_awesomeurl(1.2.4) active=1 -> displayBackOfficeHeader
+  ets_awesomeurl(1.2.4) active=1 -> displayHeader
+  ets_onepagecheckout(2.8.6) active=1 -> actionAuthentication
+  ets_onepagecheckout(2.8.6) active=1 -> actionCustomerGridQueryBuilderModifier
+  ets_onepagecheckout(2.8.6) active=1 -> actionDispatcherBefore
+  ets_onepagecheckout(2.8.6) active=1 -> actionGetIDZoneByAddressID
+  ets_onepagecheckout(2.8.6) active=1 -> actionTaxManager
+  ets_onepagecheckout(2.8.6) active=1 -> displayAdminOrderLeft
+  ets_onepagecheckout(2.8.6) active=1 -> displayAdminOrderSide
+  ets_onepagecheckout(2.8.6) active=1 -> displayBackOfficeHeader
+  ets_onepagecheckout(2.8.6) active=1 -> displayCustomerAccountForm
+  ets_onepagecheckout(2.8.6) active=1 -> displayHeader
+  ets_onepagecheckout(2.8.6) active=1 -> displayOrderDetail
+  ets_onepagecheckout(2.8.6) active=1 -> displayPDFInvoice
+  ets_onepagecheckout(2.8.6) active=1 -> taxManager
+  iqitsociallogin(1.0.1) active=1 -> displayCheckoutLoginFormAfter
+  iqitsociallogin(1.0.1) active=1 -> displayCustomerLoginFormAfter
+  iqitsociallogin(1.0.1) active=1 -> displayHeader
+  iqitsociallogin(1.0.1) active=1 -> displayRegistrationBeforeForm
+  MoneticoPaiement(1.3.0) active=1 -> actionAdminControllerSetMedia
+  MoneticoPaiement(1.3.0) active=1 -> actionGetAdminOrderButtons
+  MoneticoPaiement(1.3.0) active=1 -> actionOrderGridDefinitionModifier
+  MoneticoPaiement(1.3.0) active=1 -> actionOrderGridQueryBuilderModifier
+  MoneticoPaiement(1.3.0) active=1 -> actionOrderStatusUpdate
+  MoneticoPaiement(1.3.0) active=1 -> displayAdminOrderLeft
+  MoneticoPaiement(1.3.0) active=1 -> displayAdminOrderMainBottom
+  MoneticoPaiement(1.3.0) active=1 -> displayAdminOrderTop
+  MoneticoPaiement(1.3.0) active=1 -> displayBackOfficeOrderActions
+  MoneticoPaiement(1.3.0) active=1 -> paymentOptions
+  ps_checkout(8.5.3.2) active=1 -> actionAdminControllerSetMedia
+  ps_checkout(8.5.3.2) active=1 -> actionCartUpdateQuantityBefore
+  ps_checkout(8.5.3.2) active=1 -> actionFrontControllerSetMedia
+  ps_checkout(8.5.3.2) active=1 -> actionGetOrderShipments
+  ps_checkout(8.5.3.2) active=1 -> actionObjectOrderCarrierUpdateAfter
+  ps_checkout(8.5.3.2) active=1 -> actionObjectOrderPaymentAddAfter
+  ps_checkout(8.5.3.2) active=1 -> actionObjectOrderPaymentUpdateAfter
+  ps_checkout(8.5.3.2) active=1 -> actionObjectProductInCartDeleteAfter
+  ps_checkout(8.5.3.2) active=1 -> actionObjectShopAddAfter
+  ps_checkout(8.5.3.2) active=1 -> actionObjectShopDeleteAfter
+  ps_checkout(8.5.3.2) active=1 -> actionOrderStatusPostUpdate
+  ps_checkout(8.5.3.2) active=1 -> displayAdminAfterHeader
+  ps_checkout(8.5.3.2) active=1 -> displayAdminOrderLeft
+  ps_checkout(8.5.3.2) active=1 -> displayAdminOrderMainBottom
+  ps_checkout(8.5.3.2) active=1 -> displayInvoiceLegalFreeText
+  ps_checkout(8.5.3.2) active=1 -> displayOrderConfirmation
+  ps_checkout(8.5.3.2) active=1 -> displayOrderDetail
+  ps_checkout(8.5.3.2) active=1 -> displayPaymentByBinaries
+  ps_checkout(8.5.3.2) active=1 -> displayPaymentReturn
+  ps_checkout(8.5.3.2) active=1 -> displayPaymentTop
+  ps_checkout(8.5.3.2) active=1 -> moduleRoutes
+  ps_checkout(8.5.3.2) active=1 -> paymentOptions
+  ps_customeraccountlinks(3.2.0) active=1 -> actionModuleRegisterHookAfter
+  ps_customeraccountlinks(3.2.0) active=1 -> actionModuleUnRegisterHookAfter
+  ps_wirepayment(2.2.1) active=1 -> displayPaymentReturn
+  ps_wirepayment(2.2.1) active=1 -> paymentOptions
+  --- cles de conf ETS_ ---
+  etsy_api_host (25)
+  etsy_api_key (24)
+  etsy_api_secret (10)
+  etsy_api_user_id (9)
+  etsy_api_version (2)
+  etsy_currency (3)
+  etsy_default_lang (1)
+  etsy_desc_type (4)
+  etsy_order_default_status (2)
+  etsy_order_shipped_status (1)
+  etsy_order_tax (1)
+  etsy_order_unpaid_status (2)
+  etsy_redirect_url (125)
+  etsy_selected_shipment_name (12)
+  etsy_store_lang (29)
+  etsy_switch_value (1)
+  etsy_sync_item (2)
+  ETS_AWU_CRONJOB_TOKEN (12)
+  ETS_AWU_ENABLE_REDIRECT_NOTFOUND (1)
+  ETS_AWU_ENABLE_REMOVE_ATTR_ALIAS (1)
+  ETS_AWU_ENABLE_REMOVE_ID_ATTR_ALIAS (1)
+  ETS_AWU_ENABLE_REMOVE_ID_IN_URL (1)
+  ETS_AWU_ENABLE_REMOVE_LANG_CODE_IN_URL (1)
+  ETS_AWU_ENABLE_URL_REDIRECT (1)
+  ETS_AWU_ENABLE_XML_SITEMAP (1)
+  ETS_AWU_OLD_URL_CATEGORY_RULE (14)
+  ETS_AWU_OLD_URL_CMS_CATEGORY_RULE (31)
+  ETS_AWU_OLD_URL_CMS_RULE (22)
+  ETS_AWU_OLD_URL_MANUF_RULE (20)
+  ETS_AWU_OLD_URL_MODULE_RULE (29)
+  ETS_AWU_OLD_URL_PRODUCT_RULE (64)
+  ETS_AWU_OLD_URL_SUPPLIER_RULE (23)
+  ETS_AWU_PROD_SITEMAP_LIMIT (3)
+  ETS_AWU_REDIRECT_STATUS_CODE (3)
+  ETS_AWU_ROOT_URL_CATEGORY_RULE (14)
+  ETS_AWU_ROOT_URL_CMS_CATEGORY_RULE (31)
+  ETS_AWU_ROOT_URL_CMS_RULE (22)
+  ETS_AWU_ROOT_URL_MANUF_RULE (20)
+  ETS_AWU_ROOT_URL_MODULE_RULE (29)
+  ETS_AWU_ROOT_URL_PRODUCT_RULE (64)
+  ETS_AWU_ROOT_URL_SUPPLIER_RULE (23)
+  ETS_AWU_RSS_CONTENT_AFTER ()
+  ETS_AWU_RSS_CONTENT_BEFORE ()
+  ETS_AWU_RSS_ENABLE (1)
+  ETS_AWU_RSS_LINK ()
+  ETS_AWU_RSS_OPTION (89)
+  ETS_AWU_RSS_POST_LIMIT (3)
+  ETS_AWU_SET_REMOVE_ID (1)
+  ETS_AWU_SITEMAP_FREQ_CATEGORY (5)
+  ETS_AWU_SITEMAP_FREQ_CMS (6)
+  ETS_AWU_SITEMAP_FREQ_CMS_CATEGORY (6)
+  ETS_AWU_SITEMAP_FREQ_MANUFACTURER (6)
+  ETS_AWU_SITEMAP_FREQ_META (6)
+  ETS_AWU_SITEMAP_FREQ_PRODUCT (5)
+  ETS_AWU_SITEMAP_FREQ_SUPPLIER (6)
+  ETS_AWU_SITEMAP_LANG ()
+  ETS_AWU_SITEMAP_OPTION (38)
+  ETS_AWU_SITEMAP_PRIMARY ()
+  ETS_AWU_SITEMAP_PRIORITY (3)
+  ETS_AWU_SITEMAP_PRIORITY_CATEGORY (3)
+  ETS_AWU_SITEMAP_PRIORITY_CMS (3)
+  ETS_AWU_SITEMAP_PRIORITY_CMS_CATEGORY (3)
+  ETS_AWU_SITEMAP_PRIORITY_MANUFACTURER (3)
+  ETS_AWU_SITEMAP_PRIORITY_META (3)
+  ETS_AWU_SITEMAP_PRIORITY_PRODUCT (1)
+  ETS_AWU_SITEMAP_PRIORITY_SUPPLIER (3)
+  ETS_AWU_TIME_LOG_CRONJOB (19)
+  ETS_AWU_URL_CATEGORY_RULE (14)
+  ETS_AWU_URL_CMS_CATEGORY_RULE (31)
+  ETS_AWU_URL_CMS_RULE (22)
+  ETS_AWU_URL_MANUF_RULE (20)
+  ETS_AWU_URL_MODULE_RULE (29)
+  ETS_AWU_URL_NOID_CATEGORY_RULE (27)
+  ETS_AWU_URL_NOID_CMS_CATEGORY_RULE (26)
+  ETS_AWU_URL_NOID_CMS_RULE (17)
+  ETS_AWU_URL_NOID_MANUF_RULE (15)
+  ETS_AWU_URL_NOID_MODULE_RULE (29)
+  ETS_AWU_URL_NOID_PRODUCT_RULE (20)
+  ETS_AWU_URL_NOID_SUPPLIER_RULE (18)
+  ETS_AWU_URL_PRODUCT_RULE (50)
+  ETS_AWU_URL_SUPPLIER_RULE (23)
+  ETS_OPC_1PAGE_ENABLED (1)
+  ETS_OPC_ADDRESS_DISPLAY_FIELD (109)
+  ETS_OPC_ADDRESS_DISPLAY_FIELD_REQUIRED (68)
+  ETS_OPC_ADDRESS_GOOGLE_AUTOFILL_ENABLED (1)
+  ETS_OPC_CAPTCHA_ENABLED (1)
+  ETS_OPC_CAPTCHA_SECRET_V2 ()
+  ETS_OPC_CAPTCHA_SECRET_V3 (40)
+  ETS_OPC_CAPTCHA_SITE_V2 ()
+  ETS_OPC_CAPTCHA_SITE_V3 (40)
+  ETS_OPC_CAPTCHA_TYPE (9)
+  ETS_OPC_CART_COMMENT_ENABLED (1)
+  ETS_OPC_CHECK_BOX_NEWSLETTER (1)
+  ETS_OPC_CHECK_BOX_OFFERS (1)
+  ETS_OPC_CHECK_DEFAULT_CONDITION (1)
+  ETS_OPC_CREATEACC_CAPTCHA_ENABLED (1)
+  ETS_OPC_CREATEACC_DISPLAY_FIELD (6)
+  ETS_OPC_CREATEACC_DISPLAY_FIELD_REQUIRED (6)
+  ETS_OPC_DEFAULT_ACCOUNT_FORM (6)
+  ETS_OPC_DESIGN_COLOR1 (7)
+  ETS_OPC_DESIGN_COLOR2 (7)
+  ETS_OPC_DESIGN_COLOR3 (7)
+  ETS_OPC_DESIGN_COLOR4 (7)
+  ETS_OPC_DESIGN_COLOR5 (7)
+  ETS_OPC_DESIGN_COLOR6 (7)
+  ETS_OPC_DESIGN_COLOR7 (7)
+  ETS_OPC_DESIGN_COLOR8 (7)
+  ETS_OPC_DESIGN_COLOR9 (7)
+  ETS_OPC_DESIGN_LAYOUT (8)
+  ETS_OPC_FACEBOOK_ENABLED (1)
+  ETS_OPC_FACEBOOK_ID ()
+  ETS_OPC_FACEBOOK_SECRET ()
+  ETS_OPC_GOOGLE_ENABLED (1)
+  ETS_OPC_GOOGLE_ID (71)
+  ETS_OPC_GOOGLE_KEY_API ()
+  ETS_OPC_GOOGLE_SECRET (35)
+  ETS_OPC_GOOGLE_STYLE (5)
+  ETS_OPC_GUEST_CAPTCHA_ENABLED (1)
+  ETS_OPC_GUEST_DISPLAY_FIELD (6)
+  ETS_OPC_GUEST_DISPLAY_FIELD_REQUIRED (6)
+  ETS_OPC_LOGIN_CAPTCHA_ENABLED (1)
+  ETS_OPC_LOGIN_DISPLAY_FIELD ()
+  ETS_OPC_LOGIN_DISPLAY_FIELD_REQUIRED ()
+  ETS_OPC_PAGE_ENABLED_SOCIAL (38)
+  ETS_OPC_PAYMENT_DEFAULT (16)
+  ETS_OPC_PAYMENT_LOGO_ENABLED (1)
+  ETS_OPC_PAYPAL_ENABLED (1)
+  ETS_OPC_PAYPAL_ID (80)
+  ETS_OPC_PAYPAL_SANBOX_ENABLED (1)
+  ETS_OPC_PAYPAL_SECRET (80)
+  ETS_OPC_SEND_PASSWORD_SOCIAL (1)
+  ETS_OPC_SHIPPING_LOGO_ENABLED (1)
+  ETS_OPC_SHOW_CUSTOMER_REASSURANCE (1)
+  ETS_OPC_SHOW_SHIPPING (1)
+  ETS_OPC_TESTING_ENABLED (1)
+  ETS_OPC_TEST_API (14)
+  ETS_OPC_USE_NAME_ACCOUNT (1)
+
+### SAUVEGARDES
+total 2416
+drwxrwxr-x  2 djdj2187 djdj2187    4096 Sep  3 16:39 .
+drwx--x--x 54 djdj2187 djdj2187    4096 Sep 17 13:31 ..
+-rw-rw-r--  1 djdj2187 djdj2187   30887 Aug 28 13:22 colissimo_essentiel-preprod-20260828-132216.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   28274 Aug 28 14:22 colissimo_essentiel-preprod-20260828-142216.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   28440 Aug 28 14:40 colissimo_essentiel-preprod-20260828-144001.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   29618 Aug 28 15:02 colissimo_essentiel-preprod-20260828-150219.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   32103 Aug 29 03:40 colissimo_essentiel-preprod-20260829-034017.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   37697 Aug 29 04:01 colissimo_essentiel-preprod-20260829-040125.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   37956 Aug 29 04:02 colissimo_essentiel-preprod-20260829-040253.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   38610 Aug 29 04:17 colissimo_essentiel-preprod-20260829-041739.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   41798 Aug 29 11:30 colissimo_essentiel-preprod-20260829-113030.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   80419 Aug 29 12:58 colissimo_essentiel-preprod-20260829-125827.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187   80520 Sep  3 16:36 colissimo_essentiel-preprod-20260903-163628.tar.gz
+-rw-rw-r--  1 djdj2187 djdj2187 1964117 Sep  3 16:39 colissimo_essentiel-prod-20260903-163904.tar.gz
+2.4M	/home/djdj2187/backups
+
+### THEME : fichiers modifiés récemment (customisations hors cache) — prod
+2026-06-25        0 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/email_sponsership.txt
+2026-06-25        0 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_advertisement_campaign.txt
+2026-06-25       10 /home/djdj2187/the-replicant.com/themes/warehouse/modules/amazon/mails/fr/empty.txt
+2026-06-25       20 /home/djdj2187/the-replicant.com/themes/warehouse/modules/amazon/mails/fr/reply_msg.txt
+2026-06-25      106 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_assign_membership_admin.txt
+2026-06-25      113 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_update_membership_admin.txt
+2026-06-25      118 /home/djdj2187/the-replicant.com/themes/warehouse/modules/amazon/mails/fr/fba_stocks.txt
+2026-06-25      131 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_active_membership_customer.txt
+2026-06-25      135 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_assign_membership_customer.txt
+2026-06-25      138 /home/djdj2187/the-replicant.com/themes/warehouse/modules/sendinblue/mails/fr/smtpTestMail.txt
+2026-06-25      155 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_update_membership_customer.txt
+2026-06-25      191 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_membership_approval_admin.txt
+2026-06-25      198 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_point_balance_reminder.txt
+2026-06-25      199 /home/djdj2187/the-replicant.com/themes/warehouse/modules/amazon/mails/fr/empty.html
+2026-06-25      202 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_point_assignment_admin.txt
+2026-06-25      207 /home/djdj2187/the-replicant.com/themes/warehouse/mails/fr/lang.php
+2026-06-25      207 /home/djdj2187/the-replicant.com/themes/warehouse/modules/amazon/mails/fr/fba_multichannel.txt
+2026-06-25      224 /home/djdj2187/the-replicant.com/themes/warehouse/mails/fr/newsletter.txt
+2026-06-25      225 /home/djdj2187/the-replicant.com/themes/warehouse/modules/wkrewardsystem/mails/fr/reward_point_redeem_admin.txt
+2026-06-25      229 /home/djdj2187/the-replicant.com/themes/warehouse/modules/sendinblue/mails/fr/creditNotificationMail.txt
+2026-01-13      302 /home/djdj2187/the-replicant.com/themes/warehousechild/config/theme.yml
+2026-01-13      928 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/img/blank.png
+2026-01-13    31000 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/css/font-awesome.min.css
+2026-01-13    37414 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/css/font-awesome.css
+2026-01-13    38016 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/css/font-awesome-preload.css
+2026-01-13    77160 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.woff2
+2026-01-13    98024 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.woff
+2026-01-13   134808 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/FontAwesome.otf
+2026-01-13   149420 /home/djdj2187/the-replicant.com/themes/warehousechild/preview.png
+2026-01-13   165548 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.ttf
+2026-01-13   165742 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.eot
+2026-01-13   443670 /home/djdj2187/the-replicant.com/themes/warehousechild/assets/css/font-awesome/fonts/fontawesome-webfont.svg
+
+### MODULES MARCHEPLACE : dates de déploiement
+drwxr-xr-x  9 djdj2187 djdj2187 4096 Sep  7 14:16 /home/djdj2187/the-replicant.com/modules/aimetadata
+drwxr-xr-x 28 djdj2187 djdj2187 4096 Sep  4 11:24 /home/djdj2187/the-replicant.com/modules/amazon
+drwxr-xr-x 28 djdj2187 djdj2187 4096 Jul 31 14:53 /home/djdj2187/the-replicant.com/modules/cdiscount
+drwxr-xr-x  9 djdj2187 djdj2187 4096 Sep  4 11:48 /home/djdj2187/the-replicant.com/modules/ets_onepagecheckout
+drwxr-xr-x  8 djdj2187 djdj2187 4096 Sep 16 00:07 /home/djdj2187/the-replicant.com/modules/temuconnector
+--- aimetadata : README / memoire sur le serveur ? ---
+total 160
+drwxr-xr-x   9 djdj2187 djdj2187  4096 Sep  7 14:16 .
+drwxr-xr-x 150 djdj2187 djdj2187  4096 Sep 16 08:30 ..
+-rw-r--r--   1 djdj2187 djdj2187 23970 Sep  5 21:44 README.md
+-rw-r--r--   1 djdj2187 djdj2187 30858 Sep 17 12:12 aimetadata.php
+-rw-r--r--   1 djdj2187 djdj2187   596 Sep  3 22:16 composer.json
+-rw-r--r--   1 djdj2187 djdj2187 60741 Sep  3 22:16 composer.lock
+-rw-rw-r--   1 djdj2187 djdj2187   748 Sep  7 14:16 config_fr.xml
+drwxr-xr-x   3 djdj2187 djdj2187  4096 Sep  6 14:04 controllers
+drwxr-xr-x   2 djdj2187 djdj2187  4096 Sep  6 14:04 sql
+drwxr-xr-x   8 djdj2187 djdj2187  4096 Sep  6 14:04 src
+drwxr-xr-x   2 djdj2187 djdj2187  4096 Sep  6 14:04 translations
+drwxr-xr-x   2 djdj2187 djdj2187  4096 Sep 17 12:12 upgrade
+drwxr-xr-x   3 djdj2187 djdj2187  4096 Sep  6 14:04 vendor
+drwxr-xr-x   5 djdj2187 djdj2187  4096 Sep  6 14:04 views
+
+== FIN AUDIT 2 ==
+
