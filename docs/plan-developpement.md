@@ -25,6 +25,28 @@ Objectif : ne rien concevoir sur des hypothèses. La source de vérité est l'in
 
 ---
 
+## Phase 0 bis — Remise à niveau de la préprod (première action technique)
+
+Décision DECISION-012. Objectif : une préprod **à l'identique de la production** (fichiers + base), donc
+une base de travail qui prouve quelque chose.
+
+- [ ] **Sauvegarde complète de la préprod actuelle** (fichiers + dump de sa base) — autorisée, à faire avant tout.
+- [ ] Dump de la base de production et restauration dans la base de préprod.
+- [ ] Mise à l'identique des fichiers applicatifs (socle, modules, thème) — **sans** toucher à la production.
+- [ ] **Laisser inactifs les modules de production** : rien ne doit tirer sur les marketplaces, le paiement,
+      la messagerie ou l'e-mail depuis la préprod. Dresser la liste des modules à désactiver (amazon, cdiscount,
+      temuconnector, colissimo/colissimo_essentiel, hc_retractation, sendinblue, Monetico, Alma, ps_checkout,
+      ets_onepagecheckout selon le cas), **et vérifier les crontabs du compte** : les entrées pointant sur
+      `preprod.` doivent rester inoffensives.
+- [ ] Vérifier après restauration : `PS_SHOP_ENABLE`, URL de boutique (`preprod.the-replicant.com`), accès
+      back-office, cache vidé, `parameters.php` de la préprod pointant bien sur **sa** base.
+- [ ] Mesurer la préprod d'après restauration : poids, requêtes, temps de réponse — c'est la **nouvelle baseline**.
+
+**Porte de sortie** : la préprod sert le même code que la production, avec les modules sensibles inactifs,
+et le développement du thème peut commencer dessus.
+
+---
+
 ## Phase 1 — Design (Claude Design)
 
 - [ ] Design tokens (`docs/design/tokens.json` + `DESIGN.md`) : couleurs, typo, espacements, rayons, durée/courbes d'animation, breakpoints, états.
@@ -70,14 +92,23 @@ Tout ce qui est visible sur l'accueil est **paramétrable**, rien en dur.
 
 ---
 
-## Phase 4 — Tunnel de vente court
+## Phase 4 — Tunnel de vente court (réécrit, après décorticage)
 
+Décision DECISION-010 : tunnel **maison**, `ets_onepagecheckout` désactivé après recette.
+
+- [ ] **Décortiquer `ets_onepagecheckout` 2.8.6** (lecture seule) : champs réellement collectés par étape,
+      règles de frais de port, cas de la commande invité, interaction avec chaque moyen de paiement, gestion
+      des retours de paiement et des échecs. → note de comportement, **règles reprises, code jamais copié**.
 - [ ] Panier (édition, code promo, estimation de port, upsell discret).
-- [ ] Identification : **commande invité possible**, bascule « particulier / professionnel ».
+- [ ] Identification : **commande invité possible**, bascule « particulier / professionnel » (prix HT -20 % pour
+      le groupe pro — DECISION-014).
 - [ ] Livraison : transporteurs existants, point relais, adresses.
-- [ ] **Paiement sur une page (OPC)** — développée **au-dessus des hooks paiement** pour ne casser aucun module.
+- [ ] **Paiement sur une page**, au-dessus des hooks paiement, en gardant fonctionnels **Monetico (CMCIC)**,
+      **Alma**, **PayPal (`ps_checkout`)** et le virement ; un test de bout en bout par moyen de paiement.
 - [ ] Confirmation claire (numéro, suivi, e-mails annoncés).
 - [ ] Aucune perte de panier au retour arrière, erreurs au bon endroit, une étape = un écran mobile maximum.
+- [ ] **Points d'entrée API** du tunnel (panier, client, commande, paiement) exposés dès la conception pour
+      l'app mobile (DECISION-015).
 
 ---
 
@@ -125,12 +156,17 @@ Tout ce qui est visible sur l'accueil est **paramétrable**, rien en dur.
 
 ---
 
-## Phase 9 — App mobile (2ᵉ temps, cadrage séparé)
+## Phase 9 — App mobile (2ᵉ temps) — **canal de commande complet**
 
-- [ ] Cadrage du périmètre (attention : le chantier `multiply` a tranché `D-009` — prix = marketplaces,
-      la boutique ne sert que la connexion des utilisateurs ; ne pas dupliquer).
-- [ ] Expo + réutilisation **stricte** des design tokens du web.
-- [ ] Source de données : webservice PrestaShop en lecture ou API dédiée (décision à prendre, chiffrée).
+Décision DECISION-015 : l'app doit permettre de **passer commande**, pas seulement de consulter.
+
+- [ ] Cadrage du périmètre avec Jérôme (attention : le chantier `multiply` a tranché `D-009` — prix =
+      marketplaces, la boutique ne sert que la connexion des utilisateurs ; ne pas dupliquer).
+- [ ] Expo + réutilisation **stricte** des design tokens du web (mêmes valeurs, mêmes contrastes).
+- [ ] Source de données : **webservice PrestaShop** en 8.2, **Admin API** (API Platform) en 9.x — décision
+      chiffrée, en tenant compte de `ps_stock_available` (`id_shop=1` obligatoire, piège mesuré).
+- [ ] Réutilisation des **points d'entrée du tunnel** conçus en phase 4 (ne pas réinventer le panier ni le paiement).
+- [ ] Moyen de paiement de l'app à trancher (Monetico / Alma / PayPal / Stripe).
 
 ---
 

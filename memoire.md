@@ -103,6 +103,74 @@
   `displayProductPriceBlock`…). « Thème léger » sans trancher leur sort est un objectif inatteignable.
 - **Impact** : c'est l'arbitrage qui conditionne l'essentiel du gain de poids et une partie du design.
 
+### DECISION-010 — Le tunnel est réécrit, après décorticage de l'existant
+- **Date** : 17/09/2026 · **Sujet** : tunnel de commande (remplace DECISION-007)
+- **Décision** : construire un tunnel maison à la place de `ets_onepagecheckout`, **mais lire d'abord le module
+  pour récupérer ce qui fonctionne** (règles de calcul des frais, champs réellement collectés, cas limites
+  de commande invité, interaction avec Monetico / Alma / PayPal, gestion des erreurs de paiement).
+- **Pourquoi** : décision de Jérôme (tunnel court, maison, peu de modules) ; le module est une **référence de
+  comportement** — on reprend les règles, jamais le code.
+- **Impact** : le module tiers n'est désactivé qu'après recette du tunnel maison sur la préprod ; les 4 moyens
+  de paiement doivent rester fonctionnels (chacun a ses hooks et son retour de paiement).
+
+### DECISION-011 — Le minimum de modules, et tout ce qui peut l'être est paramétré depuis le thème
+- **Date** : 17/09/2026 · **Sujet** : périmètre fonctionnel (remplace DECISION-009)
+- **Décision** : objectif « **le moins de modules externes possible** ». Tout ce qui est paramétrable depuis le
+  thème l'est (accueil, bandeau, catégories, sections produits, réglages du thème). Chaque module tiers
+  conservé doit être **justifié explicitement** ; le socle IQIT (23 modules) est traité comme un ensemble à
+  démonter un par un, en réintégrant ce qui est utile **dans le thème ou le module compagnon**.
+- **Pourquoi** : exigence de Jérôme ; c'est aussi la seule façon d'atteindre le budget de performance.
+- **Impact** : sortie programmée de `iqitthemeeditor`, `iqitelementor`, `revsliderprestashop` et des modules
+  IQIT de vitrine ; les fonctions conservées (recherche, wishlist, avis, variantes) deviennent soit du
+  paramétrage du thème, soit des modules réécrits côté `replicanttheme`.
+
+### DECISION-012 — Remise à niveau de la préprod depuis la production, modules de prod laissés inactifs
+- **Date** : 17/09/2026 · **Sujet** : environnement de recette (résout DECISION-008)
+- **Décision** : la préproduction est **remise à l'identique de la production** (fichiers **et** base) pour
+  disposer d'une base de travail propre et à jour ; **les modules de production sont laissés inactifs sur la
+  préprod** afin d'écarter tout conflit (aucun cron ne doit tirer sur les marketplaces, le paiement ou l'e-mail
+  depuis la préprod). Le développement du thème se fait **uniquement** sur la préprod ; la production ne reçoit
+  le thème qu'après validation.
+- **Décision complémentaire** : **sauvegarde complète (fichiers + base) de la préprod existante effectuée
+  avant** la remise à niveau.
+- **Pourquoi** : décision de Jérôme ; la préprod actuelle ne prouve rien (DECISION-008).
+- **Impact** : opération à cadrer (dump de la base de prod, distance, durée, espace disque, vérification
+  après restauration) ; cette opération est la **première action technique du chantier**.
+
+### DECISION-013 — WebP servi par le thème, et diagnostic du cron de backfill
+- **Date** : 17/09/2026 · **Sujet** : images
+- **Décision** : le thème sert du **WebP** (avec repli et `srcset`). En parallèle, le cron « backfill WebP » est
+  **diagnostiqué et réparé** (il sort aujourd'hui sans rien produire : **0 fichier `.webp` pour 216 997 JPEG**).
+- **Pourquoi** : décision de Jérôme ; les deux mécanismes sont complémentaires (bibliothèque existante côté
+  serveur, chargement ciblé côté thème).
+
+### DECISION-014 — Professionnels : groupe pro, prix HT, 20 % de remise, validation manuelle
+- **Date** : 17/09/2026 · **Sujet** : parcours B2B (complète DECISION-003)
+- **Décision** : créer un **groupe client « Professionnel »** affichant les prix **HT** avec **20 % de remise** ;
+  l'accès au groupe reste soumis à **validation manuelle** par un employé en back-office.
+- **Pourquoi** : décision de Jérôme. Cohérent avec l'existant : le groupe `5 As Import` affiche déjà les prix
+  **HT** et le groupe `10 Ami(e)` applique déjà **-20 %**.
+- **Impact** : la remise doit être décidée par produit (meilleur prix) ou globale selon l'arbitrage commerce ;
+  le tunnel et les taux d'affichage doivent gérer un client connecté à prix HT (TVA affichée séparément).
+
+### DECISION-015 — L'app mobile est un canal de commande
+- **Date** : 17/09/2026 · **Sujet** : app mobile (phase 9)
+- **Décision** : l'app mobile ne sera pas un catalogue : elle doit **permettre de passer commande**. L'accès
+  à l'API devient donc structurant : **webservice PrestaShop** en 8.2, **Admin API** (API Platform) en 9.x.
+- **Pourquoi** : décision de Jérôme.
+- **Impact** : le tunnel maison et le module compagnon doivent exposer des **points d'entrée API** (panier,
+  client, commande, paiement) dès leur conception — sinon l'app devra réinventer le tunnel.
+
+### DECISION-016 — Trajectoire PrestaShop 9 : conventions Hummingbird dès maintenant
+- **Date** : 17/09/2026 · **Sujet** : évolutivité du thème
+- **Décision** : écrire le thème selon les **conventions de la référence Hummingbird** (BEM, SCSS modulaire
+  avec `@layer`, attributs `data-ps-*`, **zéro jQuery** dans le thème, accessibilité d'abord, héritage de
+  gabarits Smarty) pour que la bascule vers 9.1/9.2 soit un **port**, pas une réécriture.
+- **Pourquoi** : aucun thème Hummingbird n'est compatible à la fois avec 8.2.3 et 9.1+ (compatibilités
+  verrouillées par version) ; `1.x` (compatible 8.x) **n'est plus maintenu**, `2.x` cible 9.2.
+- **Impact** : voir `docs/dev-theme-prestashop.md` (voie A/B/C, recommandation B) et la page de bascule à
+  écrire, `docs/theme-9-migration.md`.
+
 ### DECISION-006 — La collecte de la newsletter est partie prenante du chantier
 - **Date** : 17/09/2026 · **Sujet** : dépendance externe
 - **Décision** : la mise à jour des sélecteurs de la collecte (`newsletter-replicant`,
@@ -193,15 +261,22 @@ ssh -i ~/.ssh/id_ed25519 djdj2187@nilgaut.o2switch.net 'php' < docs/outillage/so
 
 ## 8. Points ouverts (décisions attendues)
 
-1. **Tunnel** : habiller/paramétrer `ets_onepagecheckout` (déjà actif, payant, testé) **ou** le remplacer ?
-   (recommandation : habiller, et n'écrire que ce qui manque)
-2. **Écosystème IQIT** : pour chacun des 23 modules IQIT actifs + Revolution Slider — conservé, remplacé,
-   désactivé ? (conditionne le gain de poids réel et une partie du design)
-3. **Environnement de recette** : rafraîchir la préprod depuis la production, ou construire un sandbox
-   hors compte ? (la préprod actuelle ne permet pas de tester le tunnel ni le paiement)
-4. **Sauvegarde** : autoriser la sauvegarde du thème + dump de la base avant toute manipulation ?
-   (aujourd'hui, aucun rollback prouvé)
-5. **Images** : corriger le cron « backfill WebP » (216 997 JPEG concernés) ou générer les formats modernes
-   depuis le thème ? (les deux sont compatibles, mais l'un des deux doit être choisi en premier)
-6. **Pro** : la grille tarifaire professionnelle existe-t-elle, ou les pros achètent-ils au prix public ?
-7. **Webservice** : quel usage prévu pour l'app mobile (webservice PrestaShop en lecture ou API dédiée) ?
+**Tranchés le 17/09/2026** (voir DECISION-010 à DECISION-016) : tunnel réécrit après décorticage ;
+minimum de modules ; remise à niveau de la préprod (modules de prod laissés inactifs) ; sauvegarde préprod
+autorisée ; WebP + réparation du cron ; pro = groupe HT -20 % ; app mobile = canal de commande ;
+conventions Hummingbird pour l'évolutivité.
+
+**Restent ouverts :**
+
+1. **Base du thème** : fork de Hummingbird `1.x` (compatible 8.x mais **plus maintenu**),
+   thème vierge aux conventions Hummingbird (**recommandé**), ou migration de la boutique en 9.x d'abord ?
+   → `docs/dev-theme-prestashop.md` §4.
+2. **Framework CSS** : zéro framework (recommandé, cohérent avec la cible de poids) ou sous-ensemble
+   Bootstrap 5.3 aligné sur la référence ?
+3. **Trajectoire 9.x** : objectif daté par Jérôme, ou simple souhaite d'évolutivité ? (conditionne le budget
+   de portage et la priorité du module compagnon). Rappel : la boutique est en **8.2.3** alors que **8.2.8**
+   est publié — une montée de patch 8.2.x est à prévoir.
+4. **Remise pro** : -20 % global ou par produit (meilleur prix) ? Multipliable avec les remises existantes ?
+5. **App mobile** : quel moyen de paiement dans l'app (Monetico / Alma / PayPal, ou Stripe) ?
+6. **Newsletter** : qui met à jour les sélecteurs de collecte (périmètre `newsletter-replicant`) ?
+7. **Sauvegarde de production** : où sera la sauvegarde du thème et de la base avant la bascule finale ?
