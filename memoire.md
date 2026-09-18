@@ -360,10 +360,24 @@
   l'étape 1 (sauvegarde des fichiers de la préprod) n'était **qu'à 87 %** — 14,88 Go lus sur ~17 Go,
   archive à 12,1 Go progressant de +172 Mo/min.
 - **Attendu / obtenu** : 45-60 min pour les 7 étapes / **l'étape 1 non terminée en 51 minutes**.
-- **Cause** : la classe *idle* de `ionice` ne prend le disque que lorsque personne d'autre ne le
-  demande ; sur un stockage mutualisé déjà occupé, cela revient à un débit résiduel. La production,
-  elle, **n'a pas été ralentie** (charge inchangée : 11,6 / 13,2 sur 56 cœurs) : le remède était
-  efficace, mais son coût en temps n'était pas mesurable avant l'exécution (`/proc` fermé par CageFS).
+- **Cause supposée à 13h00** : la classe *idle* de `ionice` ne prend le disque que lorsque personne
+  d'autre ne le demande ; sur un stockage mutualisé déjà occupé, cela revient à un débit résiduel.
+  La production, elle, **n'a pas été ralentie** (charge inchangée : 11,6 / 13,2 sur 56 cœurs).
+- ⚠ **DIAGNOSTIC CORRIGÉ PAR LA MESURE (18/09/2026, 21h31)** — l'exécution relancée à **21h15 à
+  priorité d'E/S NORMALE** avance **au même rythme, voire plus lentement** : **3,0 Mo/s de lecture**
+  en moyenne sur 17 minutes (5,5 Mo/s sur un échantillon instantané de 20 s, `gzip` à **0 % d'un
+  cœur** — affamé d'E/S, jamais de CPU), contre **4,9 Mo/s** pour l'exécution de midi *avec*
+  `ionice`. **`ionice` n'était donc pas la cause** : le facteur limitant est le **débit du stockage
+  mutualisé** (~3-6 Mo/s utiles).
+- **Pourquoi le diagnostic était faux** : un débit *observé* avait été comparé à une **durée
+  estimée** (le « dump 5-10 min, rsync 15-30 min » du runbook) au lieu d'un débit *mesuré* à
+  priorité normale. La leçon du matin — *une atténuation non mesurée est une hypothèse* — vaut aussi
+  dans l'autre sens : **un ralentissement non mesuré avant/après est une hypothèse**.
+- **Conséquences** : ① l'arrêt de 13h00 n'a **pas** coûté un facteur 10 — il a coûté la journée, et
+  le motif de fond reste valable (la restauration serait tombée en heures ouvrées) ; ② le retrait
+  d'`ionice` est **neutre** (ni gain, ni perte) ; ③ **les durées du runbook sont à réécrire** —
+  l'opération complète se compte en **heures** (~3-6 Mo/s de débit utile), pas en minutes, et la
+  fenêtre d'exécution doit être choisie en conséquence.
 - **Correction** : `ionice -c3` **retiré** de l'enveloppe — seul `nice -n 19` reste (le CPU n'était pas
   le facteur limitant) ; exécution arrêtée proprement, préprod **intacte**, relance le même jour à 21h15.
 - **Fichiers** : `outillage/remise-a-niveau-preprod.sh`.
