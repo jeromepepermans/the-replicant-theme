@@ -8,8 +8,11 @@
 # Usage :  ./remise-a-niveau-preprod.sh            (exécution réelle)
 #          ./remise-a-niveau-preprod.sh --dry-run  (contrôles préalables uniquement)
 #
-# Priorités : les étapes distantes tournent en `nice -n 19 ionice -c3` (CPU au minimum, E/S en
-#   classe « idle ») pour ne pas ralentir la production qui partage le serveur et l'instance MariaDB.
+# Priorités : les étapes distantes tournent en `nice -n 19` (CPU au minimum) pour ne pas ralentir la
+#   production, qui partage le serveur, le disque et l'instance MariaDB.
+#   ⚠ `ionice -c3` (E/S en classe « idle ») a été RETIRÉ le 18/09/2026 : mesuré à ~4,9 Mo/s de lecture
+#   effective sur le stockage partagé (~10x plus lent — l'étape 1 n'était qu'à 87 % après 51 minutes).
+#   La production n'était pas ralentie, mais l'opération sortait de sa fenêtre. Voir BUG-004.
 # Déclenchement : par le cron SYSTÈME du VPS. Le planificateur Hermes du profil `devops` ne
 #   s'exécute pas (aucun gateway n'y tourne) : le job armé du 17/09 à 20h07 n'est jamais parti (BUG-001).
 #
@@ -86,7 +89,7 @@ if [ "$MODE" = "dry-run" ]; then
   "$MYSQL" --defaults-extra-file="$CNF_PROD" -N -e "SELECT CONCAT('    ',name,' = ',value) FROM ps_configuration WHERE name IN ('PS_MAIL_METHOD','PS_MAIL_SMTP_ENCRYPTION')" "$DB_PROD" || true
   log "paramètres e-mail de la préprod :"
   "$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT CONCAT('    ',name,' = ',value) FROM ps_configuration WHERE name IN ('PS_MAIL_METHOD','PS_MAIL_SMTP_ENCRYPTION')" "$DB_PRE" || true
-  log "priorisation des E/S : nice=$(command -v nice || echo ABSENT) ionice=$(command -v ionice || echo ABSENT)"
+  log "priorité CPU : nice=$(command -v nice || echo ABSENT) — E/S en priorité normale (BUG-004)"
   log "tâches cron visant la préprod :"
   crontab -l 2>/dev/null | grep -c preprod | sed 's/^/    /' || true
   crontab -l 2>/dev/null | grep preprod | sed -E 's/(token|key|secure_key)=[^&"'"'"' ]*/\1=***/g' | sed 's/^/    /' || true
@@ -219,14 +222,14 @@ REMOTE
 {
   echo "=== Remise à niveau préprod — mode=$MODE — $(date '+%Y-%m-%d %H:%M:%S') ==="
   echo "hôte: $SSH_TARGET"
-  # Priorités minimales (CPU nice 19 + E/S classe « idle ») : l'opération cède le disque et
-  # l'instance MariaDB dès que la production les demande. Toutes les étapes distantes héritent.
+  # Priorité CPU minimale (nice 19), héritée par toutes les étapes distantes. Les E/S restent en
+  # priorité normale : la classe « idle » a été mesurée ~10x trop lente le 18/09/2026 (BUG-004).
   # ServerAliveCountMax 20 : 10 minutes de coupure réseau tolérées plutôt qu'une restauration
   # interrompue à mi-chemin.
   ssh -i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=30 \
       -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes \
       "$SSH_TARGET" \
-      'nice -n 19 ionice -c3 bash -s -- '"$TS $MODE" <<<"$REMOTE_SCRIPT"
+      'nice -n 19 bash -s -- '"$TS $MODE" <<<"$REMOTE_SCRIPT"
   echo "=== terminé le $(date '+%Y-%m-%d %H:%M:%S') ==="
 } 2>&1 | tee -a "$LOG"
 

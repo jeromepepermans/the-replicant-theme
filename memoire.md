@@ -257,6 +257,13 @@
   profil) ; lancer en priorité normale (impact non maîtrisé sur la production).
 - **Impact** : l'opération peut durer plus longtemps puisqu'elle cède le disque dès que la production
   le demande ; le contrôle du résultat reste manuel (BUG-001 en a montré le coût).
+- **Révision du 18/09/2026 (13h00)** — l'exécution de 12h07 a montré que **la classe d'E/S *idle* coûte
+  ~10x en temps** (`BUG-004`) : elle est **retirée**. Seul `nice -n 19` reste, la production n'ayant
+  montré aucune tension CPU. La priorisation ne se paie plus par la durée de l'opération.
+- **Replanification** : **18/09/2026 à 21h15** (au lieu de 12h07). Le relevé des crons de la boutique a
+  corrigé l'heure : **la minute 7 est occupée toutes les heures** par le cron Amazon
+  (`products_json.php`, 9 marchés) — le créneau de 12h07 collait donc à une tâche. Entre **19h et 22h**,
+  la `crontab` est **libre**, et la minute 15 n'est utilisée par aucune tâche.
 
 ---
 
@@ -345,6 +352,28 @@
   existants (17/09 ×2, 18/09 ×1).
 - **Test de validation** : plus aucun hash dans `logs/`.
 
+### BUG-004 — La classe d'E/S « idle » a rendu l'opération ~10x plus lente (arrêtée à l'étape 1)
+- **Statut** : FIXED · **Date** : 18/09/2026 (mesuré à 12h58, exécution arrêtée à 13h00)
+- **Environnement** : exécution réelle du 18/09/2026 à 12h07 (VPS → `nilgaut.o2switch.net`)
+- **Description** : l'enveloppe distante `nice -n 19 ionice -c3`, posée pour protéger la production
+  (`DECISION-021`), a ramené le débit de lecture effectif à **~4,9 Mo/s** : après **51 min 27 s**,
+  l'étape 1 (sauvegarde des fichiers de la préprod) n'était **qu'à 87 %** — 14,88 Go lus sur ~17 Go,
+  archive à 12,1 Go progressant de +172 Mo/min.
+- **Attendu / obtenu** : 45-60 min pour les 7 étapes / **l'étape 1 non terminée en 51 minutes**.
+- **Cause** : la classe *idle* de `ionice` ne prend le disque que lorsque personne d'autre ne le
+  demande ; sur un stockage mutualisé déjà occupé, cela revient à un débit résiduel. La production,
+  elle, **n'a pas été ralentie** (charge inchangée : 11,6 / 13,2 sur 56 cœurs) : le remède était
+  efficace, mais son coût en temps n'était pas mesurable avant l'exécution (`/proc` fermé par CageFS).
+- **Correction** : `ionice -c3` **retiré** de l'enveloppe — seul `nice -n 19` reste (le CPU n'était pas
+  le facteur limitant) ; exécution arrêtée proprement, préprod **intacte**, relance le même jour à 21h15.
+- **Fichiers** : `outillage/remise-a-niveau-preprod.sh`.
+- **Test de validation** : dry-run du 18/09 à 13h00 en environnement dépouillé (`RESULTAT: DRY-RUN OK`,
+  commande d'exécution vérifiée : `nice -n 19 bash -s --`, plus aucun `ionice`).
+- **Ce que l'arrêt en cours d'exécution a confirmé** : `P130` s'est vérifié **en vrai** — interrompu en
+  pleine course, le script a bien laissé `~/.my-prod.cnf` et `~/.my-preprod.cnf` (mode 600, mot de
+  passe de base) sur le serveur. Supprimés manuellement à 13h00, avec l'archive partielle de **13 Go**.
+  ⇒ tant que `P130` n'est pas corrigé, **toute interruption laisse des identifiants sur le serveur**.
+
 ---
 
 ## 6. État d'avancement
@@ -352,7 +381,7 @@
 | Phase | État |
 |---|---|
 | 0 — Audit & sauvegarde | ☑ audit lecture seule **fait** (prod + préprod, 17/09/2026) · ☐ sauvegarde du thème et de la base **à faire sur accord** |
-| **0 bis — Remise à niveau de la préprod** | ☑ runbook écrit (`docs/runbook-remise-a-niveau-preprod.md`) · ☑ script versionné, éprouvé à blanc · ☑ **exécution déclenchée le 18/09/2026 à 12h07** par le cron système du VPS (DECISION-021, BUG-001) · ☐ **contrôle du résultat** (tables, modules, `crontab`, `PS_SHOP_ENABLE`, HTTP, e-mails muets) |
+| **0 bis — Remise à niveau de la préprod** | ☑ runbook écrit · ☑ script versionné, éprouvé à blanc · ☑ exécution du 18/09 à **12h07** lancée par le cron système (DECISION-021) — **arrêtée à 13h00**, bloquée à l'étape 1 par la classe d'E/S *idle* (**BUG-004**), **préprod intacte** · ☑ **relance planifiée le 18/09 à 21h15** (`nice 19`, sans `ionice`) · ☐ **contrôle du résultat** (tables ≈ 571, modules ≈ 77, `crontab` −1 tâche, `PS_SHOP_ENABLE = 1`, `PS_MAIL_METHOD = 3`, HTTP `200` derrière la redirection) |
 | 1 — Design (Claude Design) | ☑ **tokens v0.2.0 dérivés du nouveau logo** (`docs/design/tokens.json` v0.2, `DESIGN.md` v0.2, `apercu-tokens-v2.html` ; `apercu-tokens.html` = planche v0.1 conservée pour comparaison) · ☐ validation de Jérôme (palette, **variante du logo**, typographie + licences) puis maquettes (prompts P0→P10 prêts) |
 | 2 — Socle du thème | ☐ base arrêtée : thème vierge, conventions Hummingbird, **aucun framework CSS** (DECISION-017) |
 | 3 — Module BO compagnon | ☐ |
