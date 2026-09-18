@@ -127,7 +127,7 @@ fichier et dis-moi à quel écran il correspond.
 **Le prompt — à coller après le bloc de contexte :**
 
 ```
-« Étape 1 : construis le système de design de la boutique, et rien d'autre. Livre un seul fichier HTML autonome, « systeme-de-design.html », qui contient : 1. les variables CSS du système (couleurs, typographies, espacements, rayons, élévations, durées) — exactement les valeurs du bloc de contexte, sans en inventer ; 2. la palette complète affichée en pastilles, avec pour chacune son rôle et le contraste mesuré sur le fond où elle est censée vivre ; 3. l'échelle typographique complète, rendue avec les vraies polices ; 4. l'échelle d'espacement et les trois niveaux d'élévation, montrés en exemples ; 5. une planche de ~12 composants dans TOUS leurs états : bouton principal / secondaire / fantôme, survol, actif, désactivé, chargement ; champ de texte, champ en erreur (avec le message), case à cocher, choix multiple ; carte produit ; badge ; alerte ; fil d'Ariane ; pagination ; état vide. Montre chaque état, pas seulement l'état nominal.
+Étape 1 : construis le système de design de la boutique, et rien d'autre. Livre un seul fichier HTML autonome, « systeme-de-design.html », qui contient : 1. les variables CSS du système (couleurs, typographies, espacements, rayons, élévations, durées) — exactement les valeurs du bloc de contexte, sans en inventer ; 2. la palette complète affichée en pastilles, avec pour chacune son rôle et le contraste mesuré sur le fond où elle est censée vivre ; 3. l'échelle typographique complète, rendue avec les vraies polices ; 4. l'échelle d'espacement et les trois niveaux d'élévation, montrés en exemples ; 5. une planche de ~12 composants dans TOUS leurs états : bouton principal / secondaire / fantôme, survol, actif, désactivé, chargement ; champ de texte, champ en erreur (avec le message), case à cocher, choix multiple ; carte produit ; badge ; alerte ; fil d'Ariane ; pagination ; état vide. Montre chaque état, pas seulement l'état nominal.
 
 Contraintes : HTML + CSS dans un seul fichier, aucune ressource externe (polices en base64), aucun framework. Annonce l'archétype de surface (« Piloter » pour une planche de système) et annote les zones paramétrables s'il y en a.
 ```
@@ -247,7 +247,9 @@ Grille de produits responsive, tri visible, filtres dans un panneau dédié en m
 ```
 Étape 6 : dessine la fiche produit. Fichier « fiche-produit.html ». Archétype : « Configurer ».
 
-Galerie (image principale + miniatures, zoom, changement d'image sans rechargement — et un emplacement réservé pour **l'étiquette « Généré par l'IA »** que le module de métadonnées injecte : réserve-lui une zone dans la galerie **et** sur les vignettes, sans la styliser toi-même, c'est le module qui décide) Titre, prix TTC, disponibilité réelle, sélecteur d'options (couleur, taille) avec indisponibilités claires, quantité, **Ajouter au panier** (fond jaune, texte encre), réassurance livraison, description, caractéristiques, avis, produits complémentaires.
+Galerie (image principale + miniatures, zoom, changement d'image sans rechargement — et un emplacement réservé pour **l'étiquette « Généré par l'IA »** que le module de métadonnées injecte : réserve-lui une zone dans la galerie **et** sur les vignettes, sans la styliser toi-même, c'est le module qui décide)
+
+Titre, prix TTC, disponibilité réelle, sélecteur d'options (couleur, taille) avec indisponibilités claires, quantité, **Ajouter au panier** (fond jaune, texte encre), réassurance livraison, description, caractéristiques, avis, produits complémentaires.
 
 Les badges de la fiche : remise et compte à rebours s'il y a une date de fin réelle, épuisé le cas échéant — jamais plus de deux, jamais de rareté inventée.
 ```
