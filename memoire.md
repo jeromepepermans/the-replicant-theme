@@ -296,6 +296,31 @@
 
 ---
 
+### DECISION-023 — Badges produit (compte à rebours compris), logo desktop à 120 px, polices et icônes validées
+- **Date** : 18/09/2026 · **Sujet** : composants, en-tête desktop, actifs typographiques et iconiques
+- **Décision** : ① **famille de badges** livrée et spécifiée — remise (`specific_price.reduction`),
+  **compte à rebours sur date de fin réelle** (`specific_price.to`), nouveauté, derniers exemplaires,
+  **épuisé**, bientôt de retour, coup de cœur, exclusivité — avec **deux badges au maximum par carte** et un
+  ordre de priorité ; ② **l'en-tête desktop est haut au repos** (logo **120 px**, le mot devient lisible) et
+  **se compacte à 72 px au défilement** ; ③ **les animations festives sont VALIDÉES** par Jérôme ; ④ les
+  **licences des polices sont vérifiées** (OFL 1.1, les deux) et le thème sert **le sous-ensemble latin des
+  fichiers non modifiés** (65 Ko au lieu des 3 fontes chargées aujourd'hui depuis Google) ; ⑤ le **jeu
+  d'icônes** est livré et versionné.
+- **Pourquoi** : le mot du logo n'est **confortablement lisible qu'à partir de 120 px** (échelle 56/72/96/120/144
+  mesurée au rendu : illisible / à peine / lisible / confortable / très confortable) ⇒ un en-tête haut au repos
+  est le seul moyen de satisfaire « visible ET lisible » sans imposer une barre énorme en permanence.
+- **Refusé** : le **compte à rebours fabriqué** (pas de date de fin ⇒ pas de badge, jamais de minuteur
+  réinitialisé) — la fausse rareté est exclue ; le compte à rebours **dans le tunnel** (règle des 60 s).
+- **Sources vérifiées** : `ps_specific_price` = **4 204 offres datées**, **18 avec une fin future**, prochaine
+  échéance **01/10/2026 23h55** (−20 %). Les licences ont été **lues** dans les dépôts officiels (mention
+  « Reserved Font Name » incluse). Le stock passe par **`stock_available.quantity`** (PrestaShop 8).
+- **Reste ouvert** : ① **une icône « maskable »** (le fichier 512 n'a aucune marge de sécurité — Android
+  rognerait les rayons) ; ② **sur quels produits afficher un badge** parmi les 4 204 remises actives
+  (un badge partout = plus de badge nulle part) ; ③ l'optimisation des poids d'icônes (512 = 332 Ko,
+  apple-touch = 55 Ko).
+
+---
+
 ## 3. Environnement mesuré (audit phase 0 du 17/09/2026 — détail : `docs/audit-phase0-2026-09-17.md`)
 
 - SSH `djdj2187@nilgaut.o2switch.net` **fonctionne** (clé `~/.ssh/id_ed25519`), PHP CLI **8.1.34**,
