@@ -8,6 +8,11 @@
 # Usage :  ./remise-a-niveau-preprod.sh            (exécution réelle)
 #          ./remise-a-niveau-preprod.sh --dry-run  (contrôles préalables uniquement)
 #
+# Priorités : les étapes distantes tournent en `nice -n 19 ionice -c3` (CPU au minimum, E/S en
+#   classe « idle ») pour ne pas ralentir la production qui partage le serveur et l'instance MariaDB.
+# Déclenchement : par le cron SYSTÈME du VPS. Le planificateur Hermes du profil `devops` ne
+#   s'exécute pas (aucun gateway n'y tourne) : le job armé du 17/09 à 20h07 n'est jamais parti (BUG-001).
+#
 # Référence : docs/runbook-remise-a-niveau-preprod.md
 # ============================================================================================
 set -euo pipefail
@@ -46,7 +51,8 @@ log "clients utilisés : $MYSQL / $MYSQLDUMP"
 
 # --- 0. Contrôles préalables -----------------------------------------------------------------
 log "ETAPE 0 — contrôles préalables"
-mkdir -p "$BK"
+# Le dossier de sauvegarde n'est créé qu'à partir de l'étape 1 : un --dry-run ne doit rien
+# laisser sur le disque (deux dossiers vides laissés le 17/09 ressemblaient à des sauvegardes).
 for b in tar rsync gzip; do command -v "$b" >/dev/null || fail "outil manquant: $b"; done
 [ -n "$MYSQL" ] && [ -n "$MYSQLDUMP" ] || fail "client MySQL/MariaDB introuvable"
 [ -d "$SHOP" ] || fail "production introuvable"
@@ -72,13 +78,15 @@ grep -q 'domain.*preprod\.the-replicant\.com' <<<"$("$MYSQL" --defaults-extra-fi
 if [ "$MODE" = "dry-run" ]; then
   log "--- DRY-RUN : aucun téléchargement, aucune écriture de données ---"
   log "privilèges MySQL sur la base préprod :"
-  "$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e 'SHOW GRANTS FOR CURRENT_USER()' | sed 's/^/    /'
+  "$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e 'SHOW GRANTS FOR CURRENT_USER()' \
+    | sed -E "s/PASSWORD '[^']*'/PASSWORD '***'/g" | sed 's/^/    /'
   log "tables de la base préprod : $("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()' "$DB_PRE")"
   log "tables de la base prod    : $("$MYSQL" --defaults-extra-file="$CNF_PROD" -N -e 'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema="djdj2187_pab"' "$DB_PROD")"
   log "paramètres e-mail de la prod :"
   "$MYSQL" --defaults-extra-file="$CNF_PROD" -N -e "SELECT CONCAT('    ',name,' = ',value) FROM ps_configuration WHERE name IN ('PS_MAIL_METHOD','PS_MAIL_SMTP_ENCRYPTION')" "$DB_PROD" || true
   log "paramètres e-mail de la préprod :"
   "$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT CONCAT('    ',name,' = ',value) FROM ps_configuration WHERE name IN ('PS_MAIL_METHOD','PS_MAIL_SMTP_ENCRYPTION')" "$DB_PRE" || true
+  log "priorisation des E/S : nice=$(command -v nice || echo ABSENT) ionice=$(command -v ionice || echo ABSENT)"
   log "tâches cron visant la préprod :"
   crontab -l 2>/dev/null | grep -c preprod | sed 's/^/    /' || true
   crontab -l 2>/dev/null | grep preprod | sed -E 's/(token|key|secure_key)=[^&"'"'"' ]*/\1=***/g' | sed 's/^/    /' || true
@@ -89,6 +97,9 @@ if [ "$MODE" = "dry-run" ]; then
   echo "RESULTAT: DRY-RUN OK"
   exit 0
 fi
+
+mkdir -p "$BK"
+log "dossier de sauvegarde : $BK"
 
 # --- 1. Sauvegarde de la préprod (autorisation DECISION-012) ---------------------------------
 log "ETAPE 1 — sauvegarde de la préprod actuelle (fichiers + base)"
@@ -104,7 +115,7 @@ log "sauvegarde OK : $(du -sh "$BK" | cut -f1) dans $BK"
 
 # --- 2. Dump de la production (lecture seule, sans verrou) -----------------------------------
 log "ETAPE 2 — dump de la production (les ventes ne sont pas bloquées)"
-nice -n 10 "$MYSQLDUMP" --defaults-extra-file="$CNF_PROD" --single-transaction --quick --skip-lock-tables \
+nice -n 19 "$MYSQLDUMP" --defaults-extra-file="$CNF_PROD" --single-transaction --quick --skip-lock-tables \
           --routines --triggers --events --no-tablespaces "$DB_PROD" | gzip > "$BK/prod-base-$TS.sql.gz"
 [ -s "$BK/prod-base-$TS.sql.gz" ] || fail "dump de production vide"
 zcat "$BK/prod-base-$TS.sql.gz" | tail -2 | grep -q 'Dump completed' || fail "dump de production incomplet"
@@ -208,8 +219,14 @@ REMOTE
 {
   echo "=== Remise à niveau préprod — mode=$MODE — $(date '+%Y-%m-%d %H:%M:%S') ==="
   echo "hôte: $SSH_TARGET"
-  ssh -i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=30 -o ServerAliveInterval=30 "$SSH_TARGET" \
-      'bash -s -- '"$TS $MODE" <<<"$REMOTE_SCRIPT"
+  # Priorités minimales (CPU nice 19 + E/S classe « idle ») : l'opération cède le disque et
+  # l'instance MariaDB dès que la production les demande. Toutes les étapes distantes héritent.
+  # ServerAliveCountMax 20 : 10 minutes de coupure réseau tolérées plutôt qu'une restauration
+  # interrompue à mi-chemin.
+  ssh -i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=30 \
+      -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes \
+      "$SSH_TARGET" \
+      'nice -n 19 ionice -c3 bash -s -- '"$TS $MODE" <<<"$REMOTE_SCRIPT"
   echo "=== terminé le $(date '+%Y-%m-%d %H:%M:%S') ==="
 } 2>&1 | tee -a "$LOG"
 

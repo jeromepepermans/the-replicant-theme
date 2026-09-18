@@ -243,6 +243,23 @@
 
 ---
 
+### DECISION-021 — L'opération est déclenchée par le cron système, et tourne en priorité minimale
+- **Date** : 18/09/2026 · **Sujet** : déclenchement et impact sur la production
+- **Décision** : ① la remise à niveau de la préprod est déclenchée par une **ligne de cron système**
+  du VPS (`7 12 18 9 *`), **pas** par le planificateur Hermes — le profil `devops` n'a **aucun gateway
+  actif**, donc aucun de ses jobs planifiés ne s'exécute (BUG-001) ; ② **toutes** les étapes distantes
+  tournent en **`nice -n 19 ionice -c3`** (CPU au minimum, E/S en classe *idle*) pour que la production
+  — même serveur, même instance MariaDB, même système de fichiers — garde la priorité.
+- **Pourquoi** : un ralentissement de la production est un coût réel (~80 commandes/jour) ; la fenêtre
+  retenue est la **pause des employés (12h)**, décalée à **12h07** pour éviter les minutes `:00`-`:03`
+  occupées par les crons marketplaces (règle du runbook).
+- **Alternatives écartées** : re-planifier sur le planificateur Hermes (il ne tourne pas dans ce
+  profil) ; lancer en priorité normale (impact non maîtrisé sur la production).
+- **Impact** : l'opération peut durer plus longtemps puisqu'elle cède le disque dès que la production
+  le demande ; le contrôle du résultat reste manuel (BUG-001 en a montré le coût).
+
+---
+
 ## 3. Environnement mesuré (audit phase 0 du 17/09/2026 — détail : `docs/audit-phase0-2026-09-17.md`)
 
 - SSH `djdj2187@nilgaut.o2switch.net` **fonctionne** (clé `~/.ssh/id_ed25519`), PHP CLI **8.1.34**,
@@ -286,7 +303,47 @@
 
 ## 5. Bugs
 
-*(aucun à ce jour)*
+### BUG-001 — Le job planifié du 17/09 à 20h07 ne s'est jamais exécuté
+- **Statut** : FIXED · **Date** : constaté le 18/09/2026 (job créé le 17/09 à 15h38)
+- **Environnement** : planificateur Hermes, profil `devops` (VPS)
+- **Description** : la remise à niveau de la préprod était « armée » sur un job Hermes
+  (`e81746b4827b`, `once`, exécution unique le 17/09/2026 à 20h07) — il n'a jamais démarré.
+- **Reproduction** : `cron/jobs.json` → `state: scheduled`, `last_run_at: null`, `last_status: null`,
+  24 h après l'heure prévue ; `cron/executions.db` → **0 ligne** (les profils `default` et
+  `dev_artonia` en comptent 1 000 chacun).
+- **Attendu / obtenu** : une exécution à 20h07 / **aucune exécution** ; la préprod est restée
+  inchangée (dossier modifié pour la dernière fois le 17/09 à 10h17).
+- **Cause** : le planificateur ne tourne que dans un profil où un **`hermes gateway run`** est actif.
+  Les profils `default` et `dev_artonia` ont un gateway systemd ; le profil `devops` n'a **qu'un
+  dashboard** → ses jobs cron ne sont jamais déclenchés. Un job dont l'heure est passée reste
+  `scheduled` **et `enabled`** : il peut partir dès qu'un gateway de ce profil démarre.
+- **Correction** : ① déclenchement par une **ligne de cron système** du VPS (DECISION-021) ;
+  ② job Hermes **désarmé** pour écarter le double déclenchement.
+- **Fichiers** : (hors dépôt) `cron/jobs.json`, `crontab -l` de l'utilisateur `ubuntu`.
+- **Test de validation** : exécution réelle du 18/09/2026 à 12h07 + contrôle du résultat.
+
+### BUG-002 — Les étapes lourdes n'avaient aucune priorité : la production pouvait ralentir
+- **Statut** : FIXED · **Date** : 18/09/2026
+- **Description** : seuls le dump de production (`nice -n 10`) et rien d'autre étaient priorisés ;
+  `tar` de 17 Go, dump de la préprod, restauration (~1,7 Go de SQL) et `rsync` (6,84 Go mesurés)
+  tournaient en priorité normale, sur le **même serveur, la même instance MariaDB et le même
+  système de fichiers** que la production (~80 commandes/jour).
+- **Cause** : absence de priorisation — et, une fois l'enveloppe voulue, un `nice -n 10` **incompatible**
+  avec un script lancé en `nice -n 19` (on ne peut pas remonter sa priorité : `nice` échoue et
+  `set -e` aurait fait tomber l'étape 2).
+- **Correction** : enveloppe distante `nice -n 19 ionice -c3` (CPU au minimum, E/S en classe *idle*)
+  qui couvre **toutes** les étapes, et `nice -n 10` → `nice -n 19` sur le dump de production.
+- **Test de validation** : dry-run du 18/09/2026 à 09h35 — `nice` et `ionice` confirmés présents et
+  utilisés, aucune étape en échec.
+
+### BUG-003 — Le journal de dry-run écrivait le hash du mot de passe de la base
+- **Statut** : FIXED · **Date** : 18/09/2026
+- **Description** : `SHOW GRANTS FOR CURRENT_USER()` renvoie `IDENTIFIED BY PASSWORD '*…'` et cette
+  ligne partait telle quelle dans `logs/remise-a-niveau-*.log` (règle 5 du chantier : aucun secret
+  dans les journaux), alors que la clé `secure_key` de la `crontab` était, elle, masquée.
+- **Correction** : masquage par `sed` dans le script + rédaction des **3 journaux** de dry-run
+  existants (17/09 ×2, 18/09 ×1).
+- **Test de validation** : plus aucun hash dans `logs/`.
 
 ---
 
@@ -295,8 +352,8 @@
 | Phase | État |
 |---|---|
 | 0 — Audit & sauvegarde | ☑ audit lecture seule **fait** (prod + préprod, 17/09/2026) · ☐ sauvegarde du thème et de la base **à faire sur accord** |
-| **0 bis — Remise à niveau de la préprod** | ☑ **runbook écrit** (`docs/runbook-remise-a-niveau-preprod.md`) · ☐ **à exécuter sur accord de Jérôme** |
-| 1 — Design (Claude Design) | ☑ **tokens livrés** (`tokens.json`, `DESIGN.md`, `apercu-tokens.html` vérifié en navigateur) · ☐ validation par Jérôme puis maquettes (prompts P0→P10 prêts) |
+| **0 bis — Remise à niveau de la préprod** | ☑ runbook écrit (`docs/runbook-remise-a-niveau-preprod.md`) · ☑ script versionné, éprouvé à blanc · ☑ **exécution déclenchée le 18/09/2026 à 12h07** par le cron système du VPS (DECISION-021, BUG-001) · ☐ **contrôle du résultat** (tables, modules, `crontab`, `PS_SHOP_ENABLE`, HTTP, e-mails muets) |
+| 1 — Design (Claude Design) | ☑ **tokens v0.2.0 dérivés du nouveau logo** (`docs/design/tokens.json` v0.2, `DESIGN.md` v0.2, `apercu-tokens-v2.html` ; `apercu-tokens.html` = planche v0.1 conservée pour comparaison) · ☐ validation de Jérôme (palette, **variante du logo**, typographie + licences) puis maquettes (prompts P0→P10 prêts) |
 | 2 — Socle du thème | ☐ base arrêtée : thème vierge, conventions Hummingbird, **aucun framework CSS** (DECISION-017) |
 | 3 — Module BO compagnon | ☐ |
 | 4 — Tunnel de vente | ☐ tunnel maison après décorticage de `ets_onepagecheckout` (DECISION-010) |
@@ -330,18 +387,22 @@ minimum de modules ; remise à niveau de la préprod (modules de prod laissés i
 autorisée ; WebP + réparation du cron ; pro = groupe HT -20 % ; app mobile = canal de commande ;
 conventions Hummingbird pour l'évolutivité.
 
+**Également tranchés le 17/09/2026 au soir**, sans que cette liste ait été mise à jour (décisions
+`DECISION-017` à `DECISION-020`) : **base du thème** = voie B, un thème vierge aux conventions
+Hummingbird ; **aucun framework CSS** ; **bascule PrestaShop 9 datée à 2027** ; **charte du site
+basculée sur le nouveau logo** (le CTA passe au jaune `#fdd800`, le terracotta `#d06e6a` sort du
+système). Les points correspondants ont été retirés de la liste ci-dessous.
+
 **Restent ouverts :**
 
-1. **Quelle variante du logo est retenue** (1, 2, 3 ou 4 de la planche) — la densité de rayons varie
-   (29,2 / 30,5 / 37,6 / 43,8 % de la surface), donc le rendu dans un en-tête n'est pas le même.
+1. **Quelle variante du logo est retenue** (1, 2, 3 ou 4 de la planche) — la série de densités publiée
+   (29,2 / 30,5 / 37,6 / 43,8 %) n'est pas reliée à ses variantes : la **table de correspondance**
+   manque, et le rendu dans un en-tête n'est pas le même selon la variante.
 2. **Déclinaisons du logo à fournir** : version **plate sans rayons** pour l'en-tête, **SVG**, **icône
-   seule** (favicon, app mobile), et une version **monochrome** — le fichier actuel (2,6 Mo, JPEG-like,
+   seule** (favicon, app mobile), et une version **monochrome** — le fichier actuel (2,6 Mo,
    4 variantes 3D sur fond transparent) ne peut pas partir tel quel sur le site.
-3. **Bascule de la charte sur le logo** : le CTA passe-t-il au **jaune `#fdd800`** (10,96:1 avec l'encre)
-   ou reste-t-il au terracotta actuel `#d06e6a` (3,43:1 avec du blanc, sous le seuil) ?
-4. **Base du thème** : thème vierge aux conventions Hummingbird (**recommandé**) — voir
-   `docs/dev-theme-prestashop.md` §4.
-5. **Trajectoire 9.x** : objectif 2027 (DECISION-018) → prévoir la montée **8.2.3 → 8.2.8** cette année.
-6. **App mobile** : quel moyen de paiement (Monetico / Alma / PayPal, ou Stripe) ?
-7. **Newsletter** : qui met à jour les sélecteurs de collecte (périmètre `newsletter-replicant`) ?
-8. **Sauvegarde de production** : où sera la sauvegarde du thème et de la base avant la bascule finale ?
+3. **Typographie** : Montserrat 700/600 + Source Sans 3 retenu (Fraunces écartée) — la **licence de
+   chaque famille reste à confirmer avant** tout sous-ensemble et auto-hébergement.
+4. **App mobile** : quel moyen de paiement (Monetico / Alma / PayPal, ou Stripe) ?
+5. **Newsletter** : qui met à jour les sélecteurs de collecte (périmètre `newsletter-replicant`) ?
+6. **Sauvegarde de production** : où sera la sauvegarde du thème et de la base avant la bascule finale ?
