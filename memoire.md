@@ -267,6 +267,35 @@
 
 ---
 
+### DECISION-022 — Logo final en PNG transparent : en-tête = carré complet + nom en texte, ambiance festive
+- **Date** : 18/09/2026 · **Sujet** : identité visuelle, actifs d'image et mouvement
+- **Décision** : ① le logo final (`logo_Fond_transparent.png`, **1024 × 1024**, **PNG à fond transparent**,
+  1 474 666 o) devient **le** fichier de référence — la question « quelle variante » est close, il n'y en a
+  qu'une ; ② l'**en-tête** affiche **le carré complet** (`logo-carre-56.webp`, **4 224 o**, puis
+  `logo-carre-112.webp`, **12 488 o** pour les écrans denses) **suivi du nom en texte** ; ③ le **recadrage en
+  bandeau large est ÉCARTÉ** (il coupe les arcs, une étoile et les rayons) et les **SVG livrés** (1,8 à 5 Mo,
+  1 129 à 9 045 tracés) sont **réservés à l'impression** ; ④ la palette passe en **v0.3.0**, re-dérivée du
+  logo : `action-500 #fee300` (**11,83:1** avec l'encre, mieux que les 10,96:1 de la v0.2), `chaud-500
+  #fe8200` (**6,14:1**), cyan `#00f1fc` reconduit, rouge `#fe0305` contour uniquement ; ⑤ l'ambiance demandée
+  par Jérôme — **moderne, animée, avec un air de festivité** — est encadrée par une liste d'**autorisés** et
+  d'**interdits** (jamais d'animation dans le tunnel).
+- **Pourquoi** : un logo en dégradés coûte **16 712 o** pour les deux en-têtes en WebP q88, contre 42 439 o en
+  PNG et **1,8 à 5 Mo** en SVG ; et à 44-56 px le wordmark du carré complet n'est plus lisible (vérifié au
+  rendu) — c'est donc **le texte** qui porte le nom, l'emblème apportant la couleur.
+- **Alternatives écartées** : recadrage en bandeau large (coupé — fabriqué, contrôlé visuellement, écarté) ;
+  SVG « vectorisé » sur le site (poids hors budget) ; version « plate sans rayons » pour l'en-tête (elle
+  n'existe pas dans le fichier final, et n'est plus la règle).
+- **Impact** : `tokens.json` **v0.3.0** (16 paires de contraste, **13 conformes**, 3 interdits assumés),
+  `DESIGN.md` **v0.3**, **prompts Claude Design amendés** (un nouveau bloc « fait foi » en tête), planche
+  `docs/design/maquettes/entete-festif-v1.html` (3 en-têtes + bandeau festif + cartes, **0 ressource
+  externe**, vérifiée au rendu : 0 débordement, CTA 44 px), actifs versionnés dans
+  `docs/design/references/logo-final/`.
+- **Reste ouvert** : **une icône seule** (favicon, app) reste à **dessiner** — elle ne peut pas être déduite
+  par recadrage, piste : l'étoile jaune à quatre branches ; et la **licence Source Sans 3** est à confirmer
+  avant auto-hébergement (Montserrat : **OFL 1.1 vérifiée à la source**, page de licence Google Fonts).
+
+---
+
 ## 3. Environnement mesuré (audit phase 0 du 17/09/2026 — détail : `docs/audit-phase0-2026-09-17.md`)
 
 - SSH `djdj2187@nilgaut.o2switch.net` **fonctionne** (clé `~/.ssh/id_ed25519`), PHP CLI **8.1.34**,
@@ -434,7 +463,7 @@
 |---|---|
 | 0 — Audit & sauvegarde | ☑ audit lecture seule **fait** (prod + préprod, 17/09/2026) · ☐ sauvegarde du thème et de la base **à faire sur accord** |
 | **0 bis — Remise à niveau de la préprod** | ☑ runbook écrit · ☑ script versionné, éprouvé à blanc · ☑ exécution du 18/09 à **12h07** lancée par le cron système (DECISION-021) — **arrêtée à 13h00**, bloquée à l'étape 1 par la classe d'E/S *idle* (**BUG-004**), **préprod intacte** · ☑ **relance planifiée le 18/09 à 21h15** (`nice 19`, sans `ionice`) · ☑ dettes `P130`/`P132` corrigées et éprouvées (`BUG-005`, `BUG-006`) · ☐ **contrôle du résultat** (tables ≈ 571, modules ≈ 77, `crontab` −1 tâche, `PS_SHOP_ENABLE = 1`, `PS_MAIL_METHOD = 3`, HTTP `200` derrière la redirection) |
-| 1 — Design (Claude Design) | ☑ **tokens v0.2.0 dérivés du nouveau logo** (`docs/design/tokens.json` v0.2, `DESIGN.md` v0.2, `apercu-tokens-v2.html` ; `apercu-tokens.html` = planche v0.1 conservée pour comparaison) · ☐ validation de Jérôme (palette, **variante du logo**, typographie + licences) puis maquettes (prompts P0→P10 prêts) |
+| 1 — Design (Claude Design) | ☑ **tokens v0.3.0 dérivés du logo FINAL** (16 paires de contraste, 13 conformes) · ☑ `DESIGN.md` v0.3 · ☑ actifs logo versionnés (`docs/design/references/logo-final/`) · ☑ planche `maquettes/entete-festif-v1.html` (3 en-têtes, bandeau festif, cartes — vérifiée au rendu) · ☑ prompts amendés (logo final + ambiance festive) · ☐ **validation de Jérôme** (palette v0.3, ambiance festive) puis maquettes Claude Design · ☐ **dessiner une icône seule** (favicon/app) · ☐ licence Source Sans 3 à confirmer |
 | 2 — Socle du thème | ☐ base arrêtée : thème vierge, conventions Hummingbird, **aucun framework CSS** (DECISION-017) |
 | 3 — Module BO compagnon | ☐ |
 | 4 — Tunnel de vente | ☐ tunnel maison après décorticage de `ets_onepagecheckout` (DECISION-010) |

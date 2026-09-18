@@ -3,10 +3,48 @@
 Ordre d'utilisation : **P0** à l'ouverture du projet (brief maître), puis **P1** (tokens, à valider),
 puis les écrans **P2 → P9**. **P10** est réservé à la phase « app mobile ».
 
-Les prompts sont en français, prêts à coller. Les valeurs de couleur proviennent de l'audit du
-17/09/2026 (`docs/audit-2026-09-17-site-public.md`) — **ne pas laisser Claude Design en inventer d'autres**.
+Les prompts sont en français, prêts à coller. Les valeurs de couleur proviennent désormais du **logo final
+mesuré au pixel** (18/09/2026) et de `docs/design/tokens.json` **v0.3.0** — **ne pas laisser Claude Design en
+inventer d'autres**.
 
 ---
+
+## ⚠ AMENDEMENT DU 18/09/2026 — le logo final, la palette v0.3 et l'ambiance festive
+
+**Ce bloc fait foi.** S'il contredit une valeur citée plus bas dans un prompt, **c'est ce bloc qui a raison** :
+les prompts P0 → P10 ont été écrits avant l'arrivée du logo final, et seules les couleurs de
+`docs/design/tokens.json` (v0.3.0) doivent être utilisées.
+
+**1. Le logo est FINAL** : `logo_Fond_transparent.png` (1024 × 1024, **PNG à fond transparent**), une
+**composition unique** — wordmark italique gras biseauté, explosion de rayons orange/jaune et bleu/cyan, deux
+arcs, deux étoiles à quatre branches, des étincelles.
+
+- En **en-tête** : **le carré complet**, rien d'autre. `logo-carre-56.webp` (**4 224 o**) en mobile,
+  `logo-carre-112.webp` (**12 488 o**) en desktop. **Jamais** de recadrage en bandeau large (il coupe les arcs
+  et une étoile), **jamais** les SVG livrés (1,8 à 5 Mo) sur le site — impression uniquement.
+- **À 44-56 px, le wordmark du logo n'est pas lisible** : l'en-tête **affiche le nom en texte** à côté de
+  l'emblème (« The Replicant » + « Cadeaux originaux »). Ne pas demander une version « plate sans rayons » :
+  elle n'existe pas et n'est plus la règle.
+- **Une icône seule reste à dessiner** (favicon, app) — piste : l'étoile jaune à quatre branches.
+
+**2. Les couleurs de référence** (mesurées au pixel sur le logo final) : jaune **`#fee300`** (action),
+oranges **`#fe8200` / `#ffa500`** (promo — le bandeau promo n'est **plus** doré `#c6b26d`, il est **orange**),
+cyan **`#00f1fc`** (décor), rouge **`#fe0305`** (contour du logo seulement), encre **`#2b2419`**. Sur le jaune
+et sur l'orange, **le texte est toujours l'encre** (jamais du blanc). Le terracotta `#d06e6a` et l'or `#c6b26d`
+sont **hors système**.
+
+**3. L'ambiance demandée par Jérôme (18/09/2026)** : **moderne, animée, un air de festivité**. La festivité
+vient du **logo** et du **bandeau promo**, pas de la page entière :
+- autorisé : rotation très lente des rayons derrière le logo (90-120 s), 3 à 5 étincelles scintillantes dans
+  le bandeau promo, apparition douce des cartes produit (4 px), rebond du compteur de panier (150 ms) ;
+- interdit : **toute animation dans le tunnel de commande**, animation sur l'élément principal, décalage de
+  mise en page, parallaxe, son, vidéo automatique, plus d'un élément animé par bande ;
+- `prefers-reduced-motion` ⇒ **tout s'arrête**. Animations en **CSS/SVG**, aucune bibliothèque requise.
+
+**4. Planche de référence** : `docs/design/maquettes/entete-festif-v1.html` — les trois en-têtes, le bandeau
+festif, les cartes produit et les règles d'animation. À montrer à Claude Design comme cible de tenue.
+
+
 
 ## P0 — Brief maître (à coller en ouverture du projet)
 
@@ -22,8 +60,8 @@ CONTRAINTES NON NÉGOCIABLES
   pas de dégradés « SaaS ». Les visuels produits sont des photos sur fond clair.
 - Accessibilité WCAG 2.2 AA : contraste, focus visibles, cibles tactiles ≥ 44 px, pas d'info par la couleur seule.
 - **Palette issue du NOUVEAU LOGO** (analyse pixel, ne pas inventer d'autres couleurs) :
-  jaune #fdd800 = fond du CTA et des éléments actifs — TOUJOURS avec du texte encre #2b2419 (10,96:1) ;
-  orange #fda503 = bandeau promo et badges, texte encre (7,71:1) ; cyan #00f1fc = DÉCOR uniquement
+  jaune #fee300 = fond du CTA et des éléments actifs — TOUJOURS avec du texte encre #2b2419 (10,96:1) ;
+  orange #fe8200 = bandeau promo et badges, texte encre (7,71:1) ; cyan #00f1fc = DÉCOR uniquement
   (1,40:1 sur blanc : jamais du texte) ; bleu #007ef6 = information (texte #0071dd) ; rouge #ff0000 =
   contour du logo seulement (4,0:1) — les erreurs utilisent #c1121f ; encre #2b2419 / #4a4133 / #6b6152,
   surfaces #ffffff / #faf8f5 / #f4f1ea, bordure #e6e0d6. Le terracotta #d06e6a et l'or #c6b26d de
@@ -72,7 +110,7 @@ Structure imposée, dans cet ordre :
 1. Grand slider en haut (3 à 5 slides, plein largeur) — zone paramétrable : titre, sous-titre, visuel,
    bouton, lien, ordre, dates de diffusion, activation par slide. Mobile : 1 visuel, texte court,
    CTA visible sans scroll.
-2. Bandeau promo sous le header et/ou au-dessus du slider (#c6b26d, texte encre, lien, fermable)
+2. Bandeau promo sous le header et/ou au-dessus du slider (orange `#fe8200` du logo, texte encre, lien, fermable)
    — zone paramétrable : texte, couleur, lien, dates, fermable.
 3. Catégories mises en avant (grille de vignettes) — zone paramétrable : catégories choisies, ordre,
    image, nombre de colonnes mobile/desktop, activation.
@@ -102,7 +140,8 @@ DESKTOP
 - fil d'Ariane sur toutes les pages catalogue et produit.
 
 MOBILE
-- en-tête 56 px collant : logo (version plate, sans rayons), recherche en icône ouvrant un champ plein
+- en-tête 56 px collant : logo **carré complet** (`logo-carre-56.webp`) **suivi du nom en texte**,
+  recherche en icône ouvrant un champ plein
   écran, panier avec compteur.
 - barre de navigation basse à 5 entrées (Accueil · Catégories · Recherche · Panier · Compte), 48 px de
   haut, entrées LIBELLÉES et iconographiées (jamais d'icône seule), onglet actif marqué.
