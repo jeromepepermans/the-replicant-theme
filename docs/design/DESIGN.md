@@ -152,11 +152,11 @@ rupture de stock**, et d'autres options. La famille complète, avec **la donnée
 
 | Badge | Donnée PrestaShop | Règle |
 |---|---|---|
-| **−20 %** | `specific_price.reduction` | prix barré + pourcentage, **jamais de faux prix de référence** |
+| **−20 %** ou **−3 €** | `specific_price.reduction` + `reduction_type` | le badge affiche **la valeur réelle** : pourcentage (`−20 %`) ou montant (`−3 €`) — 59 règles en montant existent en base ; prix barré, **jamais de faux prix de référence** |
 | **Compte à rebours** | `specific_price.to` (**date de fin réelle**) | affiché **uniquement** si la date existe ; disparaît après l'échéance |
 | **Nouveau** | `product.date_add` | ancienneté paramétrable (30 jours par défaut) |
 | **Derniers exemplaires** | `stock_available.quantity ≤ seuil` | seuil paramétrable, rien si la quantité est masquée |
-| **Épuisé** | `stock_available.quantity ≤ 0` | **gris neutre, jamais rouge** (le rouge est réservé aux erreurs) |
+| **Épuisé** | `stock_available.quantity ≤ 0` | **gris neutre, jamais rouge** — le rouge sert aux **erreurs et aux actions destructrices**, pas aux états commerciaux |
 | **Bientôt de retour** | rupture + réappro autorisé | propose l'alerte e-mail |
 | **Coup de cœur / Exclusivité** | étiquette back-office | choix de l'équipe, **motif obligatoire** |
 
@@ -174,8 +174,10 @@ datées**, dont **18 avec une fin encore future** — la prochaine échéance re
    et **n'est pas une animation** : mise à jour une fois par minute, sans décalage de mise en page.
 5. **Accessibilité** : `<time datetime="…">` avec un libellé complet, `aria-live="off"` pour ne pas interrompre.
 
-⭐ **La vraie question reste à trancher** : sur quels produits les remises actives (4 204 lignes en base)
-doivent-elles **afficher** un badge ? Un badge partout = plus de badge nulle part.
+✅ **Portée tranchée par Jérôme (18/09/2026)** : le badge s'affiche **uniquement sur les offres qui portent une date
+de fin réelle** (`specific_price.to > NOW()`) — **18 offres** aujourd'hui, toutes à −20 %. Le badge reste donc **rare,
+donc utile**, et le compte à rebours n'apparaît que là où il est vrai. Le badge affiche la **valeur réelle** de la
+remise (pourcentage **ou** montant : « −20 % » ou « −3 € »).
 
 ## 5. Navigation — exigence explicite de Jérôme
 
