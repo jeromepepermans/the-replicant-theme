@@ -373,6 +373,44 @@
   pleine course, le script a bien laissé `~/.my-prod.cnf` et `~/.my-preprod.cnf` (mode 600, mot de
   passe de base) sur le serveur. Supprimés manuellement à 13h00, avec l'archive partielle de **13 Go**.
   ⇒ tant que `P130` n'est pas corrigé, **toute interruption laisse des identifiants sur le serveur**.
+### BUG-005 — Les identifiants temporaires survivaient à toute interruption (P130)
+- **Statut** : FIXED · **Date** : 18/09/2026
+- **Description** : `rm -f "$CNF_PRE" "$CNF_PROD"` vivait **en fin de course** ; le `trap` imprimait
+  un verdict sans nettoyer. Constaté **en vrai** à 13h00 : l'arrêt en pleine exécution a laissé
+  `~/.my-prod.cnf` et `~/.my-preprod.cnf` (**mode 600, mot de passe de base**) sur le serveur.
+- **Correction** : le nettoyage passe dans une fonction `cleanup()` appelée par `trap ... EXIT`
+  (sortie nominale **et** erreur **et** interruption) ; les `rm` explicites restent en place.
+- **Test de validation** : **échec forcé** juste après l'écriture des identifiants (bloc distant
+  extrait du script et exécuté sur le serveur) ⇒ sortie `RESULTAT: ECHEC`, ligne
+  *« identifiants temporaires supprimés par le trap »*, et **0 fichier résiduel** après le test.
+
+### BUG-006 — Le contrôle final HTTP ne prouvait rien (P132) : trois défauts, dont un créé par sa propre correction
+- **Statut** : FIXED · **Date** : 18/09/2026
+- **Description** : l'étape 7 se contentait d'**imprimer** `%{http_code}` avec un `|| true`, sans
+  assertion, là où huit autres contrôles sortent en erreur — un contrôle « vert » restait compatible
+  avec une boutique fermée. La correction a révélé **deux autres défauts** :
+  ① le **cache-buster** ajouté pour forcer une réponse fraîche (`/?v=…`) renvoie sur cette
+  préproduction **172 o de « This page has moved » en HTTP 200** — un vert parfait pour une page
+  vide, c'est-à-dire le défaut d'origine réintroduit par son remède ;
+  ② le contrôle tourne **sur le serveur**, dont l'adresse figure dans `PS_MAINTENANCE_IP` : il
+  **contourne la maintenance** et ne peut donc **jamais** constater que la boutique est fermée aux
+  clients. Mesuré : depuis le VPS `137.74.170.55` (non exempté) la préprod répond `503` *page de
+  maintenance* ; depuis le serveur, `200` *page d'accueil réelle* (1 236 217 o). Deux points de vue,
+  deux vérités — ce que je prenais pour un état qui « flappe » était une **origine de mesure**
+  différente.
+- **Correction** : ① **assertions en base** à l'étape 5 (`PS_SHOP_ENABLE = 1`, `PS_MAINTENANCE_IP`
+  supprimé) — **autoritatives**, insensibles à tout cache et à tout point de vue ; ② étape 7 :
+  mesure de l'**URL réelle** (plus de cache-buster), **plancher de taille** (50 000 o) et marqueurs
+  refusés (`maintenance-page`, `This page has moved`), 5 tentatives ; ③ **nouveau contrôle EXTERNE**
+  en fin de script, exécuté **depuis le VPS** (adresse non exemptée) : la préprod doit servir sa
+  vraie page au monde extérieur, sinon le script sort en **code 4** (verdict prononcé **hors** du
+  pipeline, faute de quoi un `exit` ne quittait que le sous-shell et le script finissait en 0).
+- **Tests de validation** (les cinq exécutés) : assertion en base → *échec attendu* sur `NULL` ;
+  contrôle HTTP sur préprod fermée → *échec* ; sur URL avec cache-buster → *échec* (le piège est
+  détecté) ; sur deux boutiques ouvertes → *succès* ; contrôle externe depuis le VPS → *branche
+  ATTENTION* retenue (503), verdict rendu, **code 4** — et *aucun verdict* sur un journal propre.
+- **Leçon** : une mesure dynamique se cite avec son **origine** autant qu'avec son chemin et son
+  heure — deux adresses, deux réponses, pour un état identique.
 
 ---
 
@@ -381,7 +419,7 @@
 | Phase | État |
 |---|---|
 | 0 — Audit & sauvegarde | ☑ audit lecture seule **fait** (prod + préprod, 17/09/2026) · ☐ sauvegarde du thème et de la base **à faire sur accord** |
-| **0 bis — Remise à niveau de la préprod** | ☑ runbook écrit · ☑ script versionné, éprouvé à blanc · ☑ exécution du 18/09 à **12h07** lancée par le cron système (DECISION-021) — **arrêtée à 13h00**, bloquée à l'étape 1 par la classe d'E/S *idle* (**BUG-004**), **préprod intacte** · ☑ **relance planifiée le 18/09 à 21h15** (`nice 19`, sans `ionice`) · ☐ **contrôle du résultat** (tables ≈ 571, modules ≈ 77, `crontab` −1 tâche, `PS_SHOP_ENABLE = 1`, `PS_MAIL_METHOD = 3`, HTTP `200` derrière la redirection) |
+| **0 bis — Remise à niveau de la préprod** | ☑ runbook écrit · ☑ script versionné, éprouvé à blanc · ☑ exécution du 18/09 à **12h07** lancée par le cron système (DECISION-021) — **arrêtée à 13h00**, bloquée à l'étape 1 par la classe d'E/S *idle* (**BUG-004**), **préprod intacte** · ☑ **relance planifiée le 18/09 à 21h15** (`nice 19`, sans `ionice`) · ☑ dettes `P130`/`P132` corrigées et éprouvées (`BUG-005`, `BUG-006`) · ☐ **contrôle du résultat** (tables ≈ 571, modules ≈ 77, `crontab` −1 tâche, `PS_SHOP_ENABLE = 1`, `PS_MAIL_METHOD = 3`, HTTP `200` derrière la redirection) |
 | 1 — Design (Claude Design) | ☑ **tokens v0.2.0 dérivés du nouveau logo** (`docs/design/tokens.json` v0.2, `DESIGN.md` v0.2, `apercu-tokens-v2.html` ; `apercu-tokens.html` = planche v0.1 conservée pour comparaison) · ☐ validation de Jérôme (palette, **variante du logo**, typographie + licences) puis maquettes (prompts P0→P10 prêts) |
 | 2 — Socle du thème | ☐ base arrêtée : thème vierge, conventions Hummingbird, **aucun framework CSS** (DECISION-017) |
 | 3 — Module BO compagnon | ☐ |

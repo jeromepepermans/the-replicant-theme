@@ -45,7 +45,18 @@ DB_PRE=djdj2187_preprod_thereplicant
 
 log()  { printf '%s | %s\n' "$(date '+%H:%M:%S')" "$*"; }
 fail() { log "ECHEC: $*"; echo "RESULTAT: ECHEC — $*"; exit 1; }
-trap 'status=$?; if [ $status -ne 0 ]; then echo "RESULTAT: ECHEC (code $status, ligne $LINENO)"; fi' EXIT
+# Nettoyage garanti : les identifiants temporaires sont supprimés SUR TOUTE SORTIE (nominale,
+# erreur, interruption), et pas seulement en fin de course (P130 — mesuré le 18/09/2026 : un arrêt
+# en pleine exécution les avait laissés sur le serveur, mode 600, mot de passe de base inclus).
+cleanup() {
+  status=$?
+  rm -f "$CNF_PRE" "$CNF_PROD" 2>/dev/null || true
+  if [ "$status" -ne 0 ]; then
+    echo "RESULTAT: ECHEC (code $status, ligne $LINENO)"
+    echo "identifiants temporaires supprimés par le trap"
+  fi
+}
+trap cleanup EXIT
 
 # Clients MariaDB si disponibles (évite l'avertissement de dépréciation du client mysql)
 MYSQL=$(command -v mariadb || command -v mysql)
@@ -166,6 +177,15 @@ SQL
 "$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT CONCAT('  url=',domain,' main=',main,' active=',active) FROM ps_shop_url" "$DB_PRE"
 TH=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e 'SELECT theme_name FROM ps_shop WHERE id_shop=1' "$DB_PRE")
 log "  thème actif : $TH"
+# Preuves AUTHORITATIVES : lues en base, donc indépendantes de tout cache HTTP. Le 18/09/2026, la
+# préprod a répondu un vrai page d'accueil en 200 alors que la base disait NULL (anomalie non
+# expliquée) : sur cet hébergement, le contrôle HTTP seul n'est pas une preuve (voir BUG-006).
+SHOP_ON=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT value FROM ps_configuration WHERE name='PS_SHOP_ENABLE' LIMIT 1" "$DB_PRE")
+log "  PS_SHOP_ENABLE = $SHOP_ON (1 attendu — la préprod doit être OUVERTE)"
+[ "$SHOP_ON" = "1" ] || fail "PS_SHOP_ENABLE n'est pas à 1 ($SHOP_ON) : la préprod resterait en maintenance"
+MAINT_LIGNES=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT COUNT(*) FROM ps_configuration WHERE name='PS_MAINTENANCE_IP'" "$DB_PRE")
+log "  PS_MAINTENANCE_IP : $MAINT_LIGNES ligne(s) (0 attendu)"
+[ "$MAINT_LIGNES" = "0" ] || fail "PS_MAINTENANCE_IP subsiste en base ($MAINT_LIGNES ligne(s))"
 # E-mails neutralisés : 3 = Mail::METHOD_DISABLE (« ne jamais envoyer d'e-mails »),
 # valeur vérifiée dans classes/Mail.php du cœur (la préprod était déjà à 3 avant restauration).
 "$MYSQL" --defaults-extra-file="$CNF_PRE" "$DB_PRE" -e "UPDATE ps_configuration SET value=3 WHERE name='PS_MAIL_METHOD'"
@@ -204,9 +224,32 @@ else
 fi
 
 # --- 7. Contrôles finaux ---------------------------------------------------------------------
-log "ETAPE 7 — contrôles finaux"
-curl -s -o /dev/null -w "  HTTP préprod = %{http_code}\n" -L --max-time 30 https://preprod.the-replicant.com/ || true
-curl -s -o /dev/null -w "  HTTP prod    = %{http_code}\n" -L --max-time 30 https://www.the-replicant.com/ || true
+# Contrôles finaux ASSERTIFS (P132). Piège mesuré le 18/09/2026 : un cache-buster « ?v=… » sur la
+# préprod renvoie 172 o de « This page has moved » en HTTP 200 — un vert parfait pour une page vide.
+# On mesure donc l'URL RÉELLE, et on exige une VRAIE page : taille plancher + aucun marqueur suspect.
+log "ETAPE 7 — contrôles finaux (assertions — P132)"
+PAGE_PRE="$BK/page-preprod-$TS.html"
+HTTP_PRE=000; PAGE_SIZE=0
+for i in 1 2 3 4 5; do
+  HTTP_PRE=$(curl -s -o "$PAGE_PRE" -w '%{http_code}' -L --max-time 60 https://preprod.the-replicant.com/ || echo 000)
+  PAGE_SIZE=$(stat -c %s "$PAGE_PRE" 2>/dev/null || echo 0)
+  [ "$HTTP_PRE" = "200" ] && [ "$PAGE_SIZE" -gt 50000 ] && break
+  log "  préprod HTTP $HTTP_PRE / ${PAGE_SIZE} o (tentative $i/5) — cache en reconstruction ?"
+  sleep 10
+done
+HTTP_PROD=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 60 https://www.the-replicant.com/ || echo 000)
+log "  HTTP préprod = $HTTP_PRE (page de ${PAGE_SIZE} o, conservée : $PAGE_PRE)"
+log "  HTTP prod    = $HTTP_PROD (la production n'est jamais écrite)"
+if grep -q 'maintenance-page' "$PAGE_PRE" 2>/dev/null; then
+  fail "la préproduction sert encore la page de maintenance (PS_SHOP_ENABLE non appliqué ?)"
+fi
+if grep -q 'This page has moved' "$PAGE_PRE" 2>/dev/null; then
+  fail "la préproduction renvoie une redirection au lieu de la boutique (configuration d'URL à revoir)"
+fi
+[ "$HTTP_PRE" = "200" ] || fail "préproduction non joignable après restauration (HTTP $HTTP_PRE)"
+[ "$PAGE_SIZE" -gt 50000 ] || fail "page de préprod suspecte (${PAGE_SIZE} o) : ni boutique, ni maintenance — voir $PAGE_PRE"
+[ "$HTTP_PROD" = "200" ] || fail "production non joignable (HTTP $HTTP_PROD) — à vérifier immédiatement"
+log "  assertion : les deux boutiques servent bien leur page réelle (ni maintenance, ni redirection)"
 log "  rappel à faire dans le back-office de la préprod :"
 log "    - Paramètres avancés > E-mail : « Ne jamais envoyer d'e-mails » (vérifié en base ci-dessus)"
 log "    - commenter la ligne de crontab qui vise preprod.the-replicant.com (colissimo_essentiel)"
@@ -231,6 +274,32 @@ REMOTE
       "$SSH_TARGET" \
       'nice -n 19 bash -s -- '"$TS $MODE" <<<"$REMOTE_SCRIPT"
   echo "=== terminé le $(date '+%Y-%m-%d %H:%M:%S') ==="
+
+  # --- 8. Contrôle EXTERNE : la préprod vue du dehors ---------------------------------------
+  # ⚠ Le contrôle final du script distant s'exécute SUR le serveur, dont l'adresse figure dans
+  # PS_MAINTENANCE_IP : il contourne donc la maintenance et ne peut PAS dire si la boutique est
+  # ouverte aux clients (mesuré le 18/09/2026 — voir BUG-006). Seul un appel depuis une adresse
+  # non exemptée, comme ce VPS, répond à la question. La réponse est aussi ASSERTIVE.
+  if [ "$MODE" = "run" ]; then
+    PAGE_EXT="/tmp/preprod-externe-$$.html"
+    CODE_EXT=$(curl -s -o "$PAGE_EXT" -w '%{http_code}' -L --max-time 60 https://preprod.the-replicant.com/ || echo 000)
+    TAILLE_EXT=$(stat -c %s "$PAGE_EXT" 2>/dev/null || echo 0)
+    echo "--- contrôle externe (depuis $(hostname), adresse non exemptée de maintenance) ---"
+    echo "  préprod vue de l'extérieur : HTTP $CODE_EXT, ${TAILLE_EXT} o"
+    if [ "$CODE_EXT" = "200" ] && [ "$TAILLE_EXT" -gt 50000 ] && ! grep -q 'maintenance-page' "$PAGE_EXT"; then
+      echo "  OK : la préproduction est ouverte et sert sa vraie page au monde extérieur"
+    else
+      echo "  ATTENTION : la préproduction n'est PAS servie normalement de l'extérieur"
+      echo "              (HTTP $CODE_EXT, ${TAILLE_EXT} o) — page conservée : $PAGE_EXT"
+    fi
+  fi
 } 2>&1 | tee -a "$LOG"
+
+# Le verdict doit être prononcé HORS du bloc : un `exit` dans un pipeline ne quitte que le
+# sous-shell, et le script se terminerait en 0 malgré l'échec (piège du 18/09/2026).
+if [ "$MODE" = "run" ] && grep -q "n'est PAS servie normalement de l'extérieur" "$LOG" 2>/dev/null; then
+  echo "VERDICT : la préproduction n'est pas joignable normalement depuis l'extérieur — à vérifier."
+  exit 4
+fi
 
 echo "Journal complet : $LOG"
