@@ -452,7 +452,39 @@
   extrait du script et exécuté sur le serveur) ⇒ sortie `RESULTAT: ECHEC`, ligne
   *« identifiants temporaires supprimés par le trap »*, et **0 fichier résiduel** après le test.
 
-### BUG-006 — Le contrôle final HTTP ne prouvait rien (P132) : trois défauts, dont un créé par sa propre correction
+### BUG-007 — la remise à niveau a effacé la crontab du serveur (tâches de production arrêtées)
+
+**Statut** : CORRIGÉ (cause corrigée dans le script) · **Date** : 18/09/2026 · **Gravité** : élevée
+**Environnement** : exécution réelle du 18/09 à 21h15 (nilgaut.o2switch.net, utilisateur `djdj2187`)
+
+**Description** : à l'étape 6 (neutralisation des appels sortants de la préprod), la crontab de
+l'utilisateur a été **supprimée** : le fichier `/var/spool/cron/crontabs/djdj2187` n'existait plus, et
+`crontab -l` ne renvoyait plus rien. **91 lignes perdues, dont 51 visant la PRODUCTION** (synchronisations
+marketplaces) → **les tâches planifiées de la boutique étaient arrêtées** depuis 23h13.
+
+**Cause** : le script faisait `crontab -l | sed … | crontab -`. Les deux commandes `crontab` s'exécutent
+**concurremment** dans le même tube ; celle qui installe a supprimé le fichier de crontab avant que celle
+qui lit ne le lise ; le tube s'est donc vidé et une crontab vide a été installée. C'est un défaut de
+conception, pas un accident imprévisible : le dry-run ne l'avait pas vu parce qu'il n'exerce pas le chemin
+d'écriture.
+
+**Correction immédiate** (accord de Jérôme, 23h25) : **pure restauration** depuis la sauvegarde.
+`crontab ~/backups/.../crontab-avant-20260918-211501.txt` → **91 lignes, empreinte
+`c94079bf2e4aca81f78533c451c50dc1` identique à la sauvegarde** : restauration au bit près, vérifiée.
+
+**Correction de cause** (dans `outillage/remise-a-niveau-preprod.sh`) :
+1. passage par un **fichier temporaire** (`crontab -l > fichier`, édition, puis `crontab fichier`) ;
+2. **refus d'installer une crontab vide** ;
+3. refus si le fichier de travail a **perdu des lignes** par rapport à la sauvegarde ;
+4. le nombre de tâches attendues est **mesuré** (`NB_CIBLES`), plus jamais supposé égal à 1 ;
+5. sauvegarde vérifiée non vide **avant** toute modification.
+
+**Leçon (à appliquer partout)** : `crontab -` (lecture sur l'entrée standard) ne doit jamais figurer dans
+un tube avec `crontab -l`. Et une opération destructive sur une ressource **partagée avec la production**
+(crontab, cron système, fichier de configuration global) doit être validée par un test qui **écrit vraiment**
+— le dry-run ne suffit pas.
+
+## BUG-006 — Le contrôle final HTTP ne prouvait rien (P132) : trois défauts, dont un créé par sa propre correction
 - **Statut** : FIXED · **Date** : 18/09/2026
 - **Description** : l'étape 7 se contentait d'**imprimer** `%{http_code}` avec un `|| true`, sans
   assertion, là où huit autres contrôles sortent en erreur — un contrôle « vert » restait compatible

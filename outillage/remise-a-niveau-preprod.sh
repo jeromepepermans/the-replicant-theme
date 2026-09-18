@@ -208,17 +208,32 @@ NB_ON=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e 'SELECT COUNT(*) FROM ps
 log "  modules encore actifs : $NB_ON (attendu : environ 77 — les modules de production sont inactifs)"
 
 # Tâche cron qui vise la préprod : neutralisée, avec sauvegarde et vérification stricte
+# ⚠ BUG-007 (18/09/2026) : la version précédente faisait `crontab -l | sed … | crontab -`. Les deux
+# commandes `crontab` tournent CONCURREMMENT dans le même tube : celle qui installe a supprimé le fichier
+# de crontab AVANT que celle qui lit ne le lise. Résultat mesuré : la crontab du serveur (91 lignes, dont
+# 51 visant la PRODUCTION) a été effacée — les tâches planifiées de la boutique se sont arrêtées.
+# RÈGLE : on ne met JAMAIS `crontab -` (lecture sur l'entrée standard) dans un tube avec `crontab -l`.
+# On passe par un FICHIER, et on refuse d'installer une crontab vide.
 CRON_AVANT=$(crontab -l 2>/dev/null | grep -vc '^#')
 crontab -l > "$BK/crontab-avant-$TS.txt" 2>/dev/null || true
+[ -s "$BK/crontab-avant-$TS.txt" ] || fail "crontab : sauvegarde vide — aucune modification tentée (protection BUG-007)"
+CRON_TMP="$(mktemp)"
 if crontab -l 2>/dev/null | grep -q 'preprod\.the-replicant\.com'; then
-  crontab -l 2>/dev/null | sed 's|^\([^#].*preprod\.the-replicant\.com.*\)$|#DESACTIVE-REFONTE-THEME \1|' | crontab -
+  crontab -l 2>/dev/null > "$CRON_TMP"
+  NB_CIBLES=$(grep -c '^[^#].*preprod\.the-replicant\.com' "$CRON_TMP" || true)
+  sed -i 's|^\([^#].*preprod\.the-replicant\.com.*\)$|#DESACTIVE-REFONTE-THEME \1|' "$CRON_TMP"
+  [ -s "$CRON_TMP" ] || { rm -f "$CRON_TMP"; fail "crontab : fichier de travail vide — aucune modification"; }
+  [ "$(wc -l < "$CRON_TMP")" -ge "$(wc -l < "$BK/crontab-avant-$TS.txt")" ] || { rm -f "$CRON_TMP"; fail "crontab : le fichier de travail a perdu des lignes — aucune modification"; }
+  crontab "$CRON_TMP"
   CRON_APRES=$(crontab -l 2>/dev/null | grep -vc '^#')
-  if [ "$CRON_APRES" -eq $((CRON_AVANT - 1)) ]; then
-    log "  crontab : tâche visant la préprod neutralisée (sauvegarde : $BK/crontab-avant-$TS.txt)"
+  if [ "$CRON_APRES" -eq $((CRON_AVANT - NB_CIBLES)) ]; then
+    log "  crontab : $NB_CIBLES tâche(s) visant la préprod neutralisée(s) (sauvegarde : $BK/crontab-avant-$TS.txt)"
   else
     crontab "$BK/crontab-avant-$TS.txt"
-    fail "crontab : modification non conforme ($CRON_AVANT → $CRON_APRES) — crontab d'origine restaurée"
+    rm -f "$CRON_TMP"
+    fail "crontab : modification non conforme ($CRON_AVANT → $CRON_APRES, $NB_CIBLES cible(s) attendue(s)) — crontab d'origine restaurée"
   fi
+  rm -f "$CRON_TMP"
 else
   log "  crontab : aucune tâche ne vise la préprod"
 fi
