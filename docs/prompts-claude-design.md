@@ -103,6 +103,18 @@ rebond du compteur de panier (150 ms) — **tout en CSS/SVG, aucune bibliothèqu
 vidéo automatique, plus d'un élément animé par bande visuelle. Et si le visiteur a demandé moins
 d'animations (`prefers-reduced-motion`), **tout s'arrête**.
 
+**Deux décisions de la boutique, à appliquer partout (19/09/2026) :**
+1. **Le slider d'accueil et les carrousels de produits défilent automatiquement**, et le rythme se règle
+   dans le back-office. Conditions non négociables : la hauteur est **réservée** (aucun décalage de mise en
+   page au changement de visuel), le défilement **se met en pause au survol et au focus clavier**, il
+   **s'arrête** en `prefers-reduced-motion` et quand l'onglet n'est plus visible, et seul le premier visuel
+   est chargé avec empressement (les autres en différé).
+2. **Le bandeau promo est piloté par une promotion sur une catégorie, avec une date de début et une date de
+   fin** — c'est le mécanisme réel de la boutique (règle de prix catalogue, ex. « Black Friday −20 % »).
+   Il ne s'affiche que dans la fenêtre de dates, disparaît tout seul ensuite, et peut porter un compte à
+   rebours vers sa date de fin. **Une promotion n'est jamais une diapositive de slider** : le slider
+   présente des thèmes permanents.
+
 **Le poids est un critère de design**, pas une conséquence : CSS ≤ 45 Ko gzip, JS ≤ 110 Ko (GSAP < 45 Ko,
 facultatif), accueil ≤ 90 Ko gzip, moins de 60 requêtes, images WebP/AVIF avec `srcset` et dimensions
 explicites (CLS < 0,05). Pas de vidéo en fond, pas d'image plein écran lourde, pas de carrousel qui
