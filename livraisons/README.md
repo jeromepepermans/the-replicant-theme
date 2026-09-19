@@ -7,7 +7,7 @@ Ce dossier est la **sortie** du travail de design. C'est ce que le développemen
 | Étape | Fichier attendu |
 |---|---|
 | 1 | `etape-1-systeme-de-design.html` |
-| 2 | `etape-2-charte.html` |
+| 2 | `etape-2-charte.md` |
 | 3 | `etape-3-entete-navigation.html` |
 | 4 | `etape-4-accueil.html` |
 | 5 | `etape-5-catalogue.html` |
