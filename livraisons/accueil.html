@@ -83,7 +83,8 @@ img{max-width:100%;display:block}
 .suggestions a{display:block;padding:8px 10px;border-radius:var(--r-sm);font-size:13.5px;text-decoration:none}
 .suggestions a:hover,.suggestions a:focus-visible{background:var(--surface-100)}
 .suggestions .lbl{font:600 12px/1.3 'Source Sans 3';text-transform:uppercase;letter-spacing:.06em;color:var(--ink-600);padding:6px 10px 2px}
-.mega{position:absolute;left:0;top:calc(100% + 6px);background:var(--surface-0);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--el2);display:none;z-index:30;width:520px;max-width:calc(100vw - 32px)}
+.univers-item{position:relative}
+.mega{position:absolute;left:0;top:100%;background:var(--surface-0);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--el2);display:none;z-index:30;width:520px;max-width:calc(100vw - 32px)}
 .mega[data-open="true"]{display:block}
 .mega-inner{padding:var(--e6) var(--e4);display:grid;grid-template-columns:minmax(180px,1fr) 260px;gap:var(--e8)}
 .mega-col h3{font:600 13px Montserrat;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-600);margin-bottom:var(--e3)}
@@ -202,11 +203,15 @@ img{max-width:100%;display:block}
 .produits-entete h2{font:600 24px Montserrat}
 .produits-entete .voir-tout{font:600 13.5px 'Source Sans 3';color:var(--froid-700);text-decoration:none}
 .produits-entete .voir-tout:hover{text-decoration:underline}
-.rangee-cartes{display:flex;gap:var(--e4);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:var(--e2);margin:0 calc(-1*var(--e4));padding-left:var(--e4);padding-right:var(--e4)}
+.rangee-cartes{display:flex;gap:var(--e4);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:var(--e2);margin:0 calc(-1*var(--e4));padding-left:var(--e4);padding-right:var(--e4);scrollbar-width:none}
+.rangee-cartes::-webkit-scrollbar{display:none}
 .rangee-cartes .carte-produit{flex:0 0 calc(83.33% - var(--e4));scroll-snap-align:start}
 @media (min-width:768px){.rangee-cartes .carte-produit{flex:0 0 calc(43% - var(--e4))}}
 @media (min-width:1024px){.rangee-cartes .carte-produit{flex:0 0 calc(31% - var(--e4))}}
 @media (min-width:1440px){.rangee-cartes .carte-produit{flex:0 0 calc(23% - var(--e4))}}
+/* grille paginée 2×2 : réservée aux deux blocs « Sélection du moment » (le carrousel Nouveautés reste en 1 rangée) */
+.rangee-cartes.grille-2x2{display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,1fr);grid-auto-columns:calc(50% - var(--e4)/2);align-items:start}
+.rangee-cartes.grille-2x2 .carte-produit{flex:none;scroll-snap-align:start}
 .carte-produit{background:var(--surface-0);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--el1);transition:box-shadow var(--d-standard) ease}
 .carte-produit:hover{box-shadow:var(--el2)}
 .carte-produit .visuel{position:relative;aspect-ratio:1/1;background:var(--surface-100);border-bottom:1px solid var(--border)}
@@ -226,6 +231,14 @@ img{max-width:100%;display:block}
 .carte-produit .compte-rebours-carte{font:600 12px 'Source Sans 3';color:var(--chaud-700);margin-top:4px}
 .produits-note{font-size:12.5px;color:var(--ink-600);margin-top:var(--e2)}
 .selection-bloc{margin-top:var(--e12)}
+.selection-groupes{display:grid;grid-template-columns:1fr;gap:var(--e12);margin-top:var(--e6)}
+@media (min-width:1024px){.selection-groupes{grid-template-columns:1fr 1fr;gap:var(--e8)}.selection-groupes.un-seul-actif{grid-template-columns:1fr}}
+.selection-groupe{display:flex;flex-direction:column;min-width:0}
+.selection-groupe[hidden]{display:none}
+.selection-image-link{display:block;border-radius:var(--r-lg);overflow:hidden;margin-bottom:var(--e4);box-shadow:var(--el1)}
+.selection-image-link[hidden]{display:none}
+.selection-image{display:block;width:100%;height:auto}
+.selection-groupe-entete h3{font:600 19px Montserrat}
 
 /* ====== bande 5 : réassurance en page ====== */
 .reassurance-home{max-width:1320px;margin:var(--e12) auto 0;padding:0 var(--e4);display:grid;grid-template-columns:1fr;gap:var(--e4)}
@@ -309,11 +322,66 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
       <span class="brand-name">The Replicant<span>Cadeaux originaux</span></span>
     </a>
     <nav class="univers-nav" aria-label="Univers">
-      <button aria-haspopup="true" aria-expanded="false" data-mega="Maison">Maison</button>
-      <button aria-haspopup="true" aria-expanded="false" data-mega="Mode">Mode et bien-être</button>
-      <button aria-haspopup="true" aria-expanded="false" data-mega="Fetes">Fêtes et événements</button>
-      <button aria-haspopup="true" aria-expanded="false" data-mega="Loisirs">Loisirs</button>
-      <button aria-haspopup="true" aria-expanded="false" data-mega="Airsoft">Pistolets à billes</button>
+      <div class="univers-item">
+        <button aria-haspopup="true" aria-expanded="false" data-mega="Maison">Maison</button>
+        <div class="mega" data-mega-panel="Maison">
+          <div class="mega-inner">
+            <div class="mega-col"><h3>Maison</h3><ul>
+              <li><a href="#">Décoration</a></li><li><a href="#">Textile d'intérieur</a></li>
+              <li><a href="#">Coin cuisine</a></li><li><a href="#">Bazar</a></li>
+            </ul></div>
+            <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Maison)</span><div class="titre">Idées déco du moment</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="univers-item">
+        <button aria-haspopup="true" aria-expanded="false" data-mega="Mode">Mode et bien-être</button>
+        <div class="mega" data-mega-panel="Mode">
+          <div class="mega-inner">
+            <div class="mega-col"><h3>Mode et bien-être</h3><ul>
+              <li><a href="#">Bougie et senteur</a></li><li><a href="#">Mode</a></li>
+              <li><a href="#">Corps</a></li><li><a href="#">Petite bagagerie</a></li>
+            </ul></div>
+            <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Mode)</span><div class="titre">Sélection bien-être</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="univers-item">
+        <button aria-haspopup="true" aria-expanded="false" data-mega="Fetes">Fêtes et événements</button>
+        <div class="mega" data-mega-panel="Fetes">
+          <div class="mega-inner">
+            <div class="mega-col"><h3>Fêtes et événements</h3><ul>
+              <li><a href="#">Fêtes</a></li><li><a href="#">Famille</a></li><li><a href="#">Événements</a></li>
+              <li><a href="#">Supporter</a></li><li><a href="#">Déguisements</a></li><li><a href="#">Accessoires divers</a></li>
+            </ul></div>
+            <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Fêtes)</span><div class="titre">Prochain événement</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="univers-item">
+        <button aria-haspopup="true" aria-expanded="false" data-mega="Loisirs">Loisirs</button>
+        <div class="mega" data-mega-panel="Loisirs">
+          <div class="mega-inner">
+            <div class="mega-col"><h3>Loisirs</h3><ul>
+              <li><a href="#">Extérieur</a></li><li><a href="#">Intérieur</a></li>
+              <li><a href="#">Adultes</a></li><li><a href="#">Gadgets</a></li>
+            </ul></div>
+            <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Loisirs)</span><div class="titre">Nouveautés loisirs</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="univers-item">
+        <button aria-haspopup="true" aria-expanded="false" data-mega="Airsoft">Pistolets à billes</button>
+        <div class="mega" data-mega-panel="Airsoft">
+          <div class="mega-inner">
+            <div class="mega-col"><h3>Pistolets à billes</h3><ul>
+              <li><a href="#">Répliques et packs</a></li><li><a href="#">Consommables airsoft</a></li>
+              <li><a href="#">Accessoires et équipements</a></li>
+            </ul></div>
+            <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Airsoft)</span><div class="titre">Meilleures ventes</div></div>
+          </div>
+        </div>
+      </div>
       <a href="#" class="univers-pro">Accès professionnels</a>
     </nav>
     <div class="header-actions">
@@ -359,51 +427,6 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
           <p class="zp" style="display:block;margin-top:var(--e2)">Produits et quantités réels de démonstration. Même régime HT/TTC que les cartes produits ci-dessous et que la page panier complète.</p>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="mega" data-mega-panel="Maison">
-    <div class="mega-inner">
-      <div class="mega-col"><h3>Maison</h3><ul>
-        <li><a href="#">Décoration</a></li><li><a href="#">Textile d'intérieur</a></li>
-        <li><a href="#">Coin cuisine</a></li><li><a href="#">Bazar</a></li>
-      </ul></div>
-      <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Maison)</span><div class="titre">Idées déco du moment</div></div>
-    </div>
-  </div>
-  <div class="mega" data-mega-panel="Mode">
-    <div class="mega-inner">
-      <div class="mega-col"><h3>Mode et bien-être</h3><ul>
-        <li><a href="#">Bougie et senteur</a></li><li><a href="#">Mode</a></li>
-        <li><a href="#">Corps</a></li><li><a href="#">Petite bagagerie</a></li>
-      </ul></div>
-      <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Mode)</span><div class="titre">Sélection bien-être</div></div>
-    </div>
-  </div>
-  <div class="mega" data-mega-panel="Fetes">
-    <div class="mega-inner">
-      <div class="mega-col"><h3>Fêtes et événements</h3><ul>
-        <li><a href="#">Fêtes</a></li><li><a href="#">Famille</a></li><li><a href="#">Événements</a></li>
-        <li><a href="#">Supporter</a></li><li><a href="#">Déguisements</a></li><li><a href="#">Accessoires divers</a></li>
-      </ul></div>
-      <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Fêtes)</span><div class="titre">Prochain événement</div></div>
-    </div>
-  </div>
-  <div class="mega" data-mega-panel="Loisirs">
-    <div class="mega-inner">
-      <div class="mega-col"><h3>Loisirs</h3><ul>
-        <li><a href="#">Extérieur</a></li><li><a href="#">Intérieur</a></li>
-        <li><a href="#">Adultes</a></li><li><a href="#">Gadgets</a></li>
-      </ul></div>
-      <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Loisirs)</span><div class="titre">Nouveautés loisirs</div></div>
-    </div>
-  </div>
-  <div class="mega" data-mega-panel="Airsoft">
-    <div class="mega-inner">
-      <div class="mega-col"><h3>Pistolets à billes</h3><ul>
-        <li><a href="#">Répliques et packs</a></li><li><a href="#">Consommables airsoft</a></li>
-        <li><a href="#">Accessoires et équipements</a></li>
-      </ul></div>
-      <div class="mega-feature"><span class="zp">univers_image_mise_en_avant (Airsoft)</span><div class="titre">Meilleures ventes</div></div>
     </div>
   </div>
 </header>
@@ -536,7 +559,7 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
       <a class="voir-tout" href="#">Voir tout →</a>
     </div>
     <div class="carousel" data-carrousel-auto="true" data-carrousel-delai="7">
-      <div class="rangee-cartes" id="carousel-nouveautes">
+      <div class="rangee-cartes" id="carousel-nouveautes" tabindex="0" role="region" aria-label="Nouveautés">
         <article class="carte-produit" data-prix-ht="5.825">
           <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
           <div class="info"><div class="nom">Kit brosse et peigne à barbe personnalisé pour Papy</div><div class="prix"></div></div>
@@ -567,40 +590,98 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
     <div class="selection-bloc">
       <div class="produits-entete">
         <h2>Sélection du moment</h2>
-        <a class="voir-tout" href="#">Voir tout →</a>
       </div>
-      <div class="carousel" data-carrousel-auto="true" data-carrousel-delai="8">
-        <div class="rangee-cartes" id="carousel-selection">
-          <article class="carte-produit" data-prix-ht="4.158333">
-            <div class="visuel"><span class="zp">visuel_produit</span></div>
-            <div class="info"><div class="nom">Lot de 3 cochonnets modèle pétanque Club</div><div class="prix"></div></div>
-          </article>
-          <article class="carte-produit" data-prix-ht="7.491667">
-            <div class="visuel"><span class="zp">visuel_produit</span></div>
-            <div class="info"><div class="nom">Pack de 10 colliers hawaïens supporter Allemagne et Belgique</div><div class="prix"></div></div>
-          </article>
-          <article class="carte-produit" data-prix-ht="3.325">
-            <div class="visuel"><span class="zp">visuel_produit</span></div>
-            <div class="info"><div class="nom">Banderole fanions Octobre rose 9&nbsp;m</div><div class="prix"></div></div>
-          </article>
-          <article class="carte-produit" data-prix-ht="3.325">
-            <div class="visuel"><span class="zp">visuel_produit</span></div>
-            <div class="info"><div class="nom">Sachet de 25 ballons rose, 30×30&nbsp;cm</div><div class="prix"></div></div>
-          </article>
-          <article class="carte-produit" data-prix-ht="2.908333" data-prix-ht-promo="2.326667" data-promo-fin="2026-10-01T23:55:00">
-            <div class="visuel"><span class="badges"><span class="badge badge-promo">−20&nbsp;%</span></span><span class="zp">visuel_produit</span></div>
-            <div class="info"><div class="nom">Corbeille de coquillages décorative</div><div class="prix"></div><div class="compte-rebours-carte" data-compte-rebours-carte aria-live="polite">—</div></div>
-          </article>
-        </div>
-        <div class="carousel-nav">
-          <div class="carousel-dots" data-dots-for="carousel-selection" role="tablist" aria-label="Aller au groupe de produits"></div>
-          <div class="carousel-arrows">
-            <button class="car-prev" data-for="carousel-selection" aria-label="Produits précédents"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
-            <button class="car-next" data-for="carousel-selection" aria-label="Produits suivants"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+      <p class="produits-note">Deux catégories indépendantes, chacune choisie et illustrée depuis le back-office : <span class="zp zp-solo"></span> <code>selection_1_active</code> (bascule marche/arrêt du bloc), <code>selection_1_categorie</code>, <code>selection_1_titre</code>, <code>selection_1_image</code>, <code>selection_1_lien</code>, <code>selection_1_nombre_produits</code> (nombre de produits tirés de la catégorie, 4 à 12) — et les mêmes champs <code>selection_2_*</code> pour le second bloc. Si un seul bloc est actif, il occupe toute la largeur (démonstration : bouton « Bloc Loisirs » du panneau Tweaks). Si une image n'est pas renseignée, seul le bandeau visuel disparaît : le titre et la grille de produits restent, sans trou dans la mise en page (démonstration : bouton « Image catégorie 2 » du panneau Tweaks).</p>
+
+      <div class="selection-groupes">
+        <div class="selection-groupe" data-selection-groupe="1">
+          <a class="selection-image-link" href="#" data-selection-lien="1">
+            <img class="selection-image" src="data:image/webp;base64,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" alt="Fêtes et événements" width="640" height="360" loading="lazy">
+          </a>
+          <div class="produits-entete selection-groupe-entete">
+            <h3 data-selection-titre="1">Fêtes et événements</h3>
+            <a class="voir-tout" href="#">Voir tout →</a>
           </div>
+          <div class="carousel" data-carrousel-auto="true" data-carrousel-delai="8">
+            <div class="rangee-cartes grille-2x2" id="carousel-selection-1" tabindex="0" role="region" aria-label="Sélection du moment — Fêtes et événements">
+              <article class="carte-produit" data-prix-ht="7.491667">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Pack de 10 colliers hawaïens supporter Allemagne et Belgique</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="3.325">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Banderole fanions Octobre rose 9&nbsp;m</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="3.325">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Sachet de 25 ballons rose, 30×30&nbsp;cm</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="2.908333" data-prix-ht-promo="2.326667" data-promo-fin="2026-10-01T23:55:00">
+                <div class="visuel"><span class="badges"><span class="badge badge-promo">−20&nbsp;%</span></span><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Corbeille de coquillages décorative</div><div class="prix"></div><div class="compte-rebours-carte" data-compte-rebours-carte aria-live="polite">—</div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="6.658333">
+                <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Guirlande lumineuse LED 10&nbsp;m, 100 leds blanc chaud</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="5.825">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Set de 6 flûtes à champagne incassables</div><div class="prix"></div></div>
+              </article>
+            </div>
+            <div class="carousel-nav">
+              <div class="carousel-dots" data-dots-for="carousel-selection-1" role="tablist" aria-label="Aller au groupe de produits"></div>
+              <div class="carousel-arrows">
+                <button class="car-prev" data-for="carousel-selection-1" aria-label="Produits précédents"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+                <button class="car-next" data-for="carousel-selection-1" aria-label="Produits suivants"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+              </div>
+            </div>
+          </div>
+          <p class="produits-note">6 produits réels (<code>selection_1_nombre_produits</code>), thème en cours (supporter, Octobre rose) + la promotion réelle « Corbeille de coquillages décorative » (réf. OOTB-830259), −20&nbsp;% du 07/09 au 01/10/2026 23h55 (<code>specific_price</code> produit). Grille 2×2 paginée : 2 pages.</p>
+        </div>
+
+        <div class="selection-groupe" data-selection-groupe="2">
+          <a class="selection-image-link" href="#" data-selection-lien="2">
+            <img class="selection-image" src="data:image/webp;base64,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" alt="Loisirs" width="640" height="360" loading="lazy">
+          </a>
+          <div class="produits-entete selection-groupe-entete">
+            <h3 data-selection-titre="2">Loisirs</h3>
+            <a class="voir-tout" href="#">Voir tout →</a>
+          </div>
+          <div class="carousel" data-carrousel-auto="true" data-carrousel-delai="8">
+            <div class="rangee-cartes grille-2x2" id="carousel-selection-2" tabindex="0" role="region" aria-label="Sélection du moment — Loisirs">
+              <article class="carte-produit" data-prix-ht="4.158333">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Lot de 3 cochonnets modèle pétanque Club</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="8.324999">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Jeu de fléchettes, cible et 6 fléchettes incluses, 36×36&nbsp;cm</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="18.325">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Jeu d'échecs en verre, plateau et 32 pions, 24,5×24,5&nbsp;cm</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="8.324999">
+                <div class="visuel"><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Pistolet à eau à pression, 4 jets simultanés, 44&nbsp;cm</div><div class="prix"></div></div>
+              </article>
+              <article class="carte-produit" data-prix-ht="3.325">
+                <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
+                <div class="info"><div class="nom">Frisbee alvéolé plein air, Ø 27&nbsp;cm</div><div class="prix"></div></div>
+              </article>
+            </div>
+            <div class="carousel-nav">
+              <div class="carousel-dots" data-dots-for="carousel-selection-2" role="tablist" aria-label="Aller au groupe de produits"></div>
+              <div class="carousel-arrows">
+                <button class="car-prev" data-for="carousel-selection-2" aria-label="Produits précédents"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+                <button class="car-next" data-for="carousel-selection-2" aria-label="Produits suivants"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+              </div>
+            </div>
+          </div>
+          <p class="produits-note">5 produits réels du catalogue (<code>selection_2_nombre_produits</code>), thème jeux et plein air. Grille 2×2 paginée : 2 pages, la dernière incomplète.</p>
         </div>
       </div>
-      <p class="produits-note">5 produits réels du catalogue (plafond 12), thèmes en cours (pétanque, supporter, Octobre rose) + une promotion réelle en cours : « Corbeille de coquillages décorative » (réf. OOTB-830259), −20&nbsp;% du 07/09 au 01/10/2026 23h55 (<code>specific_price</code> produit), badge et compte à rebours réels selon la priorité de la charte (Promo &gt; Compte à rebours). Source de la sélection — catégorie, tag ou choix manuel : <span class="zp zp-solo"></span> (<code>source_produits</code>).</p>
     </div>
   </section>
 
@@ -723,7 +804,15 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
     <button class="seg" data-regime-prix="ttc" aria-pressed="true">TTC</button>
     <button class="seg" data-regime-prix="ht" aria-pressed="false">HT (pro)</button>
   </span></div>
-  <p class="zp" style="display:block;margin-top:6px;line-height:1.35">Astuce&nbsp;: survolez l'icône panier — rebond de démo (déclencheur réel&nbsp;: ajout au panier).</p>
+  <div class="row" title="Démontre qu'un bloc sans image reste propre : le titre et la grille de produits restent, sans trou dans la mise en page."><span>Image catégorie 2</span><span>
+    <button class="seg" data-image-cat2="avec" aria-pressed="true">Avec</button>
+    <button class="seg" data-image-cat2="sans" aria-pressed="false">Sans</button>
+  </span></div>
+  <div class="row" title="Démontre le champ back-office selection_2_active : bloc désactivé, l'autre occupe toute la largeur."><span>Bloc Loisirs</span><span>
+    <button class="seg" data-selection2-actif="oui" aria-pressed="true">Actif</button>
+    <button class="seg" data-selection2-actif="non" aria-pressed="false">Inactif</button>
+  </span></div>
+  <p class="zp" style="display:block;margin-top:6px;line-height:1.35">Démonstration&nbsp;: le badge du panier rebondit au chargement puis toutes les 6&nbsp;s. Déclencheur réel dans le thème&nbsp;: l'ajout au panier.</p>
 </div>
 
 <script>
@@ -744,49 +833,53 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
   }
   window.addEventListener('scroll', onScroll, {passive:true});
 
-  /* ---- mega-menu : clic/entree ouvre, survol ouvre avec delai, Echap et clic dehors ferment ---- */
-  var triggers = Array.prototype.slice.call(document.querySelectorAll('[data-mega]'));
+  /* ---- mega-menu : bouton + panneau partagent le meme conteneur .univers-item (pas de zone morte au survol) ---- */
+  var items = Array.prototype.slice.call(document.querySelectorAll('.univers-item'));
+  var triggers = items.map(function(item){ return item.querySelector('[data-mega]'); });
   function closeAllMega(){
     triggers.forEach(function(t){ t.setAttribute('aria-expanded','false'); });
     document.querySelectorAll('.mega').forEach(function(p){ p.dataset.open = 'false'; });
   }
-  function positionMega(t, p){
-    var headerRect = document.getElementById('site-header').getBoundingClientRect();
-    var triggerRect = t.getBoundingClientRect();
+  function positionMega(item, p){
+    var itemRect = item.getBoundingClientRect();
     var panelWidth = p.offsetWidth;
-    var left = triggerRect.left - headerRect.left;
-    var maxLeft = headerRect.width - panelWidth - 16;
-    if (left > maxLeft) left = Math.max(16, maxLeft);
-    if (left < 16) left = 16;
-    p.style.left = left + 'px';
+    var overflow = (itemRect.left + panelWidth) - (window.innerWidth - 16);
+    p.style.left = overflow > 0 ? (-overflow) + 'px' : '0px';
   }
   function openMega(name){
     closeAllMega();
     var t = document.querySelector('[data-mega="'+name+'"]');
+    var item = t && t.closest('.univers-item');
     var p = document.querySelector('[data-mega-panel="'+name+'"]');
     if (t) t.setAttribute('aria-expanded','true');
-    if (p) { p.dataset.open = 'true'; positionMega(t, p); }
+    if (p && item) { p.dataset.open = 'true'; positionMega(item, p); }
   }
   window.addEventListener('resize', function(){
     var openPanel = document.querySelector('.mega[data-open="true"]');
     if (!openPanel) return;
-    var name = openPanel.dataset.megaPanel;
-    var t = document.querySelector('[data-mega="'+name+'"]');
-    if (t) positionMega(t, openPanel);
+    var item = openPanel.closest('.univers-item');
+    if (item) positionMega(item, openPanel);
   });
-  var hoverTimer;
-  triggers.forEach(function(t){
+  var hoverTimer, closeTimer;
+  items.forEach(function(item){
+    var t = item.querySelector('[data-mega]');
     var name = t.dataset.mega;
     t.addEventListener('click', function(){
       var isOpen = t.getAttribute('aria-expanded') === 'true';
       isOpen ? closeAllMega() : openMega(name);
     });
-    t.addEventListener('mouseenter', function(){ clearTimeout(hoverTimer); hoverTimer = setTimeout(function(){ openMega(name); }, 90); });
-    t.closest('.site-header').addEventListener('mouseleave', function(){ clearTimeout(hoverTimer); hoverTimer = setTimeout(closeAllMega, 180); });
+    item.addEventListener('mouseenter', function(){
+      clearTimeout(closeTimer); clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(function(){ openMega(name); }, 90);
+    });
+    item.addEventListener('mouseleave', function(){
+      clearTimeout(hoverTimer);
+      closeTimer = setTimeout(closeAllMega, 180);
+    });
   });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeAllMega(); });
   document.addEventListener('click', function(e){
-    if (!e.target.closest('.univers-nav') && !e.target.closest('.mega')) closeAllMega();
+    if (!e.target.closest('.univers-nav')) closeAllMega();
   });
 
   /* ---- recherche mobile plein ecran ---- */
@@ -983,7 +1076,8 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
     start();
   }
   makeProductCarousel('carousel-nouveautes');
-  makeProductCarousel('carousel-selection');
+  makeProductCarousel('carousel-selection-1');
+  makeProductCarousel('carousel-selection-2');
 
   /* ---- prix HT/TTC selon groupe client ---- */
   var TAUX_TVA = 1.20;
@@ -1077,19 +1171,26 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
   updateCartesCompteRebours();
   setInterval(updateCartesCompteRebours, 60000);
 
-  /* ---- rebond panier : demonstration au survol/focus (vrai declencheur = ajout reel au panier) ---- */
-  ['panier-icon-header', 'panier-icon-bottombar'].forEach(function(id){
+  /* ---- rebond panier : demonstration au chargement puis toutes les 6 s (vrai declencheur = ajout reel au panier) ---- */
+  var rebondBadges = ['panier-icon-header', 'panier-icon-bottombar'].map(function(id){
     var link = document.getElementById(id);
-    if (!link) return;
-    var badge = link.querySelector('.cart-count');
-    function jouerRebond(){
-      if (prefersReducedMotion() || !badge) return;
+    return link ? link.querySelector('.cart-count') : null;
+  }).filter(Boolean);
+  function jouerRebondDemo(){
+    if (prefersReducedMotion()) return;
+    rebondBadges.forEach(function(badge){
       badge.classList.remove('rebond');
       void badge.offsetWidth;
       badge.classList.add('rebond');
-    }
-    link.addEventListener('mouseenter', jouerRebond);
-    link.addEventListener('focus', jouerRebond);
+    });
+  }
+  jouerRebondDemo();
+  setInterval(jouerRebondDemo, 6000);
+  ['panier-icon-header', 'panier-icon-bottombar'].forEach(function(id){
+    var link = document.getElementById(id);
+    if (!link) return;
+    link.addEventListener('mouseenter', jouerRebondDemo);
+    link.addEventListener('focus', jouerRebondDemo);
   });
 
   /* ---- degagement dynamique du bouton retour-haut au-dessus du panneau tweaks ---- */
@@ -1136,6 +1237,23 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
     b.addEventListener('click', function(){
       document.querySelectorAll('[data-rayon]').forEach(function(x){ x.setAttribute('aria-pressed', x===b ? 'true':'false'); });
       document.documentElement.style.setProperty('--rayon-scale', b.dataset.rayon === 'nets' ? '0.4' : '1');
+    });
+  });
+  document.querySelectorAll('[data-image-cat2]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-image-cat2]').forEach(function(x){ x.setAttribute('aria-pressed', x===b ? 'true':'false'); });
+      var lien = document.querySelector('[data-selection-lien="2"]');
+      if (lien) lien.hidden = (b.dataset.imageCat2 === 'sans');
+    });
+  });
+  document.querySelectorAll('[data-selection2-actif]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-selection2-actif]').forEach(function(x){ x.setAttribute('aria-pressed', x===b ? 'true':'false'); });
+      var inactif = b.dataset.selection2Actif === 'non';
+      var groupe2 = document.querySelector('[data-selection-groupe="2"]');
+      var groupes = document.querySelector('.selection-groupes');
+      if (groupe2) groupe2.hidden = inactif;             /* zone paramétrable : selection_2_active */
+      if (groupes) groupes.classList.toggle('un-seul-actif', inactif);
     });
   });
 })();
