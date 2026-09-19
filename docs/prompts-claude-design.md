@@ -115,6 +115,19 @@ d'animations (`prefers-reduced-motion`), **tout s'arrête**.
    rebours vers sa date de fin. **Une promotion n'est jamais une diapositive de slider** : le slider
    présente des thèmes permanents.
 
+**Trois règles de plus (19/09/2026) :**
+1. **Un sous-menu s'ouvre aligné sous son propre item de menu**, jamais au bord gauche de la page. L'item
+   qui ouvre un panneau est la référence : le panneau démarre à son bord gauche et s'étend vers la droite ;
+   si cela dépassait le bord droit de l'écran, on décale le panneau pour qu'il reste entièrement visible —
+   aucun débordement horizontal, jamais.
+2. **Les prix s'affichent HT ou TTC selon le groupe du client.** La boutique a un groupe **« Compte pro »**
+   (−20 %, prix **hors taxe**) et un groupe **« Ami(e) »** (−20 %, prix TTC) : les cartes produit, la fiche,
+   le panier et le mini-panier doivent afficher le bon régime **et le dire lisiblement** (« HT » ou « TTC »
+   à côté du prix, jamais implicite). Un même écran doit donc être pensé pour les deux cas.
+3. **L'accès professionnels existe à deux endroits** : une entrée dans le menu de l'en-tête **et** un lien
+   dans le pied de page (colonne « La boutique »). Il mène à une page « Devenir professionnel »
+   (présentation + demande) ; les professionnels déjà inscrits passent par leur compte.
+
 **Le poids est un critère de design**, pas une conséquence : CSS ≤ 45 Ko gzip, JS ≤ 110 Ko (GSAP < 45 Ko,
 facultatif), accueil ≤ 90 Ko gzip, moins de 60 requêtes, images WebP/AVIF avec `srcset` et dimensions
 explicites (CLS < 0,05). Pas de vidéo en fond, pas d'image plein écran lourde, pas de carrousel qui
