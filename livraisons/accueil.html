@@ -128,34 +128,36 @@ img{max-width:100%;display:block}
 .hero-track{position:relative;border-radius:var(--r-lg);overflow:hidden;background:var(--surface-100);border:1px solid var(--border)}
 .hero-slide{position:relative;display:none;min-height:260px}
 .hero-slide.active{display:block}
-.hero-visual{position:absolute;inset:0;background:repeating-linear-gradient(135deg,var(--surface-100) 0 18px,var(--surface-150) 18px 36px)}
+.hero-visual{position:absolute;inset:0;background:var(--surface-100)}
+.hero-slide.loaded .hero-visual{background:repeating-linear-gradient(135deg,var(--surface-100) 0 18px,var(--surface-150) 18px 36px)}
 .hero-slide .zp{position:absolute;top:var(--e4);left:var(--e4);z-index:2}
 .hero-caption{position:relative;z-index:1;margin-top:auto;padding:var(--e8) var(--e6) var(--e6);max-width:520px;display:flex;flex-direction:column;gap:var(--e3);background:linear-gradient(0deg,rgba(255,255,255,.94) 0%,rgba(255,255,255,.7) 70%,transparent 100%)}
 .hero-caption .theme{font:600 12px 'Source Sans 3';text-transform:uppercase;letter-spacing:.08em;color:var(--chaud-700)}
 .hero-caption h2{font:700 28px/1.15 Montserrat}
 .hero-caption .cta{align-self:flex-start;min-height:44px;padding:0 var(--e6);border-radius:var(--r-pill);background:var(--action-500);color:var(--ink-900);font:600 14px 'Source Sans 3';display:inline-flex;align-items:center;text-decoration:none;box-shadow:var(--el1)}
 .hero-caption .cta:hover{background:var(--action-600)}
-.hero-nav{display:flex;align-items:center;justify-content:space-between;padding:var(--e3) 0}
-.hero-dots{display:flex;gap:var(--e1)}
-.hero-dots button{width:44px;height:44px;padding:0;display:grid;place-items:center}
-.hero-dots button::after{content:"";width:9px;height:9px;border-radius:var(--r-pill);background:var(--border);transition:width var(--d-standard) ease,background var(--d-standard) ease}
-.hero-dots button[aria-current="true"]::after{background:var(--chaud-500);width:22px}
-.hero-arrows{display:flex;gap:var(--e2)}
-.hero-arrows button{width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--border);display:grid;place-items:center;background:var(--surface-0)}
-.hero-arrows button:hover{background:var(--surface-100)}
+.carousel-nav{display:flex;align-items:center;justify-content:space-between;padding:var(--e3) 0;gap:var(--e3)}
+.carousel-dots{display:flex;gap:var(--e1);flex-wrap:wrap}
+.carousel-dots button{width:44px;height:44px;padding:0;display:grid;place-items:center}
+.carousel-dots button::after{content:"";width:9px;height:9px;border-radius:var(--r-pill);background:var(--border);transition:width var(--d-standard) ease,background var(--d-standard) ease}
+.carousel-dots button[aria-current="true"]::after{background:var(--chaud-500);width:22px}
+.carousel-arrows{display:flex;gap:var(--e2);flex:0 0 auto}
+.carousel-arrows button{width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--border);display:grid;place-items:center;background:var(--surface-0)}
+.carousel-arrows button:hover{background:var(--surface-100)}
+.carousel-arrows button:disabled{opacity:.35;cursor:default}
 @media (min-width:768px){.hero-slide{min-height:400px}.hero-caption h2{font-size:34px}}
 
 /* ====== bande 2 : bandeau promo festif ====== */
 .promo{max-width:1320px;margin:var(--e6) auto 0;padding:0 var(--e4)}
 .promo-inner{position:relative;border-radius:var(--r-lg);overflow:hidden;background:linear-gradient(120deg,var(--chaud-500) 0%,var(--chaud-clair) 100%);padding:var(--e6) var(--e12) var(--e6) var(--e6);display:flex;align-items:center;gap:var(--e6);color:var(--ink-900);flex-wrap:wrap}
-.promo-inner .spark{position:absolute;width:14px;height:14px;color:var(--ink-900);opacity:0;animation:etincelle 2.5s ease-in-out infinite}
+.promo-inner .spark{position:absolute;width:16px;height:16px;color:var(--surface-0);filter:drop-shadow(0 0 3px rgba(255,255,255,.85));opacity:.45;animation:etincelle 2.5s ease-in-out infinite}
 .promo-inner .spark svg{width:100%;height:100%;fill:currentColor}
 .promo-inner .spark:nth-child(1){top:14%;left:8%;animation-delay:0s}
-.promo-inner .spark:nth-child(2){top:65%;left:22%;animation-delay:.5s;width:10px;height:10px}
-.promo-inner .spark:nth-child(3){top:24%;left:82%;animation-delay:1s}
-.promo-inner .spark:nth-child(4){top:70%;left:92%;animation-delay:1.5s;width:11px;height:11px}
-.promo-inner .spark:nth-child(5){top:40%;left:52%;animation-delay:2s;width:9px;height:9px}
-@keyframes etincelle{0%,100%{opacity:0;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+.promo-inner .spark:nth-child(2){top:65%;left:22%;animation-delay:.5s;width:14px;height:14px}
+.promo-inner .spark:nth-child(3){top:24%;left:82%;animation-delay:1s;width:18px;height:18px}
+.promo-inner .spark:nth-child(4){top:70%;left:92%;animation-delay:1.5s;width:15px;height:15px}
+.promo-inner .spark:nth-child(5){top:40%;left:52%;animation-delay:2s;width:14px;height:14px}
+@keyframes etincelle{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
 .promo-texte{position:relative;z-index:1;display:flex;flex-direction:column;gap:var(--e2)}
 .promo-texte strong{font:700 20px Montserrat}
 .promo-cta{position:relative;z-index:1;min-height:44px;padding:0 var(--e6);border-radius:var(--r-pill);background:var(--action-500);color:var(--ink-900);font:600 14px 'Source Sans 3';display:inline-flex;align-items:center;text-decoration:none;margin-left:auto}
@@ -163,6 +165,7 @@ img{max-width:100%;display:block}
 .promo-close{position:absolute;top:var(--e2);right:var(--e2);width:44px;height:44px;border-radius:var(--r-pill);background:rgba(255,255,255,.55);display:grid;place-items:center;z-index:2}
 .promo-close:hover{background:rgba(255,255,255,.85)}
 .promo-note{max-width:1320px;margin:var(--e2) auto 0;padding:0 var(--e4);font-size:12.5px;color:var(--ink-600)}
+.promo-compte-rebours{font:700 13px 'Source Sans 3';background:rgba(255,255,255,.55);border-radius:var(--r-sm);padding:var(--e1) var(--e2);width:fit-content}
 
 /* ====== bande 3 : univers mis en avant ====== */
 .univers-mep{max-width:1320px;margin:var(--e12) auto 0;padding:0 var(--e4)}
@@ -182,12 +185,15 @@ img{max-width:100%;display:block}
 .produits-entete h2{font:600 24px Montserrat}
 .produits-entete .voir-tout{font:600 13.5px 'Source Sans 3';color:var(--froid-700);text-decoration:none}
 .produits-entete .voir-tout:hover{text-decoration:underline}
-.rangee-cartes{display:flex;gap:var(--e4);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:var(--e2);margin:0 calc(-1*var(--e4));padding-left:var(--e4);padding-right:var(--e4)}
-.rangee-cartes .carte-produit{flex:0 0 168px;scroll-snap-align:start}
-@media (min-width:768px){.rangee-cartes{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible}.rangee-cartes .carte-produit{flex:auto}}
+.rangee-cartes{display:flex;gap:var(--e4);overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding-bottom:var(--e2);margin:0 calc(-1*var(--e4));padding-left:var(--e4);padding-right:var(--e4)}
+.rangee-cartes .carte-produit{flex:0 0 calc(83.33% - var(--e4));scroll-snap-align:start}
+@media (min-width:768px){.rangee-cartes .carte-produit{flex:0 0 calc(43% - var(--e4))}}
+@media (min-width:1024px){.rangee-cartes .carte-produit{flex:0 0 calc(31% - var(--e4))}}
+@media (min-width:1440px){.rangee-cartes .carte-produit{flex:0 0 calc(23% - var(--e4))}}
 .carte-produit{background:var(--surface-0);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--el1);transition:box-shadow var(--d-standard) ease}
 .carte-produit:hover{box-shadow:var(--el2)}
-.carte-produit .visuel{position:relative;aspect-ratio:1/1;background:repeating-linear-gradient(135deg,var(--surface-100) 0 14px,var(--surface-150) 14px 28px);border-bottom:1px solid var(--border)}
+.carte-produit .visuel{position:relative;aspect-ratio:1/1;background:var(--surface-100);border-bottom:1px solid var(--border)}
+.carte-produit .visuel.loaded{background:repeating-linear-gradient(135deg,var(--surface-100) 0 14px,var(--surface-150) 14px 28px)}
 .carte-produit .badges{position:absolute;top:var(--e2);left:var(--e2);display:flex;flex-direction:column;gap:var(--e2);z-index:1}
 .badge{display:inline-flex;align-items:center;padding:var(--e1) var(--e2);border-radius:var(--r-pill);font:700 12px/1.3 'Source Sans 3';width:fit-content}
 .badge-nouveau{background:var(--action-500);color:var(--ink-900)}
@@ -240,6 +246,17 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
 .mentions-in{max-width:1320px;margin:0 auto;padding:var(--e4);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12.5px;color:var(--ink-600)}
 .mentions-in a{text-decoration:none;margin-left:12px}
 .mentions-in a:hover{text-decoration:underline}
+.reseaux{display:flex;gap:var(--e2);margin-top:var(--e3)}
+.reseaux a{width:44px;height:44px;border-radius:var(--r-pill);border:1px solid var(--border);display:grid;place-items:center;background:var(--surface-0);color:var(--ink-700)}
+.reseaux a:hover{background:var(--surface-0);color:var(--froid-700);border-color:var(--froid-700)}
+.reseaux svg{width:20px;height:20px;fill:currentColor}
+
+/* ====== retour en haut ====== */
+.retour-haut{position:fixed;left:var(--e4);bottom:var(--e4);z-index:45;width:44px;height:44px;border-radius:var(--r-pill);background:var(--ink-900);color:#fff;display:grid;place-items:center;box-shadow:var(--el2);opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity var(--d-standard) ease,transform var(--d-standard) ease}
+.retour-haut.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
+.retour-haut:hover{background:var(--ink-700)}
+.retour-haut svg{width:20px;height:20px}
+@media (max-width:1023px){.retour-haut{bottom:calc(64px + var(--e3))}}
 
 /* ====== panneau tweaks ====== */
 .tweaks{position:fixed;right:16px;bottom:76px;z-index:60;background:var(--surface-0);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--el2);padding:12px 14px;font-size:12.5px;width:190px}
@@ -388,10 +405,10 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
 
 <main>
 
-  <!-- ① slider hero — 4 thèmes réellement en avant sur le site (grand-père, Octobre rose, pétanque, décorations marines) -->
-  <section class="hero" aria-roledescription="carrousel" aria-label="Mises en avant">
+  <!-- ① slider hero — 3 thèmes permanents réellement en avant sur le site (grand-père, Octobre rose, pétanque). « Décorations marines » retiré : c'était une promotion, pas un thème permanent — elle relève du bandeau ②, pas du slider. -->
+  <section class="hero" aria-roledescription="carrousel" aria-label="Mises en avant" id="hero-region">
     <div class="hero-track" id="hero-track">
-      <div class="hero-slide active" role="group" aria-roledescription="diapositive" aria-label="1 sur 4">
+      <div class="hero-slide active loaded" role="group" aria-roledescription="diapositive" aria-label="1 sur 3">
         <div class="hero-visual"></div>
         <span class="zp">visuel_slide (1)</span>
         <div class="hero-caption">
@@ -400,7 +417,7 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
           <a class="cta" href="#">Découvrir</a>
         </div>
       </div>
-      <div class="hero-slide" role="group" aria-roledescription="diapositive" aria-label="2 sur 4">
+      <div class="hero-slide" role="group" aria-roledescription="diapositive" aria-label="2 sur 3">
         <div class="hero-visual"></div>
         <span class="zp">visuel_slide (2)</span>
         <div class="hero-caption">
@@ -409,7 +426,7 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
           <a class="cta" href="#">Découvrir</a>
         </div>
       </div>
-      <div class="hero-slide" role="group" aria-roledescription="diapositive" aria-label="3 sur 4">
+      <div class="hero-slide" role="group" aria-roledescription="diapositive" aria-label="3 sur 3">
         <div class="hero-visual"></div>
         <span class="zp">visuel_slide (3)</span>
         <div class="hero-caption">
@@ -418,47 +435,39 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
           <a class="cta" href="#">Découvrir</a>
         </div>
       </div>
-      <div class="hero-slide" role="group" aria-roledescription="diapositive" aria-label="4 sur 4">
-        <div class="hero-visual"></div>
-        <span class="zp">visuel_slide (4)</span>
-        <div class="hero-caption">
-          <span class="theme">Thème réel · lien actuel : /532-decorations-marines</span>
-          <h2 class="zp">titre_slide</h2>
-          <a class="cta" href="#">Découvrir</a>
-        </div>
-      </div>
     </div>
-    <div class="hero-nav">
-      <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Aller à la diapositive">
+    <div class="carousel-nav">
+      <div class="carousel-dots" id="hero-dots" role="tablist" aria-label="Aller à la diapositive">
         <button role="tab" aria-current="true" aria-label="Diapositive 1"></button>
         <button role="tab" aria-current="false" aria-label="Diapositive 2"></button>
         <button role="tab" aria-current="false" aria-label="Diapositive 3"></button>
-        <button role="tab" aria-current="false" aria-label="Diapositive 4"></button>
       </div>
-      <div class="hero-arrows">
+      <div class="carousel-arrows">
         <button id="hero-prev" aria-label="Diapositive précédente"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
         <button id="hero-next" aria-label="Diapositive suivante"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
       </div>
     </div>
   </section>
-  <p class="promo-note" style="margin-top:2px">Ordre, nombre de diapositives (3 à 5), visuel, titre et lien : <span class="zp zp-solo"></span> par diapositive. Un seul visuel est demandé à l'écran ; le suivant n'est chargé qu'à la navigation. Pas d'avance automatique : le slider ne bouge qu'à l'action de la personne, jamais seul.</p>
+  <p class="promo-note" style="margin-top:2px">Ordre, nombre de diapositives (3 à 5), visuel, titre, lien : <span class="zp zp-solo"></span> par diapositive · défilement automatique <code>slider_defilement_auto</code> (activé par défaut) et délai <code>slider_delai_secondes</code> (6&nbsp;s, réglable 3–12) : <span class="zp zp-solo"></span>. Hauteur réservée (aucun décalage de mise en page) ; pause au survol et au focus clavier, reprend à la sortie ; à l'arrêt en <code>prefers-reduced-motion</code> et quand l'onglet n'est plus visible. Premier visuel chargé avec empressement, les suivants en différé, à la première activation. Pilotable au clavier (flèches ← →).</p>
 
-  <!-- ② bandeau promo festif — seule bande vraiment animée -->
-  <section class="promo" id="promo-band">
-    <div class="promo-inner">
+  <!-- ② bandeau promo festif — seule bande vraiment animée. Piloté par une règle de prix catalogue réelle sur une catégorie, avec une fenêtre de dates : le bandeau s'affiche seulement entre bandeau_promo_date_debut et bandeau_promo_date_fin, jamais inventé. -->
+  <section class="promo" hidden id="promo-band-wrap">
+    <div class="promo-inner" id="promo-band">
       <span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0l2.2 8.8L23 11l-8.8 2.2L12 22l-2.2-8.8L1 11l8.8-2.2z"/></svg></span>
       <span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0l2.2 8.8L23 11l-8.8 2.2L12 22l-2.2-8.8L1 11l8.8-2.2z"/></svg></span>
       <span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0l2.2 8.8L23 11l-8.8 2.2L12 22l-2.2-8.8L1 11l8.8-2.2z"/></svg></span>
       <span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0l2.2 8.8L23 11l-8.8 2.2L12 22l-2.2-8.8L1 11l8.8-2.2z"/></svg></span>
       <span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0l2.2 8.8L23 11l-8.8 2.2L12 22l-2.2-8.8L1 11l8.8-2.2z"/></svg></span>
       <div class="promo-texte">
-        <span class="zp" style="background:var(--surface-0);border-color:var(--surface-0)">bandeau_promo_texte</span>
+        <span class="zp" style="background:var(--surface-0);border-color:var(--surface-0)">bandeau_promo_categorie</span>
+        <strong id="promo-titre">—20&nbsp;% · Black Friday</strong>
+        <div class="promo-compte-rebours" id="promo-cdt" aria-live="polite">—</div>
       </div>
-      <a class="promo-cta" href="#">bandeau_promo_lien_texte</a>
+      <a class="promo-cta" id="promo-cta" href="#">bandeau_promo_lien_texte</a>
       <button class="promo-close" id="promo-close" aria-label="Fermer le bandeau">✕</button>
     </div>
   </section>
-  <p class="promo-note">Aucune promotion n'est active aujourd'hui sur the-replicant.com (vérifié le 19/09/2026) : <code>bandeau_promo_actif</code> vaut « non » par défaut, le bandeau est alors absent de la page. Ce bloc démontre son état actif — dégradé et étincelles du logo, jamais de compte à rebours inventé (seul <code>specific_price.to</code>, une date réelle, en autorise un). Fermable, jamais dans le tunnel de commande.</p>
+  <p class="promo-note" id="promo-explain">Piloté par une règle de prix catalogue réelle de la boutique (Réductions → Règles de prix catalogue) : <code>bandeau_promo_categorie</code>, <code>bandeau_promo_date_debut</code>, <code>bandeau_promo_date_fin</code>, <code>bandeau_promo_texte</code>, <code>bandeau_promo_lien</code>, <code>bandeau_promo_lien_texte</code>, <code>bandeau_promo_actif</code>. Le bandeau ne s'affiche QUE dans la fenêtre de dates et disparaît tout seul ensuite — aujourd'hui (19/09/2026) aucune des deux règles actives de la boutique n'est dans sa fenêtre ; la prochaine est réelle : « Black Friday », −20&nbsp;%, du 29/11 au 02/12/2026. Le bandeau ci-dessus est donc masqué en conditions réelles — <label style="font-weight:600"><input type="checkbox" id="promo-demo-toggle" style="width:16px;height:16px;vertical-align:-2px"> afficher une démonstration avec cette date réelle</label>. Compte à rebours vers <code>bandeau_promo_date_fin</code>, mis à jour une fois par minute, sans animation. Fermable, jamais dans le tunnel de commande.</p>
 
   <!-- ③ catégories mises en avant — les 5 univers réels du site -->
   <section class="univers-mep">
@@ -479,50 +488,68 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
       <h2>Nouveautés</h2>
       <a class="voir-tout" href="#">Voir tout →</a>
     </div>
-    <div class="rangee-cartes">
-      <article class="carte-produit">
-        <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
-        <div class="info"><div class="nom">Kit brosse et peigne à barbe personnalisé pour Papy</div><div class="prix">5,83&nbsp;€</div></div>
-      </article>
-      <article class="carte-produit">
-        <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
-        <div class="info"><div class="nom">Décapsuleur niveau à bulle multifonction « Papy je t'aime »</div><div class="prix">8,33&nbsp;€</div></div>
-      </article>
-      <article class="carte-produit">
-        <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
-        <div class="info"><div class="nom">Planche à découper en bambou gravée « Cuisine de Papy »</div><div class="prix">9,99&nbsp;€</div></div>
-      </article>
-      <article class="carte-produit">
-        <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
-        <div class="info"><div class="nom">Matelas pliable de plage avec coussin intégré et poignée</div><div class="prix">19,99&nbsp;€</div></div>
-      </article>
+    <div class="carousel" data-carrousel-auto="true" data-carrousel-delai="7">
+      <div class="rangee-cartes" id="carousel-nouveautes">
+        <article class="carte-produit">
+          <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
+          <div class="info"><div class="nom">Kit brosse et peigne à barbe personnalisé pour Papy</div><div class="prix">5,83&nbsp;€</div></div>
+        </article>
+        <article class="carte-produit">
+          <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
+          <div class="info"><div class="nom">Décapsuleur niveau à bulle multifonction « Papy je t'aime »</div><div class="prix">8,33&nbsp;€</div></div>
+        </article>
+        <article class="carte-produit">
+          <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
+          <div class="info"><div class="nom">Planche à découper en bambou gravée « Cuisine de Papy »</div><div class="prix">9,99&nbsp;€</div></div>
+        </article>
+        <article class="carte-produit">
+          <div class="visuel"><span class="badges"><span class="badge badge-nouveau">Nouveau</span></span><span class="zp">visuel_produit</span></div>
+          <div class="info"><div class="nom">Matelas pliable de plage avec coussin intégré et poignée</div><div class="prix">19,99&nbsp;€</div></div>
+        </article>
+      </div>
+      <div class="carousel-nav">
+        <div class="carousel-dots" data-dots-for="carousel-nouveautes" role="tablist" aria-label="Aller au groupe de produits"></div>
+        <div class="carousel-arrows">
+          <button class="car-prev" data-for="carousel-nouveautes" aria-label="Produits précédents"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+          <button class="car-next" data-for="carousel-nouveautes" aria-label="Produits suivants"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+      </div>
     </div>
-    <p class="produits-note">4 produits réels, les plus récemment ajoutés au catalogue (API <code>id_DESC</code>). Badge « Nouveau » : <code>product.date_add</code>, seuil <span class="zp zp-solo"></span> (30&nbsp;jours par défaut). Nombre de cartes et source : <span class="zp zp-solo"></span>.</p>
+    <p class="produits-note">4 produits réels (plafond 12), les plus récemment ajoutés au catalogue (API <code>id_DESC</code>). Badge « Nouveau » : <code>product.date_add</code>, seuil <span class="zp zp-solo"></span> (30&nbsp;jours par défaut). Nombre de cartes affichées par palier (390/768/1024/1440) et source : <span class="zp zp-solo"></span> (<code>carrousel_nb_visibles</code>, <code>source_produits</code>). Défilement automatique <code>carrousel_auto</code> et délai <code>carrousel_delai_secondes</code> : <span class="zp zp-solo"></span> — mêmes règles que le slider (hauteur réservée, pause au survol/focus, arrêt en mouvement réduit et onglet masqué, images suivantes en différé).</p>
 
     <div class="selection-bloc">
       <div class="produits-entete">
         <h2>Sélection du moment</h2>
         <a class="voir-tout" href="#">Voir tout →</a>
       </div>
-      <div class="rangee-cartes">
-        <article class="carte-produit">
-          <div class="visuel"><span class="zp">visuel_produit</span></div>
-          <div class="info"><div class="nom">Lot de 3 cochonnets modèle pétanque Club</div><div class="prix">4,16&nbsp;€</div></div>
-        </article>
-        <article class="carte-produit">
-          <div class="visuel"><span class="zp">visuel_produit</span></div>
-          <div class="info"><div class="nom">Pack de 10 colliers hawaïens supporter Allemagne et Belgique</div><div class="prix">7,49&nbsp;€</div></div>
-        </article>
-        <article class="carte-produit">
-          <div class="visuel"><span class="zp">visuel_produit</span></div>
-          <div class="info"><div class="nom">Banderole fanions Octobre rose 9&nbsp;m</div><div class="prix">3,33&nbsp;€</div></div>
-        </article>
-        <article class="carte-produit">
-          <div class="visuel"><span class="zp">visuel_produit</span></div>
-          <div class="info"><div class="nom">Sachet de 25 ballons rose, 30×30&nbsp;cm</div><div class="prix">3,33&nbsp;€</div></div>
-        </article>
+      <div class="carousel" data-carrousel-auto="true" data-carrousel-delai="8">
+        <div class="rangee-cartes" id="carousel-selection">
+          <article class="carte-produit">
+            <div class="visuel"><span class="zp">visuel_produit</span></div>
+            <div class="info"><div class="nom">Lot de 3 cochonnets modèle pétanque Club</div><div class="prix">4,16&nbsp;€</div></div>
+          </article>
+          <article class="carte-produit">
+            <div class="visuel"><span class="zp">visuel_produit</span></div>
+            <div class="info"><div class="nom">Pack de 10 colliers hawaïens supporter Allemagne et Belgique</div><div class="prix">7,49&nbsp;€</div></div>
+          </article>
+          <article class="carte-produit">
+            <div class="visuel"><span class="zp">visuel_produit</span></div>
+            <div class="info"><div class="nom">Banderole fanions Octobre rose 9&nbsp;m</div><div class="prix">3,33&nbsp;€</div></div>
+          </article>
+          <article class="carte-produit">
+            <div class="visuel"><span class="zp">visuel_produit</span></div>
+            <div class="info"><div class="nom">Sachet de 25 ballons rose, 30×30&nbsp;cm</div><div class="prix">3,33&nbsp;€</div></div>
+          </article>
+        </div>
+        <div class="carousel-nav">
+          <div class="carousel-dots" data-dots-for="carousel-selection" role="tablist" aria-label="Aller au groupe de produits"></div>
+          <div class="carousel-arrows">
+            <button class="car-prev" data-for="carousel-selection" aria-label="Produits précédents"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <button class="car-next" data-for="carousel-selection" aria-label="Produits suivants"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
       </div>
-      <p class="produits-note">4 produits réels du catalogue, thèmes en cours (pétanque, supporter, Octobre rose). Source de la sélection — catégorie, tag ou choix manuel : <span class="zp zp-solo"></span> (<code>source_produits</code>).</p>
+      <p class="produits-note">4 produits réels du catalogue (plafond 12), thèmes en cours (pétanque, supporter, Octobre rose). Source de la sélection — catégorie, tag ou choix manuel : <span class="zp zp-solo"></span> (<code>source_produits</code>).</p>
     </div>
   </section>
 
@@ -597,6 +624,15 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
       <div class="paiements">
         <span>CB · Monetico</span><span>Alma</span><span>PayPal</span><span>Virement</span>
       </div>
+      <h3 style="margin-top:20px">Suivez-nous</h3>
+      <div class="reseaux">
+        <a href="https://www.facebook.com/thereplicant13420" target="_blank" rel="noopener" aria-label="The Replicant sur Facebook (nouvel onglet)">
+          <svg viewBox="0 0 24 24"><path d="M13.5 22v-8.4h2.8l.4-3.3h-3.2V8.2c0-.96.27-1.6 1.65-1.6H17V3.6C16.6 3.55 15.5 3.4 14.2 3.4c-2.7 0-4.5 1.65-4.5 4.65v2.25H6.9v3.3h2.8V22h3.8z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/thereplicant13420/" target="_blank" rel="noopener" aria-label="The Replicant sur Instagram (nouvel onglet)">
+          <svg viewBox="0 0 24 24"><path d="M7.8 2.5h8.4a5.3 5.3 0 0 1 5.3 5.3v8.4a5.3 5.3 0 0 1-5.3 5.3H7.8a5.3 5.3 0 0 1-5.3-5.3V7.8a5.3 5.3 0 0 1 5.3-5.3zm0 2a3.3 3.3 0 0 0-3.3 3.3v8.4a3.3 3.3 0 0 0 3.3 3.3h8.4a3.3 3.3 0 0 0 3.3-3.3V7.8a3.3 3.3 0 0 0-3.3-3.3H7.8zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm5.3-3.2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>
+        </a>
+      </div>
     </div>
   </div>
   <div class="mentions">
@@ -608,6 +644,10 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
     </div>
   </div>
 </footer>
+
+<a class="retour-haut" id="btn-top" href="#site-header" aria-label="Retour en haut de page">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</a>
 
 <nav class="bottom-bar" aria-label="Navigation principale">
   <a href="#" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/></svg>Accueil</a>
@@ -709,22 +749,191 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
     touchX = null;
   }, {passive:true});
 
-  /* ---- slider hero : un seul visuel affiche, navigation manuelle uniquement ---- */
+  /* ---- reduit-mouvement : detection partagee ---- */
+  var reduceMotionMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function prefersReducedMotion(){ return reduceMotionMq.matches; }
+
+  /* ---- slider hero : un seul visuel affiche, defilement automatique configurable (slider_defilement_auto, slider_delai_secondes) ---- */
   var slides = Array.prototype.slice.call(document.querySelectorAll('.hero-slide'));
   var dots = Array.prototype.slice.call(document.querySelectorAll('#hero-dots button'));
+  var heroRegion = document.getElementById('hero-region');
   var heroIndex = 0;
+  var heroAuto = true;          /* zone paramétrable : slider_defilement_auto */
+  var heroDelaiMs = 6000;       /* zone paramétrable : slider_delai_secondes (3000-12000) */
+  var heroTimer = null;
   function goHero(i){
     heroIndex = (i + slides.length) % slides.length;
-    slides.forEach(function(s, idx){ s.classList.toggle('active', idx === heroIndex); });
+    slides.forEach(function(s, idx){
+      var active = idx === heroIndex;
+      s.classList.toggle('active', active);
+      if (active) s.classList.add('loaded'); /* premier visuel : empressé ; les suivants : différé, à la première activation */
+    });
     dots.forEach(function(d, idx){ d.setAttribute('aria-current', idx === heroIndex ? 'true' : 'false'); });
   }
-  dots.forEach(function(d, idx){ d.addEventListener('click', function(){ goHero(idx); }); });
-  document.getElementById('hero-prev').addEventListener('click', function(){ goHero(heroIndex - 1); });
-  document.getElementById('hero-next').addEventListener('click', function(){ goHero(heroIndex + 1); });
+  function heroTick(){ goHero(heroIndex + 1); }
+  function heroStart(){
+    heroStop();
+    if (heroAuto && !prefersReducedMotion() && !document.hidden && slides.length > 1){
+      heroTimer = setInterval(heroTick, heroDelaiMs);
+    }
+  }
+  function heroStop(){ if (heroTimer){ clearInterval(heroTimer); heroTimer = null; } }
+  dots.forEach(function(d, idx){ d.addEventListener('click', function(){ goHero(idx); heroStart(); }); });
+  document.getElementById('hero-prev').addEventListener('click', function(){ goHero(heroIndex - 1); heroStart(); });
+  document.getElementById('hero-next').addEventListener('click', function(){ goHero(heroIndex + 1); heroStart(); });
+  heroRegion.addEventListener('mouseenter', heroStop);
+  heroRegion.addEventListener('mouseleave', heroStart);
+  heroRegion.addEventListener('focusin', heroStop);
+  heroRegion.addEventListener('focusout', heroStart);
+  heroRegion.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight'){ goHero(heroIndex + 1); heroStart(); }
+    if (e.key === 'ArrowLeft'){ goHero(heroIndex - 1); heroStart(); }
+  });
+  document.addEventListener('visibilitychange', function(){ if (document.hidden) heroStop(); else heroStart(); });
+  reduceMotionMq.addEventListener ? reduceMotionMq.addEventListener('change', heroStart) : reduceMotionMq.addListener(heroStart);
+  goHero(0);
+  heroStart();
 
-  /* ---- bandeau promo : fermable ---- */
-  var promo = document.getElementById('promo-band');
-  document.getElementById('promo-close').addEventListener('click', function(){ promo.style.display = 'none'; });
+  /* ---- bandeau promo : regle de prix catalogue reelle sur une categorie, fenetre de dates, compte a rebours ---- */
+  var promoWrap = document.getElementById('promo-band-wrap');
+  var promoBand = document.getElementById('promo-band');
+  var promoCdt = document.getElementById('promo-cdt');
+  var promoConfig = {                              /* zones paramétrables : bandeau_promo_* */
+    actif: true,                                    /* bandeau_promo_actif */
+    categorie: 'Black Friday',                      /* bandeau_promo_categorie */
+    debut: new Date('2026-11-29T00:00:00'),          /* bandeau_promo_date_debut (règle réelle de la boutique) */
+    fin: new Date('2026-12-02T23:59:59'),            /* bandeau_promo_date_fin */
+    texte: '−20 % sur la catégorie',                 /* bandeau_promo_texte */
+    lien: '#',                                       /* bandeau_promo_lien */
+    lienTexte: 'Découvrir la catégorie'              /* bandeau_promo_lien_texte */
+  };
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function formatCompteARebours(ms){
+    if (ms <= 0) return null;
+    var s = Math.floor(ms / 1000);
+    var j = Math.floor(s / 86400); s -= j * 86400;
+    var h = Math.floor(s / 3600); s -= h * 3600;
+    var m = Math.floor(s / 60);
+    return j + ' j ' + pad(h) + ' h ' + pad(m) + ' min';
+  }
+  function updatePromo(){
+    var now = new Date();
+    var dansFenetre = now >= promoConfig.debut && now <= promoConfig.fin;
+    var demo = document.getElementById('promo-demo-toggle');
+    var forcerDemo = demo && demo.checked;
+    var visible = promoConfig.actif && (dansFenetre || forcerDemo);
+    promoWrap.hidden = !visible;
+    if (!visible) return;
+    document.getElementById('promo-titre').textContent = promoConfig.texte + ' · ' + promoConfig.categorie;
+    document.getElementById('promo-cta').textContent = promoConfig.lienTexte;
+    document.getElementById('promo-cta').href = promoConfig.lien;
+    var restant = formatCompteARebours(promoConfig.fin - now);
+    promoCdt.textContent = restant ? ('se termine dans ' + restant) : 'promotion terminée';
+  }
+  document.getElementById('promo-close').addEventListener('click', function(){ promoWrap.hidden = true; });
+  var demoToggle = document.getElementById('promo-demo-toggle');
+  if (demoToggle) demoToggle.addEventListener('change', updatePromo);
+  updatePromo();
+  setInterval(updatePromo, 60000); /* mise à jour une fois par minute, sans animation */
+
+  /* ---- carrousels produits : Nouveautés / Sélection du moment ---- */
+  function makeProductCarousel(trackId){
+    var track = document.getElementById(trackId);
+    if (!track) return;
+    var carouselEl = track.closest('.carousel');
+    var auto = carouselEl.dataset.carrouselAuto !== 'false';       /* zone paramétrable : carrousel_auto */
+    var delaiMs = (parseFloat(carouselEl.dataset.carrouselDelai) || 7) * 1000; /* carrousel_delai_secondes */
+    var dotsWrap = document.querySelector('[data-dots-for="' + trackId + '"]');
+    var prevBtn = document.querySelector('.car-prev[data-for="' + trackId + '"]');
+    var nextBtn = document.querySelector('.car-next[data-for="' + trackId + '"]');
+    var cards = Array.prototype.slice.call(track.querySelectorAll('.carte-produit'));
+    var timer = null;
+
+    function pageCount(){
+      var cw = track.clientWidth;
+      return Math.max(1, Math.ceil((track.scrollWidth - 1) / cw));
+    }
+    function currentPage(){
+      var cw = track.clientWidth;
+      return Math.round(track.scrollLeft / cw);
+    }
+    function renderDots(){
+      var n = pageCount();
+      dotsWrap.innerHTML = '';
+      for (var i = 0; i < n; i++){
+        var b = document.createElement('button');
+        b.setAttribute('role', 'tab');
+        b.setAttribute('aria-label', 'Groupe de produits ' + (i + 1));
+        b.setAttribute('aria-current', i === currentPage() ? 'true' : 'false');
+        (function(i){ b.addEventListener('click', function(){ goPage(i); start(); }); })(i);
+        dotsWrap.appendChild(b);
+      }
+    }
+    function updateDots(){
+      var p = currentPage();
+      Array.prototype.forEach.call(dotsWrap.children, function(b, i){ b.setAttribute('aria-current', i === p ? 'true' : 'false'); });
+    }
+    function goPage(i){
+      var n = pageCount();
+      i = (i + n) % n;
+      track.scrollTo({ left: i * track.clientWidth, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    }
+    function tick(){ goPage(currentPage() + 1); }
+    function start(){
+      stop();
+      if (auto && !prefersReducedMotion() && !document.hidden){ timer = setInterval(tick, delaiMs); }
+    }
+    function stop(){ if (timer){ clearInterval(timer); timer = null; } }
+
+    prevBtn.addEventListener('click', function(){ goPage(currentPage() - 1); start(); });
+    nextBtn.addEventListener('click', function(){ goPage(currentPage() + 1); start(); });
+    carouselEl.addEventListener('mouseenter', stop);
+    carouselEl.addEventListener('mouseleave', start);
+    carouselEl.addEventListener('focusin', stop);
+    carouselEl.addEventListener('focusout', start);
+    track.addEventListener('scroll', function(){
+      clearTimeout(track._scrollDebounce);
+      track._scrollDebounce = setTimeout(updateDots, 100);
+    }, { passive: true });
+    document.addEventListener('visibilitychange', function(){ if (document.hidden) stop(); else start(); });
+    reduceMotionMq.addEventListener ? reduceMotionMq.addEventListener('change', start) : reduceMotionMq.addListener(start);
+    window.addEventListener('resize', function(){ renderDots(); });
+
+    /* premier visuel charge avec empressement, les suivants en differe (a l'entree dans le viewport) */
+    var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){ if (entry.isIntersecting) entry.target.classList.add('loaded'); });
+    }, { root: track, threshold: 0.2 }) : null;
+    cards.forEach(function(card, idx){
+      var visuel = card.querySelector('.visuel');
+      if (idx === 0){ visuel.classList.add('loaded'); }
+      else if (io){ io.observe(visuel); }
+      else { visuel.classList.add('loaded'); }
+    });
+
+    renderDots();
+    start();
+  }
+  makeProductCarousel('carousel-nouveautes');
+  makeProductCarousel('carousel-selection');
+
+  /* ---- retour en haut : visible des 2 hauteurs d'ecran, remonte en douceur (sauf reduit-mouvement) ---- */
+  var btnTop = document.getElementById('btn-top');
+  var topTicking = false;
+  function onScrollTop(){
+    if (!topTicking){
+      requestAnimationFrame(function(){
+        btnTop.classList.toggle('visible', window.scrollY > window.innerHeight * 2);
+        topTicking = false;
+      });
+      topTicking = true;
+    }
+  }
+  window.addEventListener('scroll', onScrollTop, { passive: true });
+  btnTop.addEventListener('click', function(e){
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    document.getElementById('site-header').querySelector('a.brand').focus();
+  });
 
   /* ---- panneau tweaks ---- */
   document.querySelectorAll('[data-densite]').forEach(function(b){
