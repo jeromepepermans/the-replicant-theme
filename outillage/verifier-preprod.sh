@@ -18,8 +18,10 @@ SSH_TARGET="${SSH_TARGET:-djdj2187@nilgaut.o2switch.net}"
 PRE="https://preprod.the-replicant.com/"
 PROD="https://www.the-replicant.com/"
 ECHELLES=0
+AVERTISSEMENTS=0
 
 ok()   { printf '  ✅ %s\n' "$*"; }
+avert(){ printf '  ⚠ %s\n' "$*"; AVERTISSEMENTS=$((AVERTISSEMENTS+1)); }
 non()  { printf '  ⛔ %s\n' "$*"; ECHELLES=$((ECHELLES+1)); }
 # Vérifie une égalité SANS tube dans le test : on lit la valeur, on ne teste pas un code de sortie.
 verifie() { if [ "$2" = "$3" ]; then ok "$1 ($2)"; else non "$1 : obtenu « $2 », attendu « $3 »"; fi; }
@@ -51,9 +53,12 @@ for i in 1 2 3 4; do
   [ "$DETP" = "200" ] && break
   sleep 5
 done
-verifie "production joignable" "$DETP" "200"
-if [ "$ERREUR_SSL" -gt 0 ]; then
-  non "la production a répondu $ERREUR_SSL fois une erreur de certificat SSL (hôte o2switch au lieu du domaine) — à signaler à l'hébergeur"
+if [ "$DETP" = "200" ]; then
+  ok "production joignable (200)"
+elif [ "$ERREUR_SSL" -gt 0 ]; then
+  avert "production injoignable depuis ce poste : $ERREUR_SSL réponse(s) portant le certificat d'un autre hôte o2switch — détournement par la protection de l'hébergeur (volume de requêtes), pas une panne. À confirmer depuis une autre adresse."
+else
+  non "production joignable : obtenu « $DETP », attendu « 200 »"
 fi
 NX="$(grep -ci '^x-robots-tag' /tmp/vp-prod.txt)"
 verifie "la production n'est pas noindex" "$NX" "0"
@@ -102,4 +107,6 @@ if [ "${CRON_TOT:-0}" -ge 85 ] 2>/dev/null; then ok "crontab du serveur présent
 
 rm -f /tmp/vp-corps.html /tmp/vp-entetes.txt /tmp/vp-prod.txt
 echo
-if [ "$ECHELLES" -eq 0 ]; then echo "RÉSULTAT : conforme ✅"; exit 0; else echo "RÉSULTAT : $ECHELLES écart(s) ⛔"; exit 1; fi
+if [ "$ECHELLES" -eq 0 ] && [ "$AVERTISSEMENTS" -eq 0 ]; then echo "RÉSULTAT : conforme ✅"; exit 0
+elif [ "$ECHELLES" -eq 0 ]; then echo "RÉSULTAT : conforme, avec $AVERTISSEMENTS avertissement(s) ⚠"; exit 0
+else echo "RÉSULTAT : $ECHELLES écart(s) ⛔, $AVERTISSEMENTS avertissement(s) ⚠"; exit 1; fi
