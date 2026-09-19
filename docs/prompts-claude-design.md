@@ -1,5 +1,15 @@
 # Prompts — Claude Design de **The Replicant**
 
+> ## En trois lignes, à chaque étape
+> 1. **Ouvre une nouvelle conversation** (une par étape).
+> 2. **Colle le bloc de contexte** (section 2) au début — inutile de le recoller si la conversation le
+>    contient déjà.
+> 3. **Colle le prompt de l'étape**, tel quel, sans rien ajouter devant ni derrière.
+>
+> Le fichier du dépôt sert de **contexte** et de **trace** : il ne demande rien et ne déclenche rien. Seul un
+> message envoyé dans la conversation fait travailler Claude. Si tu ne sais plus où tu en es : le tableau
+> `livraisons/SUIVI.md` dit quelle étape est faite et laquelle vient.
+
 **Ce document est fait pour être remis tel quel** à qui travaille dans le compte Claude Design de la
 boutique. Chaque prompt se colle sans nettoyage : pas de guillemets à retirer, pas de note à trier.
 
