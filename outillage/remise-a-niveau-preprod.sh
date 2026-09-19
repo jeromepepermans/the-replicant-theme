@@ -170,11 +170,22 @@ log "  parameters.php de la préprod préservé (md5 inchangé attendu)"
 # --- 5. Remettre la préprod sur ses rails ----------------------------------------------------
 log "ETAPE 5 — URL de boutique, ouverture, cache"
 "$MYSQL" --defaults-extra-file="$CNF_PRE" "$DB_PRE" <<'SQL'
-UPDATE ps_shop_url SET domain='preprod.the-replicant.com', physical_uri='/', virtual_uri='', main=1, active=1;
+-- ⚠ BUG-008 (19/09/2026) : la version précédente ne posait que `domain`. Or avec PS_SSL_ENABLED=1,
+-- PrestaShop construit ses URL sur `domain_ssl` et sur PS_SHOP_DOMAIN_SSL : la préprod REDIRIGEAIT
+-- vers la production (301 vers www.the-replicant.com), elle était donc inutilisable — et l'étape 7,
+-- qui suivait les redirections, mesurait en réalité la production en croyant mesurer la préprod.
+UPDATE ps_shop_url SET domain='preprod.the-replicant.com', domain_ssl='preprod.the-replicant.com',
+  physical_uri='/', virtual_uri='', main=1, active=1;
+UPDATE ps_configuration SET value='preprod.the-replicant.com' WHERE name IN ('PS_SHOP_DOMAIN','PS_SHOP_DOMAIN_SSL');
 UPDATE ps_configuration SET value=1 WHERE name='PS_SHOP_ENABLE';
 DELETE FROM ps_configuration WHERE name='PS_MAINTENANCE_IP';
 SQL
-"$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT CONCAT('  url=',domain,' main=',main,' active=',active) FROM ps_shop_url" "$DB_PRE"
+"$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT CONCAT('  url=',domain,' | ssl=',domain_ssl,' main=',main,' active=',active) FROM ps_shop_url" "$DB_PRE"
+# Assertion (P132) : la préprod doit se déclarer ELLE-MÊME, domaine ET domaine SSL. Sans cette
+# assertion, un domaine SSL oublié passe inaperçu et toute la boutique redirige vers la production.
+URL_PRE=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT CONCAT(domain,'|',domain_ssl) FROM ps_shop_url LIMIT 1" "$DB_PRE")
+[ "$URL_PRE" = "preprod.the-replicant.com|preprod.the-replicant.com" ] \
+  || fail "URL de préprod incorrecte ($URL_PRE) : domaine et domaine SSL doivent valoir preprod.the-replicant.com, sinon la préprod redirige vers la production (BUG-008)"
 TH=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e 'SELECT theme_name FROM ps_shop WHERE id_shop=1' "$DB_PRE")
 log "  thème actif : $TH"
 # Preuves AUTHORITATIVES : lues en base, donc indépendantes de tout cache HTTP. Le 18/09/2026, la
@@ -255,6 +266,17 @@ done
 HTTP_PROD=$(curl -s -o /dev/null -w '%{http_code}' -L --max-time 60 https://www.the-replicant.com/ || echo 000)
 log "  HTTP préprod = $HTTP_PRE (page de ${PAGE_SIZE} o, conservée : $PAGE_PRE)"
 log "  HTTP prod    = $HTTP_PROD (la production n'est jamais écrite)"
+# ⚠ BUG-008 : `curl -L` suit les redirections — un contrôle qui suit une redirection vers la
+# production mesure la production. On exige donc que la page servie se DÉCLARE préproduction.
+CANON_PRE=$(grep -o -m1 'rel="canonical" href="[^"]*"' "$PAGE_PRE" 2>/dev/null | sed 's/.*href="//; s/"$//')
+[ "$CANON_PRE" = "https://preprod.the-replicant.com/" ] \
+  || fail "la préproduction ne se déclare pas elle-même (canonical=$CANON_PRE) : elle redirige vers une autre boutique (BUG-008)"
+# La préprod sert le contenu de la production : elle ne doit JAMAIS être indexable.
+NOINX_PRE=$(curl -s -o /dev/null -D - --max-time 30 https://preprod.the-replicant.com/ | grep -ci '^x-robots-tag: noindex')
+[ "$NOINX_PRE" -ge 1 ] || fail "la préproduction n'est pas en noindex : elle peut être indexée par les moteurs avec le contenu de la production"
+NOINX_PROD=$(curl -s -o /dev/null -D - --max-time 30 https://www.the-replicant.com/ | grep -ci '^x-robots-tag')
+[ "$NOINX_PROD" -eq 0 ] || fail "la PRODUCTION est en noindex — incident SEO majeur, à corriger immédiatement"
+log "  assertion : la préprod se déclare elle-même, elle est en noindex, la production ne l'est pas"
 if grep -q 'maintenance-page' "$PAGE_PRE" 2>/dev/null; then
   fail "la préproduction sert encore la page de maintenance (PS_SHOP_ENABLE non appliqué ?)"
 fi

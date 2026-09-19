@@ -452,7 +452,44 @@
   extrait du script et exécuté sur le serveur) ⇒ sortie `RESULTAT: ECHEC`, ligne
   *« identifiants temporaires supprimés par le trap »*, et **0 fichier résiduel** après le test.
 
-### BUG-007 — la remise à niveau a effacé la crontab du serveur (tâches de production arrêtées)
+### BUG-008 — après la remise à niveau, la préproduction redirigeait vers la production
+
+**Statut** : CORRIGÉ · **Date** : 19/09/2026 · **Gravité** : élevée (la préprod était inutilisable)
+**Détecté par** : Jérôme, en visitant la préprod (« preprod redirige vers la prod »)
+
+**Description** : `https://preprod.the-replicant.com/` répondait **301 vers www.the-replicant.com**.
+`ps_shop_url` avait `domain=preprod.the-replicant.com` mais **`domain_ssl=www.the-replicant.com`**, et
+`PS_SHOP_DOMAIN` comme `PS_SHOP_DOMAIN_SSL` valaient `www.the-replicant.com` — valeurs recopiées de la
+production par la restauration. Comme `PS_SSL_ENABLED=1`, PrestaShop construit ses URL sur le domaine SSL
+et redirige vers la production.
+
+**Cause** : l'étape 5 du runbook faisait
+`UPDATE ps_shop_url SET domain='preprod.the-replicant.com', …` — **sans `domain_ssl`**, et sans toucher aux
+deux clés `PS_SHOP_DOMAIN*`. Le dry-run ne pouvait pas le voir (il n'écrit rien).
+
+**Aggravant — mon contrôle final était faux** : l'étape 7 mesurait avec `curl -L`, qui **suit la
+redirection**. Elle a donc mesuré la **production** (200, 1 408 560 o) en croyant mesurer la préprod, et a
+conclu « conforme ». Le signal était pourtant là : **la prétendue page de la préprod faisait exactement la
+même taille que celle de la production**, au octet près. Une égalité parfaite entre deux pages distinctes
+est une alerte, pas une coïncidence.
+
+**Correction** : `domain_ssl` et les deux clés de configuration remis à `preprod.the-replicant.com`
+(mesuré : canonical = `https://preprod.the-replicant.com/`, tailles désormais différentes de la prod).
+
+**Défenses ajoutées au runbook** :
+1. l'étape 5 pose `domain_ssl` et `PS_SHOP_DOMAIN*`, puis **affirme** que les deux valent
+   `preprod.the-replicant.com` ;
+2. l'étape 7 exige que la page servie **se déclare préproduction** (`rel=canonical`) — c'est l'assertion
+   qui aurait attrapé le bug ;
+3. l'étape 7 exige le `noindex` sur la préprod **et son absence sur la production** (incident SEO majeur
+   sinon) ;
+4. `outillage/verifier-preprod.sh`, rejouable, porte les mêmes assertions.
+
+**Leçon** : ne jamais conclure d'un contrôle qui **suit une redirection** — mesurer l'URL demandée et
+vérifier que la page obtenue **est bien celle qu'on croit**. Et deux mesures identiques entre deux
+environnements censés différer méritent une explication avant d'être déclarées conformes.
+
+## BUG-007 — la remise à niveau a effacé la crontab du serveur (tâches de production arrêtées)
 
 **Statut** : CORRIGÉ (cause corrigée dans le script) · **Date** : 18/09/2026 · **Gravité** : élevée
 **Environnement** : exécution réelle du 18/09 à 21h15 (nilgaut.o2switch.net, utilisateur `djdj2187`)
