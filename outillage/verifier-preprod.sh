@@ -39,8 +39,22 @@ NOINX="$(grep -ci '^x-robots-tag: noindex' /tmp/vp-entetes.txt)"
 verifie "en-tête noindex (la préprod ne doit jamais être indexée)" "$NOINX" "1"
 
 # --- 2. La production n'est pas touchée --------------------------------------------------------------
-DETP="$(curl -sS -o /dev/null -D /tmp/vp-prod.txt -w '%{http_code}' --max-time 30 "$PROD" 2>/dev/null)"
+# ⚠ Mesuré le 19/09/2026 : la production répond par INTERMITTENCE une erreur de certificat SSL
+# (« ipxtender-09.cluster-01.o2switch.cloud » ne correspond pas à www.the-replicant.com) — 2 essais sur 3,
+# puis 200. Anomalie d'hébergement à surveiller : un vrai visiteur verrait un avertissement de sécurité.
+# On réessaie donc avant de conclure à une panne, et on rapporte ce qui a été observé.
+DETP="000"; ERREUR_SSL=0
+for i in 1 2 3 4; do
+  SORTIE="$(curl -sS -o /dev/null -D /tmp/vp-prod.txt -w '%{http_code}' --max-time 30 "$PROD" 2>&1)"
+  DETP="$(printf '%s' "$SORTIE" | tail -1)"
+  case "$SORTIE" in *"certificate subject name"*) ERREUR_SSL=$((ERREUR_SSL+1));; esac
+  [ "$DETP" = "200" ] && break
+  sleep 5
+done
 verifie "production joignable" "$DETP" "200"
+if [ "$ERREUR_SSL" -gt 0 ]; then
+  non "la production a répondu $ERREUR_SSL fois une erreur de certificat SSL (hôte o2switch au lieu du domaine) — à signaler à l'hébergeur"
+fi
 NX="$(grep -ci '^x-robots-tag' /tmp/vp-prod.txt)"
 verifie "la production n'est pas noindex" "$NX" "0"
 
