@@ -27,9 +27,36 @@ Ce dossier est la **sortie** du travail de design. C'est ce que le développemen
 
 ## Comment le fichier arrive ici
 
-1. **Le plus simple** : dans GitHub, ouvrir ce dossier, bouton *Add file* puis *Upload files*, glisser le
-   fichier, valider. Aucune ligne de commande.
-2. **Par l'outil de design** : si le compte a accès à ce dépôt, il dépose directement le fichier ici.
-3. **Sinon** : m'envoyer le fichier — je le dépose et je vérifie qu'il respecte la porte de son étape.
+### A. Sans rien configurer — le dépôt par le navigateur (30 secondes)
 
-Dans tous les cas, **cocher `SUIVI.md`** dans le même mouvement : sans ça, on ne sait plus où on en est.
+Dans GitHub, ouvrir ce dossier → *Add file* → *Upload files* → glisser le fichier → valider. Pour
+`SUIVI.md` : l'ouvrir, cliquer sur le crayon, remplir la ligne, valider. Aucune ligne de commande, aucun
+droit à accorder, aucun risque.
+
+### B. Avec l'accès en écriture (l'outil de design dépose lui-même)
+
+Pour que Claude écrive dans le dépôt, il faut **deux autorisations**, dans cet ordre :
+
+1. **Côté GitHub** — l'application GitHub de Claude doit voir ce dépôt.
+   `github.com` → *Settings* (ton compte) → *Applications* → *Installed GitHub Apps* → **Claude** →
+   *Configure* → **Repository access** → cocher `the-replicant-theme`.
+   (Le dépôt appartient à un compte personnel ; pour une organisation, c'est
+   *Settings → Third-party Access → GitHub Apps*.)
+2. **Côté Claude** — *Settings* → *Connectors* → **GitHub** → *Connect*, puis autoriser.
+   Claude demande alors **lecture _et_ écriture** sur les dépôts choisis : c'est normal et c'est ce qu'il
+   faut pour déposer un fichier. En revanche **un envoi de commit reste soumis à ta confirmation
+   explicite** — Claude te demande l'accord avant de pousser.
+
+**Trois règles quand l'outil a l'accès en écriture :**
+
+- **Travailler sur une branche**, jamais directement sur `main` : demande `claude/etape-N`. On relit, puis
+  on fusionne. Rien n'arrive dans la version de référence sans relecture.
+- **Ne toucher que `livraisons/`.** `outillage/`, `memoire.md` et `docs/preuves/` concernent l'exploitation
+  du serveur — ce n'est pas le travail de design.
+- **Cocher `SUIVI.md` dans le même mouvement** que le dépôt du fichier : sans ça, on ne sait plus où on en
+  est.
+
+> ⚠️ L'accès en écriture porte sur **tout le dépôt**, pas seulement sur ce dossier : les trois règles
+> ci-dessus sont donc la seule protection. Si tu veux une séparation réelle, crée un dépôt dédié au design
+> (`the-replicant-design`) et donne l'accès en écriture **à lui seul** : l'outil ne pourra alors
+> physiquement pas toucher à l'exploitation.
