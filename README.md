@@ -1,5 +1,14 @@
 # the-replicant-theme — refonte du thème de the-replicant.com
 
+## Espace de travail (design)
+
+- **`CLAUDE.md`** — le contexte de design à respecter : système, couleurs, polices, règles, interdits.
+- **`livraisons/`** — là où se déposent les écrans produits par Claude Design, avec `SUIVI.md`.
+- **`docs/prompts-claude-design.md`** — le mode opératoire : dix étapes, un prompt, un livrable et une
+  porte de validation par étape.
+- **`outillage/verifier-preprod.sh`** — le contrôle de l'état de la préproduction, rejouable à tout moment.
+
+
 Nouveau thème PrestaShop 8.2 pour **the-replicant.com** (boutique de cadeaux originaux et insolites,
 hébergement o2switch, compte cPanel `nilgaut`), conçu **de zéro** sur une base vierge, avec une
 obsession : **la légèreté**, mobile d'abord.
