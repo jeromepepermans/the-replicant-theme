@@ -84,7 +84,10 @@ quand l'emblème est petit, **le nom s'écrit en texte à côté**.
 - Le noir du logo (#0a0a0a) n'est pas l'encre de l'interface (#2b2419) : ne les confonds pas.
 
 **Les polices** (auto-hébergées, deux graisses maximum) : **Montserrat 700/600** pour les titres — elle
-fait écho au lettrage du logo — et **Source Sans 3 400/600** pour le corps. Échelle : 34 / 24 / 19 / 16 /
+fait écho au lettrage du logo — et **Source Sans 3 400/600** pour le corps. Ce sont des **polices
+variables** : **un seul fichier par famille** couvre les deux graisses, donc **une seule déclaration
+`@font-face` par famille** avec la plage (`font-weight: 600 700`, `font-weight: 400 600`) — servir deux
+fois le même fichier serait une faute de poids. Échelle : 34 / 24 / 19 / 16 /
 14 / 12 px, corps 16 px, interligne 1,6, **jamais moins de 12 px**. L'**italique** est réservé aux titres
 promotionnels (≤ 5 % des titres), jamais au corps de texte.
 
