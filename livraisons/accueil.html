@@ -313,9 +313,11 @@ footer{background:var(--surface-100);border-top:1px solid var(--border);margin-t
       l'un sous l'autre, chacun sur toute la largeur. Empilement en dessous de 1024 px. */
 @media (min-width:1024px){
   .selection-groupes{grid-template-columns:minmax(0,1fr)}
-  .selection-groupe{flex-direction:row;align-items:flex-start;gap:var(--e6)}
-  .selection-groupe>.selection-image-link{flex:0 0 32%;margin-bottom:0}
-  .selection-groupe>*:not(.selection-image-link){flex:1 1 0;min-width:0}
+  .selection-groupe{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:var(--e6)}
+  .selection-groupe>.selection-image-link{flex:0 0 32%;margin-bottom:0;align-self:stretch}
+  /* seule la rangee de produits prend l'espace restant ; la navigation et la note passent dessous */
+  .selection-groupe>.carousel{flex:1 1 0;min-width:0}
+  .selection-groupe>*:not(.selection-image-link):not(.carousel){flex:0 0 100%;min-width:0}
 }
 /*   3) Le texte du bloc editorial etait rogne a 768 px : colonne qui refuse de se reduire. */
 .editorial-card .contenu{min-width:0}
