@@ -452,7 +452,48 @@
   extrait du script et exécuté sur le serveur) ⇒ sortie `RESULTAT: ECHEC`, ligne
   *« identifiants temporaires supprimés par le trap »*, et **0 fichier résiduel** après le test.
 
-### BUG-008 — après la remise à niveau, la préproduction redirigeait vers la production
+### BUG-009 — après la remise à niveau, aucune image ne s'affichait et des liens tombaient en 404
+
+**Statut** : CORRIGÉ · **Date** : 19/09/2026 · **Gravité** : élevée (préprod inutilisable)
+**Détecté par** : Jérôme (« aucune image apparaît et quand je clique sur un lien j'ai la page 404 ») —
+et la piste était la bonne : le `.htaccess`.
+
+**Description** : la préprod servait les pages, mais **aucune image** et plusieurs liens en 404.
+
+**Cause** : PrestaShop génère des URL d'images « jolies » de la forme
+`/<id_image>-home_default/<nom>.jpg`. Leur traduction vers le fichier physique
+(`img/p/4/9/4/0/1/49401-home_default.jpg`) n'est faite que par des règles du `.htaccess`
+**conditionnées sur le domaine du magasin** :
+```apache
+RewriteCond %{HTTP_HOST} ^<domaine du magasin>$
+RewriteRule ^(([\d])(?:\-[\w-]*)?)/.+\.(jpe?g|webp|png|avif)$ %{ENV:REWRITEBASE}img/p/$2/$1$3 [L]
+```
+Or le `rsync` **exclut `.htaccess`** (choix délibéré : la préprod garde ses protections et son noindex),
+donc la préprod a conservé un fichier **ancien** : **0 règle d'images**, et celles de la production
+verrouillées sur `^www.the-replicant.com$`. Sur `preprod.the-replicant.com`, la condition échoue → les
+adresses d'images ne sont jamais traduites → toutes les images manquantes. Manquaient aussi les routes de
+modules (ex. `/retractation/`).
+
+**Correction** : régénération par PrestaShop lui-même, pour SA configuration :
+`Tools::generateHtaccess()` (contexte boutique 1). Mesuré : `.htaccess` de 91 → **117 lignes**,
+**7 règles d'images** désormais en `^preprod.the-replicant.com$`, et **le bloc `noindex` préservé**
+(PrestaShop conserve ce qui est hors de ses marqueurs `# ~~start~~ … # ~~end~~`).
+Vérification de bout en bout : `https://preprod.the-replicant.com/49401-home_default/parapluie-….jpg`
+→ **200, image/jpeg, 6 108 o** (JPEG 236×305).
+
+**Défenses ajoutées** :
+1. le runbook **régénère le `.htaccess`** après la restauration (étape 5bis) et **échoue** si le fichier
+   régénéré contient moins de 4 règles d'images, s'il ne vise pas le domaine de la préprod, ou si le bloc
+   `noindex` a disparu ;
+2. `outillage/verifier-preprod.sh` **va chercher une adresse d'image dans la page** et exige qu'elle
+   réponde `200` avec un `content-type` d'image — c'est le seul contrôle qui attrape ce bug, le HTML
+   d'une page sans images étant parfaitement valide.
+
+**Leçon** : un environnement restauré n'est pas « prêt » parce que sa page répond 200. Ce qui est
+**exclu** du transfert doit être soit régénéré, soit vérifié par une assertion dédiée — et un contrôle
+qui ne regarde que le HTML ne voit ni les images, ni les feuilles de style, ni les scripts.
+
+## BUG-008 — après la remise à niveau, la préproduction redirigeait vers la production
 
 **Statut** : CORRIGÉ · **Date** : 19/09/2026 · **Gravité** : élevée (la préprod était inutilisable)
 **Détecté par** : Jérôme, en visitant la préprod (« preprod redirige vers la prod »)

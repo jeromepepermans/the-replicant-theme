@@ -37,6 +37,21 @@ CANON="$(grep -o -m1 'rel="canonical" href="[^"]*"' /tmp/vp-corps.html | sed 's/
 verifie "URL canonique de la préprod" "$CANON" "$PRE"
 MOTIF="$(grep -c -iE 'page has moved|site is undergoing maintenance|maintenance' /tmp/vp-corps.html)"
 verifie "aucun marqueur de maintenance ni de redirection dans le corps" "$MOTIF" "0"
+# BUG-009 : sans les règles d'images du .htaccess, la page se charge mais AUCUNE image n'apparaît.
+# Le HTML seul ne le montre pas : on va donc chercher une vraie adresse d'image dans la page et on exige
+# que ce soit... une image.
+IMGS="$(grep -oE 'https://preprod\.the-replicant\.com/[^"]*\.(jpe?g|png|webp)' /tmp/vp-corps.html | head -3)"
+if [ -n "$IMGS" ]; then
+  BONNE=0
+  while IFS= read -r u; do
+    REP="$(curl -sS -o /dev/null -w '%{http_code} %{content_type}' --max-time 30 "$u" 2>/dev/null)"
+    case "$REP" in "200 image/"*) BONNE=$((BONNE+1));; esac
+  done <<< "$IMGS"
+  if [ "$BONNE" -ge 1 ]; then ok "les images du thème sont servies ($BONNE adresse(s) testée(s))"
+  else non "AUCUNE image ne se charge : les règles d'images manquent dans le .htaccess (BUG-009) — régénérer avec Tools::generateHtaccess()"; fi
+else
+  avert "aucune adresse d'image trouvée dans la page (page de maintenance ?)"
+fi
 NOINX="$(grep -ci '^x-robots-tag: noindex' /tmp/vp-entetes.txt)"
 verifie "en-tête noindex (la préprod ne doit jamais être indexée)" "$NOINX" "1"
 

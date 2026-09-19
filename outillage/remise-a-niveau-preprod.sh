@@ -186,6 +186,31 @@ SQL
 URL_PRE=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e "SELECT CONCAT(domain,'|',domain_ssl) FROM ps_shop_url LIMIT 1" "$DB_PRE")
 [ "$URL_PRE" = "preprod.the-replicant.com|preprod.the-replicant.com" ] \
   || fail "URL de préprod incorrecte ($URL_PRE) : domaine et domaine SSL doivent valoir preprod.the-replicant.com, sinon la préprod redirige vers la production (BUG-008)"
+
+# --- 5bis. Régénérer le .htaccess depuis PrestaShop (BUG-009, 19/09/2026) ---------------------
+# Le rsync EXCLUT .htaccess : c'est voulu (la préprod garde ses protections et son noindex), mais
+# l'ancien fichier ne contient plus les règles propres à la préprod. Or PrestaShop génère des URL
+# d'images « jolies » ( /<id_image>-home_default/<nom>.jpg ) qui ne sont traduites que par des règles
+# d'images **conditionnées sur le domaine du magasin** :
+#     RewriteCond %{HTTP_HOST} ^<domaine du magasin>$
+#     RewriteRule ^(([\d])(?:\-[\w-]*)?)/.+\.(jpe?g|webp|png|avif)$ .../img/p/$2/$1$3 [L]
+# Avec l'ancien .htaccess (règles absentes ou verrouillées sur le domaine de la PRODUCTION), AUCUNE
+# image ne s'affiche : mesuré le 19/09/2026, la préprod servait alors des pages sans image et des 404.
+log "ETAPE 5bis — régénération du .htaccess par PrestaShop"
+php -r '
+  chdir("'"$PRE"'");
+  $_SERVER["HTTP_HOST"]="preprod.the-replicant.com"; $_SERVER["SERVER_NAME"]="preprod.the-replicant.com";
+  $_SERVER["REQUEST_URI"]="/"; $_SERVER["SCRIPT_NAME"]="/index.php";
+  $_SERVER["SERVER_PORT"]="443"; $_SERVER["HTTPS"]="on";
+  require_once "config/config.inc.php";
+  Shop::setContext(Shop::CONTEXT_SHOP, 1);
+  Tools::generateHtaccess();
+' >/dev/null 2>&1 || fail "régénération du .htaccess impossible"
+NB_IMG=$(grep -c 'img/p/' "$PRE/.htaccess" || true)
+[ "$NB_IMG" -ge 4 ] || fail "le .htaccess régénéré ne contient que $NB_IMG règle(s) d'images : aucune image ne s'affichera (BUG-009)"
+grep -q 'X-Robots-Tag' "$PRE/.htaccess" || fail "le bloc noindex a disparu lors de la régénération du .htaccess"
+grep -q "\^preprod\.the-replicant\.com\$" "$PRE/.htaccess" || fail "les règles d'images ne visent pas le domaine de la préprod"
+log "  .htaccess régénéré : $NB_IMG règles d'images visant la préprod, bloc noindex préservé"
 TH=$("$MYSQL" --defaults-extra-file="$CNF_PRE" -N -e 'SELECT theme_name FROM ps_shop WHERE id_shop=1' "$DB_PRE")
 log "  thème actif : $TH"
 # Preuves AUTHORITATIVES : lues en base, donc indépendantes de tout cache HTTP. Le 18/09/2026, la
