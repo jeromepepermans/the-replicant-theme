@@ -94,10 +94,16 @@ while($x=$r->fetch_assoc()) $mods[$x["name"]]=$x["active"];
 $t=0; $r=$m->query("SHOW TABLES"); while($r&&$r->fetch_row()) $t++;
 $cmd=0; $r=$m->query("SELECT COUNT(*) n FROM ps_orders"); $cmd=$r?$r->fetch_assoc()["n"]:0;
 $lignes=[];
-$lignes[] = (($cfg["PS_SHOP_ENABLE"]??"")==="1" ? "  ✅ boutique de préprod OUVERTE (PS_SHOP_ENABLE=1)" : "  ⛔ boutique fermée (PS_SHOP_ENABLE=".($cfg["PS_SHOP_ENABLE"]??"absent").")");
-$lignes[] = (($cfg["PS_MAIL_METHOD"]??"")==="3" ? "  ✅ envoi d'e-mails DÉSACTIVÉ (PS_MAIL_METHOD=3)" : "  ⛔ les e-mails peuvent partir (PS_MAIL_METHOD=".($cfg["PS_MAIL_METHOD"]??"absent").")");
 $mi=trim($cfg["PS_MAINTENANCE_IP"]??"");
-$lignes[] = ($mi==="" ? "  ✅ aucune exemption de maintenance" : "  ⛔ exemptions de maintenance présentes (".count(explode(",",$mi))." adresse(s))");
+$nb_ex = $mi==="" ? 0 : count(array_filter(array_map("trim", explode(",",$mi))));
+if ((($cfg["PS_SHOP_ENABLE"]??"")==="1"))
+  $lignes[] = "  ✅ boutique de préprod OUVERTE (PS_SHOP_ENABLE=1)".($nb_ex?" — $nb_ex adresse(s) exemptée(s), sans effet puisque la boutique est ouverte":"");
+elseif ($nb_ex > 0)
+  $lignes[] = "  ⚠ boutique en MAINTENANCE avec $nb_ex adresse(s) exemptée(s) — état VOLONTAIRE : les contrôles HTTP ci-dessus ont été mesurés avec cette exemption";
+else
+  $lignes[] = "  ⛔ boutique FERMÉE sans aucune exemption : personne ne peut voir la préproduction";
+$lignes[] = (($cfg["PS_MAIL_METHOD"]??"")==="3" ? "  ✅ envoi d'e-mails DÉSACTIVÉ (PS_MAIL_METHOD=3)" : "  ⛔ les e-mails peuvent partir (PS_MAIL_METHOD=".($cfg["PS_MAIL_METHOD"]??"absent").")");
+// (l'état de maintenance et ses exemptions sont traités en une seule assertion, plus haut)
 $dom=($cfg["PS_SHOP_DOMAIN"]??""); $dssl=($cfg["PS_SHOP_DOMAIN_SSL"]??"");
 $lignes[] = ($dom==="preprod.the-replicant.com" && $dssl==="preprod.the-replicant.com"
   ? "  ✅ URL de préprod (domaine et domaine SSL)" : "  ⛔ URL incorrecte : domaine=$dom / SSL=$dssl → la préprod redirigera vers la production");
@@ -110,7 +116,9 @@ PHP
 )"
 echo "$SORTIE_PHP"
 ECHECS_PHP="$(printf '%s\n' "$SORTIE_PHP" | grep -c '⛔')"
+AVERT_PHP="$(printf '%s\n' "$SORTIE_PHP" | grep -c '⚠')"
 ECHELLES=$((ECHELLES + ECHECS_PHP))
+AVERTISSEMENTS=$((AVERTISSEMENTS + AVERT_PHP))
 
 # --- 4. La crontab ne doit plus rien lancer vers la préprod ------------------------------------------
 CRON_PRE="$(ssh -i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=20 "$SSH_TARGET" \

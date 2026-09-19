@@ -45,7 +45,10 @@ quand l'emblème est petit, **le nom s'écrit en texte à côté**.
 - Le noir du logo (#0a0a0a) n'est pas l'encre de l'interface (#2b2419) : ne les confonds pas.
 
 **Les polices** (auto-hébergées, deux graisses maximum) : **Montserrat 700/600** pour les titres — elle
-fait écho au lettrage du logo — et **Source Sans 3 400/600** pour le corps. Échelle : 34 / 24 / 19 / 16 /
+fait écho au lettrage du logo — et **Source Sans 3 400/600** pour le corps. Ce sont des **polices
+variables** : **un seul fichier par famille** (latin) couvre les deux graisses — donc **une seule
+déclaration `@font-face`** par famille, avec la plage (`font-weight: 600 700`, `font-weight: 400 600`).
+Servir deux fois le même fichier serait une faute de poids. Échelle : 34 / 24 / 19 / 16 /
 14 / 12 px, corps 16 px, interligne 1,6, **jamais moins de 12 px**. L'**italique** est réservé aux titres
 promotionnels (≤ 5 % des titres), jamais au corps de texte.
 
@@ -111,4 +114,8 @@ fichier et dis-moi à quel écran il correspond.
 - `docs/design/DESIGN.md` — pourquoi ces choix.
 - `docs/design/maquettes/` — l'en-tête festif, la charte, et la planche du système de design.
 - `docs/design/references/logo-final/` — le logo final dans toutes ses tailles (PNG et WebP).
-- `docs/design/references/polices/` — les polices, auto-hébergées, avec leurs licences.
+- `docs/design/references/polices/` — les polices **variables**, auto-hébergées (latin + latin-ext), avec
+  leurs licences OFL 1.1.
+- `docs/design/maquettes/etape1-systeme-de-design.html` — **une planche de contrôle de l'étape 1 existe
+  déjà** : 13 familles de composants dans tous leurs états, contrastes mesurés, variables du système
+  complètes. À reprendre comme référence ou à dépasser — mais pas à contredire sans raison.
