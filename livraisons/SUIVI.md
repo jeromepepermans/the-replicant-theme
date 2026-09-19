@@ -5,7 +5,7 @@ considérée comme faite.*
 
 | # | Étape | Fichier | Déposé le | Validé par | Remarque |
 |---|---|---|---|---|---|
-| 1 | Le système de design | `etape-1-systeme-de-design.html` | 18/09/2026 | | planche de contrôle produite (brouillon de référence) |
+| 1 | Le système de design | `etape-1-systeme-de-design.html` | 19/09/2026 | **Hermes — audité le 19/09/2026** | **CONFORME** aux 6 critères de la porte — voir `docs/preuves/2026-09-19-verification-etape-1.md`. 3 réserves mineures reportées à l'étape 2. *Une planche de contrôle produite le 18/09 sert de référence : `docs/design/maquettes/etape1-systeme-de-design.html`.* |
 | 2 | La charte écrite | `etape-2-charte.html` | | | |
 | 3 | En-tête, navigation, pied de page | `etape-3-entete-navigation.html` | | | |
 | 4 | La page d'accueil | `etape-4-accueil.html` | | | |
