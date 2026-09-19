@@ -97,3 +97,9 @@ L'énergie visuelle vit dans le logo et le bandeau promo, jamais dans la page en
 - Nous n'ajoutons jamais de requête réseau externe dans un livrable : polices, images et scripts sont embarqués ou déjà servis par le thème.
 - Nous ne servons jamais deux fois le même fichier de police variable sous deux déclarations `@font-face` distinctes.
 - Nous n'animons jamais rien dans le tunnel de commande, et nous n'ignorons jamais `prefers-reduced-motion`.
+
+## 7 · Règles d'usage
+
+- **Sous-menus (méga-menu)** : un panneau de sous-menu s'ouvre toujours aligné sous son propre item de navigation — jamais au bord gauche de la page. S'il dépasserait le bord droit de l'écran, il se décale automatiquement pour rester entièrement visible : aucun débordement horizontal, jamais.
+- **Prix HT / TTC selon le groupe client** : le prix affiché dépend du groupe du client connecté — groupe « Compte pro » : prix HT (−20 % par rapport au TTC) ; groupe « Ami(e) » : prix TTC (−20 %). La mention « HT » ou « TTC » est toujours affichée explicitement à côté du prix, jamais implicite.
+- **Accès professionnels** : un lien « Accès professionnels » figure dans le menu de l'en-tête et dans le pied de page. Il mène à une page « Devenir professionnel » (présentation et formulaire de demande) ; un professionnel déjà inscrit passe par son compte, jamais par ce lien.
