@@ -43,6 +43,74 @@ parcoure tout le catalogue) et la fin de liste annonce « vous avez tout vu ».
 
 ---
 
+## 4 bis. L'EN-TÊTE ET LE MENU — à faire AVANT les pages suivantes
+
+**Pourquoi avant** : l'en-tête est commun à tous les écrans. Le corriger maintenant, c'est le corriger une
+seule fois. Le faire après, c'est le refaire sur chaque page livrée.
+
+```
+L'en-tête ne contient pas toutes les catégories de la boutique : reprends-le entièrement sur la base
+ci-dessous, en deux lignes PLEINE LARGEUR, en gardant la composition, les jetons, la palette et le bandeau
+promotionnel déjà validés.
+
+LIGNE DU HAUT (72 px au repos, 56 px au défilement) : l'emblème du logo à gauche (jamais le wordmark seul,
+illisible sous 96 px — le nom s'écrit en texte à côté) ; la recherche au centre (champ + loupe, placeholder
+« Je cherche un produit ») ; à droite « Mon compte » (connexion, création de compte, commandes), le panier
+avec son compteur à rebond, « FR / € ».
+
+LIGNE DU BAS (pleine largeur, bordure haute fine) : à gauche cinq entrées — « Nos produits » (qui ouvre le
+grand menu), « Nouveautés », « Bon plan », « Thèmes », « Moins de 5 € » ; à l'EXTRÊMITÉ DROITE de cette même
+ligne, « Accès professionnels ». Les quatre raccourcis sont visuellement distincts du catalogue : texte
+#a35200 sur fond #fff9d6, et fond #fe8200 plein pour « Bon plan » quand une promotion est active, « Nos
+produits » restant en encre. Chacun mène à une vraie page, jamais à une page vide.
+
+LE GRAND MENU (« Nos produits ») :
+- il s'ouvre AU CLIC, et au survol sur les appareils qui ont une souris — jamais au survol seul, sinon il est
+  inutilisable au doigt. L'arrière-plan se voile d'encre à 60 %, avec un flou de 2 px seulement là où le
+  navigateur le sait faire, et aucun flou ailleurs ;
+- à gauche, les cinq catégories mères : Maison, Mode et Bien-Être, Fêtes et Événements, Loisirs, Pistolets
+  à billes. Au survol, fond #fee300 et texte en encre — jamais de blanc sur le jaune ;
+- au survol ou au focus d'une catégorie mère, ses sous-catégories apparaissent à gauche du panneau et leurs
+  enfants à droite, répartis en TROIS COLONNES automatiques : c'est ce qui évite d'avoir à défiler, la
+  branche Maison comptant une quarantaine de sous-catégories. La hauteur du panneau ne dépasse jamais la
+  hauteur de la fenêtre ;
+- la couleur guide la profondeur : mère = encre ; sous-catégorie = fond chaud très clair et bordure gauche
+  #fe8200 ; enfant = fond blanc, texte secondaire, survol #fff9d6 ;
+- LES TROIS NIVEAUX SONT CLIQUABLES, chacun vers sa page. Un titre cliquable n'ouvre pas le panneau : le
+  titre mène à sa page, le survol ouvre le panneau. Pas de double action sur un même élément ;
+- en bas du panneau, une ligne discrète « Tout voir dans Maison » ;
+- au clavier : Échap ferme, les flèches parcourent, le focus reste dans le panneau tant qu'il est ouvert et
+  revient sur « Nos produits » à la fermeture ;
+- sous 1024 px, le même contenu devient un ACCORDÉON plein écran : catégories empilées, chaque niveau se
+  dépliant, bouton retour en haut, recherche accessible en tête.
+
+LE MENU « Thèmes » : il s'ouvre sous la ligne du bas et révèle les thèmes AVEC LEURS IMAGES — six au
+maximum, vignettes carrées de 120 px, WebP, dimensions déclarées, chargement différé. C'est une bande de
+navigation, pas une galerie.
+Champs : theme_actif, theme_titre, theme_image, theme_lien, theme_ordre.
+
+RÈGLE DE SOURCE, pour tous les menus : rien ne s'écrit en dur. « Nos produits » vient de l'arbre réel des
+catégories, « Nouveautés » des produits triés par date de création, « Bon plan » des remises réellement en
+cours, « Moins de 5 € » des produits sous ce prix. Le module compagnon lira tout cela en base.
+Champs : menu_source, menu_profondeur (3 niveaux), menu_accueil_libelle, menu_accueil_actif, menu_ordre,
+menu_colonnes, menu_raccourcis_actifs, raccourci_nouveautes_actif, raccourci_bonplan_actif,
+raccourci_bonplan_seuil (nombre minimum d'offres pour l'afficher), raccourci_moins5_actif,
+raccourci_moins5_seuil (nombre minimum de produits), pro_lien_libelle (« Accès professionnels »),
+pro_lien_url, pro_lien_position (droite de la ligne du bas).
+
+Le reste de la page ne change pas. Livrable : accueil.html (nouvelle version) + la liste de ce que tu as changé.
+```
+
+**La porte de validation de l'en-tête** : deux lignes pleine largeur à 1440 px ; la recherche est utilisable
+au clavier ; « Accès professionnels » est bien à l'extrémité droite de la ligne du bas ; **aucune catégorie
+manquante** (l'arbre complet est parcourable sur les trois niveaux) ; **aucun défilement** dans le panneau à
+1024 px comme à 1440 px ; aucun vide entre un item et son panneau ; le menu s'ouvre au clic et se ferme par
+Échap ; à 390 px la même navigation est utilisable au doigt ; aucune couleur de texte inventée (jamais de
+blanc sur le jaune ou l'orange) ; le poids de l'en-tête reste sous 12 Ko compressés, images des thèmes
+comprises.
+
+---
+
 ## 5. Page de catégorie (le listing) — archétype **Explorer**
 
 ```
